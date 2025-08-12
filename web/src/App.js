@@ -292,7 +292,7 @@ class App extends Component {
               : (
                 Conf.CustomFooter !== null ? Conf.CustomFooter : (
                   <React.Fragment>
-                  Powered by <a target="_blank" href="https://casdoor.org" rel="noreferrer"><img style={{paddingBottom: "3px"}} height={"20px"} alt={"Casdoor"} src={logo} /></a>
+                  Powered by <a target="_blank" href="http://112.28.49.224:31126/" rel="noreferrer"><img style={{padding: "0 0 3px 5px"}} height={"40px"} alt={"HitoX"} src={logo} /></a>
                   </React.Fragment>
                 )
               )
