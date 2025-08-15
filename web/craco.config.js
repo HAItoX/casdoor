@@ -1,43 +1,44 @@
 const CracoLessPlugin = require("craco-less");
 const path = require("path");
+const baseURL = "http://112.28.49.224:31126"; // "http://localhost:8000"
 
 module.exports = {
   devServer: {
     proxy: {
       "/api": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/swagger": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/files": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/.well-known/openid-configuration": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/cas/serviceValidate": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/cas/proxyValidate": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/cas/proxy": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/cas/validate": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       },
       "/scim": {
-        target: "http://localhost:8000",
+        target: baseURL,
         changeOrigin: true,
       }
     },

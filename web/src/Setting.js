@@ -27,12 +27,15 @@ import * as phoneNumber from "libphonenumber-js";
 import moment from "moment";
 import {MfaAuthVerifyForm, NextMfa, RequiredMfa} from "./auth/mfa/MfaAuthVerifyForm";
 import {EmailMfaType, SmsMfaType, TotpMfaType} from "./auth/MfaSetupPage";
+import * as Setting from "./Setting";
 
 const {Option} = Select;
 
 export const ServerUrl = "";
 
 export const StaticBaseUrl = "https://cdn.casbin.org";
+export const HitoXStaticBaseUrl = "http://112.28.49.224:31115";
+export const showUrl = "http://112.28.49.224:31126/";
 
 export const Countries = [
   {label: "English", key: "en", country: "US", alt: "English"},
@@ -95,9 +98,9 @@ export function getAlgorithmNames(themeData) {
 
 export function getLogo(themes) {
   if (themes.includes("dark")) {
-    return `${StaticBaseUrl}/img/casdoor-logo_1185x256_dark.png`;
+    return `${HitoXStaticBaseUrl}/logo/logo-site-dark.png`;
   } else {
-    return `${StaticBaseUrl}/img/casdoor-logo_1185x256.png`;
+    return `${HitoXStaticBaseUrl}/logo/logo-site-dark.png`;
   }
 }
 
@@ -487,7 +490,7 @@ export function isLocalhost() {
 export function getFullServerUrl() {
   let fullServerUrl = window.location.origin;
   if (fullServerUrl === "http://localhost:7001") {
-    fullServerUrl = "http://localhost:8000";
+    fullServerUrl = "http://112.28.49.224:31126"; // "http://localhost:8000";
   }
   return fullServerUrl;
 }
@@ -1192,18 +1195,22 @@ export function renderLogo(application) {
   if (application === null) {
     return null;
   }
+  // login页面logo改为默认
+  const storageThemeAlgorithm = localStorage.getItem("themeAlgorithm") ? JSON.parse(localStorage.getItem("themeAlgorithm")) : ["default"];
+  const logo = Setting.getLogo(storageThemeAlgorithm);
+  return <img style={{marginBottom: "-20px"}} width={270} src={logo} alt="HitoX" />;
 
-  if (application.homepageUrl !== "") {
-    return (
-      <a target="_blank" rel="noreferrer" href={application.homepageUrl}>
-        <img className="panel-logo" width={250} src={application.logo} alt={application.displayName} />
-      </a>
-    );
-  } else {
-    return (
-      <img className="panel-logo" width={250} src={application.logo} alt={application.displayName} />
-    );
-  }
+  // if (application.homepageUrl !== "") {
+  //   return (
+  //     <a target="_blank" rel="noreferrer" href={application.homepageUrl}>
+  //       <img className="panel-logo" width={250} src={application.logo} alt={application.displayName} />
+  //     </a>
+  //   );
+  // } else {
+  //   return (
+  //     <img className="panel-logo" width={250} src={application.logo} alt={application.displayName} />
+  //   );
+  // }
 }
 
 function isSigninMethodEnabled(application, signinMethod) {
@@ -1592,7 +1599,7 @@ export function getUserCommonFields() {
 }
 
 export function getDefaultFooterContent() {
-  return `Powered by <a target="_blank" href="https://casdoor.org" rel="noreferrer"><img style="padding-bottom: 3px" height="20" alt="Casdoor" src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png"/></a>`;
+  return `Powered by <a target="_blank" href="${showUrl}" rel="noreferrer"><img style="padding-bottom: 3px" height="20" alt="Casdoor" src="${HitoXStaticBaseUrl}/logo/logo-site-dark.png"/></a>`;
 }
 
 export function getEmptyFooterContent() {

@@ -1173,11 +1173,11 @@ class ApplicationEditPage extends React.Component {
             <div style={{position: "relative", width: previewWidth, border: "1px solid rgb(217,217,217)", boxShadow: "10px 10px 5px #888888", overflow: "auto"}}>
               {
                 Setting.isPasswordEnabled(this.state.application) ? (
-                  <div className="loginBackground" style={{backgroundImage: `url(${this.state.application?.formBackgroundUrl})`, overflow: "auto"}}>
+                  <div className="loginBackground" style={{backgroundColor: themeData.colorPrimary, backgroundImage: `url(${this.state.application?.formBackgroundUrl})`, overflow: "auto"}}>
                     <SignupPage application={this.state.application} preview = "auto" />
                   </div>
                 ) : (
-                  <div className="loginBackground" style={{backgroundImage: `url(${this.state.application?.formBackgroundUrl})`, overflow: "auto"}}>
+                  <div className="loginBackground" style={{backgroundColor: themeData.colorPrimary, backgroundImage: `url(${this.state.application?.formBackgroundUrl})`, overflow: "auto"}}>
                     <LoginPage type={"login"} mode={"signup"} application={this.state.application} preview = "auto" />
                   </div>
                 )
@@ -1203,7 +1203,7 @@ class ApplicationEditPage extends React.Component {
             },
           }}>
             <div style={{position: "relative", width: previewWidth, border: "1px solid rgb(217,217,217)", boxShadow: "10px 10px 5px #888888", overflow: "auto"}}>
-              <div className="loginBackground" style={{backgroundImage: `url(${this.state.application?.formBackgroundUrl})`, overflow: "auto"}}>
+              <div className="loginBackground" style={{backgroundColor: themeData.colorPrimary, backgroundImage: `url(${this.state.application?.formBackgroundUrl})`, overflow: "auto"}}>
                 <LoginPage type={"login"} mode={"signin"} application={this.state.application} preview = "auto" />
               </div>
               <div style={{overflow: "auto", ...maskStyle}} />

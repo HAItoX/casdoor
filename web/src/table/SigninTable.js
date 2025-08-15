@@ -23,7 +23,7 @@ const {Option} = Select;
 
 export const SigninTableDefaultCssMap = {
   "Back button": ".back-button {\n      top: 65px;\n      left: 15px;\n      position: absolute;\n}\n.back-inner-button{}",
-  "Languages": ".login-languages {\n    top: 55px;\n    right: 5px;\n    position: absolute;\n}",
+  "Languages": ".login-languages {\n    top: 60px;\n    right: 10px;\n    position: absolute;\n}",
   "Logo": ".login-logo-box {}",
   "Signin methods": ".signin-methods {}",
   "Username": ".login-username {}\n.login-username-input{}",

@@ -104,12 +104,13 @@ class EntryPage extends React.Component {
     }
 
     const isDarkMode = this.props.themeAlgorithm.includes("dark");
+    const themeData = this.state.application !== null ? Setting.getThemeData(this.state.application?.organizationObj, this.state.application) : Conf.ThemeDefault;
 
     return (
       <React.Fragment>
         <CustomHead headerHtml={this.state.application?.headerHtml} />
         <div className={`${isDarkMode ? "loginBackgroundDark" : "loginBackground"}`}
-          style={{backgroundImage: Setting.inIframe() ? null : (Setting.isMobile() ? `url(${this.state.application?.formBackgroundUrlMobile})` : `url(${this.state.application?.formBackgroundUrl})`)}}>
+          style={{backgroundColor: themeData.colorPrimary, backgroundImage: Setting.inIframe() ? null : (Setting.isMobile() ? `url(${this.state.application?.formBackgroundUrlMobile})` : `url(${this.state.application?.formBackgroundUrl})`)}}>
           <Spin size="large" spinning={this.state.application === undefined && this.state.pricing === undefined} tip={i18next.t("login:Loading")}
             style={{width: "100%", margin: "0 auto", position: "absolute"}} />
           <Switch>
