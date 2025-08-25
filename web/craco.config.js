@@ -1,6 +1,6 @@
 const CracoLessPlugin = require("craco-less");
 const path = require("path");
-const baseURL = "http://112.28.49.224:31126"; // "http://localhost:8000"
+const baseURL = "http://127.0.0.1:8000"; // "http://localhost:8000"
 
 module.exports = {
   devServer: {
