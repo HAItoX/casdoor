@@ -1,6 +1,6 @@
 const CracoLessPlugin = require("craco-less");
 const path = require("path");
-const baseURL = "http://127.0.0.1:8000"; // "http://localhost:8000"
+const baseURL = process.env.NODE_ENV === "production" ? "http://127.0.0.1:8000" : "http://112.28.49.224:31126";
 
 module.exports = {
   devServer: {
@@ -40,7 +40,7 @@ module.exports = {
       "/scim": {
         target: baseURL,
         changeOrigin: true,
-      }
+      },
     },
   },
   plugins: [
@@ -49,7 +49,10 @@ module.exports = {
       options: {
         lessLoaderOptions: {
           lessOptions: {
-            modifyVars: {"@primary-color": "rgb(89,54,213)", "@border-radius-base": "5px"},
+            modifyVars: {
+              "@primary-color": "rgb(89,54,213)",
+              "@border-radius-base": "5px",
+            },
             javascriptEnabled: true,
           },
         },
@@ -57,7 +60,7 @@ module.exports = {
     },
   ],
   webpack: {
-    configure: (webpackConfig, { env, paths }) => {
+    configure: (webpackConfig, {env, paths}) => {
       paths.appBuild = path.resolve(__dirname, "build-temp");
       webpackConfig.output.path = path.resolve(__dirname, "build-temp");
 
