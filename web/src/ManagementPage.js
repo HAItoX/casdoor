@@ -384,7 +384,7 @@ function ManagementPage(props) {
     const onfinish = props.onfinish;
     return (
       <Switch>
-        <Route exact path="/" render={(props) => renderLoginIfNotLoggedIn(<Dashboard account={account} {...props} />)} />
+        <Route exact path="/" render={(props) => renderLoginIfNotLoggedIn(<Redirect to="/apps" />)} />
         <Route exact path="/apps" render={(props) => renderLoginIfNotLoggedIn(<AppListPage account={account} {...props} />)} />
         <Route exact path="/shortcuts" render={(props) => renderLoginIfNotLoggedIn(<ShortcutsPage account={account} {...props} />)} />
         <Route exact path="/account" render={(props) => renderLoginIfNotLoggedIn(<AccountPage account={account} {...props} />)} />

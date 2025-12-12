@@ -77,7 +77,9 @@ class CasLogout extends React.Component {
       <Card>
         <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
           {
-            <Spin size="large" tip={i18next.t("login:Logging out...")} style={{paddingTop: "10%"}} />
+            <Spin size="large" tip={i18next.t("login:Logging out...")} style={{paddingTop: "10%"}}>
+              <div style={{height: "100px"}} />
+            </Spin>
           }
         </div>
       </Card>
