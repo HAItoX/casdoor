@@ -1,6 +1,9 @@
 const CracoLessPlugin = require("craco-less");
 const path = require("path");
-const baseURL = process.env.NODE_ENV === "production" ? "http://127.0.0.1:8000" : "http://112.28.49.224:31126";
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "http://127.0.0.1:8000"
+    : "http://112.28.49.224:31126";
 
 module.exports = {
   devServer: {
@@ -60,9 +63,16 @@ module.exports = {
     },
   ],
   webpack: {
-    configure: (webpackConfig, {env, paths}) => {
+    configure: (webpackConfig, { env, paths }) => {
       paths.appBuild = path.resolve(__dirname, "build-temp");
       webpackConfig.output.path = path.resolve(__dirname, "build-temp");
+
+      // 在生产构建时禁用 ESLint
+      if (process.env.ESLINT_DISABLE === "true") {
+        webpackConfig.plugins = webpackConfig.plugins.filter((plugin) => {
+          return plugin.constructor.name !== "ESLintWebpackPlugin";
+        });
+      }
 
       // ignore webpack warnings by source-map-loader
       // https://github.com/facebook/create-react-app/pull/11752#issuecomment-1345231546

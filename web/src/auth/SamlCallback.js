@@ -118,14 +118,16 @@ class SamlCallback extends React.Component {
 
     return (
       <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-        {
-          (this.state.msg === null) ? (
-            <Spin size="large" tip={i18next.t("login:Signing in...")} style={{paddingTop: "10%"}} />
-          ) : (
-            Util.renderMessageLarge(this, this.state.msg)
-          )
-        }
-      </div>
+          {
+            (this.state.msg === null) ? (
+              <Spin size="large" tip={i18next.t("login:Signing in...")} style={{paddingTop: "10%"}}>
+                <div style={{height: "100px"}} />
+              </Spin>
+            ) : (
+              Util.renderMessageLarge(this, this.state.msg)
+            )
+          }
+        </div>
     );
   }
 }

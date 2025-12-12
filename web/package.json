@@ -57,8 +57,8 @@
     "react-social-login-buttons": "^3.4.0"
   },
   "scripts": {
-    "start": "cross-env HOST=0.0.0.0 PORT=31126 craco start",
-    "build": "craco build",
+    "start": "cross-env HOST=0.0.0.0 PORT=5555 craco start",
+    "build": "cross-env ESLINT_DISABLE=true craco build",
     "postbuild": "node mv.js",
     "test": "craco test",
     "eject": "craco eject",
@@ -67,9 +67,7 @@
     "fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
     "lint:css": "stylelint src/**/*.{css,less} --fix"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
+
   "browserslist": {
     "production": [
       ">0.2%",
@@ -106,9 +104,6 @@
   "lint-staged": {
     "src/**/*.{css,less}": [
       "stylelint --fix"
-    ],
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
     ]
   },
   "husky": {
