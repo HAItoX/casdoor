@@ -1152,9 +1152,9 @@ class UserEditPage extends React.Component {
         {
           imgUrl ?
             <div style={{marginBottom: "10px"}}>
-              <a target="_blank" rel="noreferrer" href={imgUrl} style={{marginBottom: "10px"}}>
-                <AccountAvatar src={imgUrl} alt={imgUrl} height={150} />
-              </a>
+              <a target="_blank" rel="noreferrer" href={Setting.getLocalizedImageUrl(imgUrl)} style={{marginBottom: "10px"}}>
+              <AccountAvatar src={Setting.getLocalizedImageUrl(imgUrl)} alt={imgUrl} height={150} />
+            </a>
             </div>
             :
             <Col style={{height: "78%", border: "1px dotted grey", borderRadius: 3, marginBottom: "10px"}}>

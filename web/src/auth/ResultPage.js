@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Card, Result, Spin} from "antd";
+import { Button, Card, Result, Spin } from "antd";
 import i18next from "i18next";
-import {authConfig} from "./Auth";
+import { authConfig } from "./Auth";
 import * as ApplicationBackend from "../backend/ApplicationBackend";
 import * as Setting from "../Setting";
 import * as AuthBackend from "./AuthBackend";
@@ -25,7 +25,10 @@ class ResultPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
-      applicationName: props.match.params.applicationName !== undefined ? props.match.params.applicationName : authConfig.appName,
+      applicationName:
+        props.match.params.applicationName !== undefined
+          ? props.match.params.applicationName
+          : authConfig.appName,
       application: null,
     };
   }
@@ -34,7 +37,10 @@ class ResultPage extends React.Component {
     if (this.state.applicationName !== undefined) {
       this.getApplication();
     } else {
-      Setting.showMessage("error", `Unknown application name: ${this.state.applicationName}`);
+      Setting.showMessage(
+        "error",
+        `Unknown application name: ${this.state.applicationName}`
+      );
     }
   }
 
@@ -43,8 +49,8 @@ class ResultPage extends React.Component {
       return;
     }
 
-    ApplicationBackend.getApplication("admin", this.state.applicationName)
-      .then((res) => {
+    ApplicationBackend.getApplication("admin", this.state.applicationName).then(
+      (res) => {
         if (res.status === "error") {
           Setting.showMessage("error", res.msg);
           return;
@@ -54,7 +60,8 @@ class ResultPage extends React.Component {
         this.setState({
           application: res.data,
         });
-      });
+      }
+    );
   }
 
   onUpdateApplication(application) {
@@ -62,19 +69,18 @@ class ResultPage extends React.Component {
   }
 
   handleSignIn = () => {
-    AuthBackend.getAccount()
-      .then((res) => {
-        if (res.status === "ok" && res.data) {
-          const linkInStorage = sessionStorage.getItem("signinUrl");
-          if (linkInStorage !== null && linkInStorage !== "") {
-            window.location.href = linkInStorage;
-          } else {
-            Setting.goToLink("/");
-          }
+    AuthBackend.getAccount().then((res) => {
+      if (res.status === "ok" && res.data) {
+        const linkInStorage = sessionStorage.getItem("signinUrl");
+        if (linkInStorage !== null && linkInStorage !== "") {
+          window.location.href = linkInStorage;
         } else {
-          Setting.redirectToLoginPage(this.state.application, this.props.history);
+          Setting.goToLink(Setting.getFromLink());
         }
-      });
+      } else {
+        Setting.redirectToLoginPage(this.state.application, this.props.history);
+      }
+    });
   };
 
   render() {
@@ -82,31 +88,43 @@ class ResultPage extends React.Component {
 
     if (application === null) {
       return (
-        <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-          <Spin size="large" tip={i18next.t("login:Loading")} style={{paddingTop: "10%"}}>
-            <div style={{height: "100px"}} />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Spin
+            size="large"
+            tip={i18next.t("login:Loading")}
+            style={{ paddingTop: "10%" }}
+          >
+            <div style={{ height: "100px" }} />
           </Spin>
         </div>
       );
     }
 
     return (
-      <div style={{display: "flex", flex: "1", justifyContent: "center"}}>
+      <div style={{ display: "flex", flex: "1", justifyContent: "center" }}>
         <Card>
-          <div style={{marginTop: "30px", marginBottom: "30px", textAlign: "center"}}>
-            {
-              Setting.renderHelmet(application)
-            }
-            {
-              Setting.renderLogo(application)
-            }
-            {
-              Setting.renderHelmet(application)
-            }
+          <div
+            style={{
+              marginTop: "30px",
+              marginBottom: "30px",
+              textAlign: "center",
+            }}
+          >
+            {Setting.renderHelmet(application)}
+            {Setting.renderLogo(application)}
+            {Setting.renderHelmet(application)}
             <Result
               status="success"
               title={i18next.t("signup:Your account has been created!")}
-              subTitle={i18next.t("signup:Please click the below button to sign in")}
+              subTitle={i18next.t(
+                "signup:Please click the below button to sign in"
+              )}
               extra={[
                 <Button type="primary" key="login" onClick={this.handleSignIn}>
                   {i18next.t("login:Sign In")}

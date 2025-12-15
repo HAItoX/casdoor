@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Card, Row, Spin} from "antd";
+import { Card, Row, Spin } from "antd";
 import i18next from "i18next";
 import React from "react";
 import * as Setting from "../Setting";
@@ -23,26 +23,56 @@ const GridCards = (props) => {
 
   if (items === null || items === undefined) {
     return (
-      <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10%"}}>
-        <Spin size="large" tip={i18next.t("login:Loading")} style={{paddingTop: "10%"}}>
-          <div style={{height: "100px"}} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "10%",
+        }}
+      >
+        <Spin
+          size="large"
+          tip={i18next.t("login:Loading")}
+          style={{ paddingTop: "10%" }}
+        >
+          <div style={{ height: "100px" }} />
         </Spin>
       </div>
     );
   }
 
-  return (
-    Setting.isMobile() ? (
-      <Card styles={{body: {padding: 0}}}>
-        {items.map(item => <SingleCard key={item.link} logo={item.logo} link={item.link} title={item.name} desc={item.description} isSingle={items.length === 1} />)}
-      </Card>
-    ) : (
-      <div style={{width: "100%", padding: "0 100px"}}>
-        <Row style={{justifyContent: "center"}}>
-          {items.map(item => <SingleCard logo={item.logo} link={item.link} title={item.name} desc={item.description} time={item.createdTime} isSingle={items.length === 1} key={item.name} />)}
-        </Row>
-      </div>
-    )
+  return Setting.isMobile() ? (
+    <Card styles={{ body: { padding: 0 } }}>
+      {items.map((item) => (
+        <SingleCard
+          key={item.link}
+          logo={item.logo}
+          icon={item.icon}
+          link={item.link}
+          title={item.name}
+          desc={item.description}
+          isSingle={items.length === 1}
+        />
+      ))}
+    </Card>
+  ) : (
+    <div style={{ width: "100%", padding: "0 100px" }}>
+      <Row style={{ justifyContent: "center" }}>
+        {items.map((item) => (
+          <SingleCard
+            logo={item.logo}
+            icon={item.icon}
+            link={item.link}
+            title={item.name}
+            desc={item.description}
+            time={item.createdTime}
+            isSingle={items.length === 1}
+            key={item.name}
+          />
+        ))}
+      </Row>
+    </div>
   );
 };
 

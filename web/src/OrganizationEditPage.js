@@ -431,8 +431,8 @@ class OrganizationEditPage extends React.Component {
               </Col>
               <Col span={23} >
                 <a target="_blank" rel="noreferrer" href={this.state.organization.defaultAvatar}>
-                  <img src={this.state.organization.defaultAvatar} alt={this.state.organization.defaultAvatar} height={90} style={{marginBottom: "20px"}} />
-                </a>
+              <img src={Setting.getLocalizedImageUrl(this.state.organization.defaultAvatar)} alt={this.state.organization.defaultAvatar} height={90} style={{marginBottom: "20px"}} />
+            </a>
               </Col>
             </Row>
           </Col>
