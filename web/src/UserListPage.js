@@ -269,9 +269,10 @@ class UserListPage extends BaseListPage {
         key: "avatar",
         width: "80px",
         render: (text, record, index) => {
+          const localizedUrl = Setting.getLocalizedImageUrl(text);
           return (
-            <a target="_blank" rel="noreferrer" href={text}>
-              <AccountAvatar referrerPolicy="no-referrer" src={text} alt={text} size={50} />
+            <a target="_blank" rel="noreferrer" href={localizedUrl}>
+              <AccountAvatar referrerPolicy="no-referrer" src={localizedUrl} alt={localizedUrl} size={50} />
             </a>
           );
         },

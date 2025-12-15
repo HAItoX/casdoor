@@ -1612,7 +1612,7 @@ class LoginPage extends React.Component {
                     "login:Successfully logged in with WebAuthn credentials"
                   )
                 );
-                Setting.goToLink("/");
+                Setting.goToLink(Setting.getFromLink());
               }
             } else {
               Setting.showMessage("error", res.msg);

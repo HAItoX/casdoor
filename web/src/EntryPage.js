@@ -47,7 +47,7 @@ class EntryPage extends React.Component {
 
   renderHomeIfLoggedIn(component) {
     if (this.props.account !== null && this.props.account !== undefined) {
-      return <Redirect to={{pathname: "/", state: {from: "/login"}}} />;
+      return <Redirect to={{pathname: "/apps", state: {from: "/login"}}} />;
     } else {
       return component;
     }

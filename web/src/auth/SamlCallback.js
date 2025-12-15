@@ -85,7 +85,7 @@ class SamlCallback extends React.Component {
           const handleLogin = (res2) => {
             if (responseType === "login") {
               Setting.showMessage("success", "Logged in successfully");
-              Setting.goToLink("/");
+              Setting.goToLink(Setting.getFromLink());
             } else if (responseType === "code") {
               const code = res2.data;
               Setting.goToLink(`${redirectUri}?code=${code}&state=${state}`);
