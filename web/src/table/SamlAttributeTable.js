@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Row, Select, Table, Tooltip} from "antd";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Button, Col, Input, Row, Select, Table, Tooltip } from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 
-const {Option} = Select;
+const { Option } = Select;
 
 class SamlAttributeTable extends React.Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class SamlAttributeTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {Name: "", nameFormat: "", value: ""};
+    const row = { Name: "", nameFormat: "", value: "" };
     if (table === undefined || table === null) {
       table = [];
     }
@@ -70,9 +70,12 @@ class SamlAttributeTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "name", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "name", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -83,16 +86,39 @@ class SamlAttributeTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Select virtual={false} style={{width: "100%"}}
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
               value={text}
               defaultValue="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-              onChange={value => {
+              onChange={(value) => {
                 this.updateField(table, index, "nameFormat", value);
-              }} >
-              <Option key="Unspecified" value="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">Unspecified</Option>
-              <Option key="Basic" value="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">Basic</Option>
-              <Option key="UriReference" value="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">UriReference</Option>
-              <Option key="x500AttributeName" value="urn:oasis:names:tc:SAML:2.0:attrname-format:X500">x500AttributeName</Option>
+              }}
+            >
+              <Option
+                key="Unspecified"
+                value="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+              >
+                Unspecified
+              </Option>
+              <Option
+                key="Basic"
+                value="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+              >
+                Basic
+              </Option>
+              <Option
+                key="UriReference"
+                value="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+              >
+                UriReference
+              </Option>
+              <Option
+                key="x500AttributeName"
+                value="urn:oasis:names:tc:SAML:2.0:attrname-format:X500"
+              >
+                x500AttributeName
+              </Option>
             </Select>
           );
         },
@@ -104,9 +130,12 @@ class SamlAttributeTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "value", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "value", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -119,13 +148,29 @@ class SamlAttributeTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -134,12 +179,24 @@ class SamlAttributeTable extends React.Component {
     ];
 
     return (
-      <Table title={() => (
-        <div>
-          <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
-        </div>
-      )}
-      columns={columns} dataSource={table} rowKey="key" size="middle" bordered
+      <Table
+        title={() => (
+          <div>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
+          </div>
+        )}
+        columns={columns}
+        dataSource={table}
+        rowKey="key"
+        size="middle"
+        bordered
       />
     );
   }
@@ -147,12 +204,8 @@ class SamlAttributeTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.props.table)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.props.table)}</Col>
         </Row>
       </div>
     );

@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -575,7 +575,7 @@ class LoginPage extends React.Component {
   }
 
   login(values) {
-    // here we are supposed to determine whether Casdoor is working as an OAuth server or CAS server
+    // here we are supposed to determine whether HitoFlowis working as an OAuth server or CAS server
     values["language"] = this.state.userLang ?? "";
     if (this.state.type === "cas") {
       // CAS
@@ -587,7 +587,7 @@ class LoginPage extends React.Component {
           const loginHandler = (res) => {
             let msg = "Logged in successfully. ";
             if (casParams.service === "") {
-              // If service was not specified, Casdoor must display a message notifying the client that it has successfully initiated a single sign-on session.
+              // If service was not specified, HitoFlowmust display a message notifying the client that it has successfully initiated a single sign-on session.
               msg += "Now you can visit apps protected by Casdoor.";
             }
             Setting.showMessage("success", msg);
@@ -1992,7 +1992,7 @@ class LoginPage extends React.Component {
           }}
         >
           <Spin size="large" tip={i18next.t("login:Signing in...")}>
-            <div style={{height: "100px", width: "100%"}} />
+            <div style={{ height: "100px", width: "100%" }} />
           </Spin>
         </div>
       );

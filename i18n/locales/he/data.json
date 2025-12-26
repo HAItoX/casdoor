@@ -121,7 +121,7 @@
     "Only admin can modify the %s.": "רק מנהל יכול לשנות את %s.",
     "The %s is immutable.": "%s הוא בלתי ניתן לשינוי.",
     "Unknown modify rule %s.": "כלל שינוי לא ידוע %s.",
-    "adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Casdoor. Refer to the docs: https://casdoor.org/docs/basic/core-concepts#how-does-casdoor-manage-itself. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option.": "הוספת משתמש חדש לארגון 'מובנה' מושבת כעת. שימו לב: כל המשתמשים בארגון 'מובנה' הם מנהלים גלובליים ב-Casdoor. ראו את המסמכים: https://casdoor.org/docs/basic/core-concepts#how-does-casdoor-manage-itself. אם עדיין תרצו ליצור משתמש לארגון 'מובנה', עברו לדף הגדרות הארגון והפעילו את האפשרות 'יש הסכמה לזכויות'."
+    "adding a new user to the 'built-in' organization is currently disabled. Please note: all users in the 'built-in' organization are global administrators in Casdoor. Refer to the docs: https://snbb.hitox.top/docs/basic/core-concepts#how-does-casdoor-manage-itself. If you still wish to create a user for the 'built-in' organization, go to the organization's settings page and enable the 'Has privilege consent' option.": "הוספת משתמש חדש לארגון 'מובנה' מושבת כעת. שימו לב: כל המשתמשים בארגון 'מובנה' הם מנהלים גלובליים ב-Casdoor. ראו את המסמכים: https://snbb.hitox.top/docs/basic/core-concepts#how-does-casdoor-manage-itself. אם עדיין תרצו ליצור משתמש לארגון 'מובנה', עברו לדף הגדרות הארגון והפעילו את האפשרות 'יש הסכמה לזכויות'."
   },
   "permission": {
     "The permission: \\\"%s\\\" doesn't exist": "ההרשאה: \\\"%s\\\" אינה קיימת"

@@ -1,0 +1,33 @@
+[
+  {
+  "name": "hitoColib",
+  "entry": "//localhost:5173/fe-sg/qiankun.html", 
+  "container": "#hitocolib-container",
+  "activeRule": "/subapp/hitoColib",
+  "props": {
+    "authState": {},
+    "masterActions": {}
+  }
+  },
+  {
+    "name": "sub-app-react",
+    "entry": "//localhost:3001",
+    "container": "#subapp-container",
+    "activeRule": "/subapp/react",
+    "props": {}
+  },
+  {
+    "name": "sub-app-vue",
+    "entry": "//localhost:3002",
+    "container": "#subapp-container",
+    "activeRule": "/subapp/vue",
+    "props": {}
+  },
+  {
+    "name": "sub-app-js",
+    "entry": "//localhost:3004",
+    "container": "#subapp-container",
+    "activeRule": "/subapp/js",
+    "props": {}
+  }
+]

@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,36 +14,58 @@
 
 import * as Setting from "../Setting";
 
-export function getGroups(owner = "", withTree = false, page = "", pageSize = "", field = "", value = "", sortField = "", sortOrder = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-groups?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}&withTree=${withTree}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+export function getGroups(
+  owner = "",
+  withTree = false,
+  page = "",
+  pageSize = "",
+  field = "",
+  value = "",
+  sortField = "",
+  sortOrder = ""
+) {
+  return fetch(
+    `${Setting.ServerUrl}/api/get-groups?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}&withTree=${withTree}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function getGroup(owner, name) {
-  return fetch(`${Setting.ServerUrl}/api/get-group?id=${owner}/${encodeURIComponent(name)}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/get-group?id=${owner}/${encodeURIComponent(
+      name
+    )}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function updateGroup(owner, name, group) {
   const newGroup = Setting.deepCopy(group);
-  return fetch(`${Setting.ServerUrl}/api/update-group?id=${owner}/${encodeURIComponent(name)}`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(newGroup),
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/update-group?id=${owner}/${encodeURIComponent(
+      name
+    )}`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(newGroup),
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function addGroup(group) {
@@ -55,7 +77,7 @@ export function addGroup(group) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function deleteGroup(group) {
@@ -67,5 +89,5 @@ export function deleteGroup(group) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }

@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Row, Select, Switch, Table, Tooltip} from "antd";
-import {CountryCodeSelect} from "../common/select/CountryCodeSelect";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Button, Col, Input, Row, Select, Switch, Table, Tooltip } from "antd";
+import { CountryCodeSelect } from "../common/select/CountryCodeSelect";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 import * as Provider from "../auth/Provider";
 
-const {Option} = Select;
+const { Option } = Select;
 
 class ProviderTable extends React.Component {
   constructor(props) {
@@ -44,7 +44,15 @@ class ProviderTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {name: Setting.getNewRowNameForTable(table, "Please select a provider"), canSignUp: true, canSignIn: true, canUnlink: true, prompted: false, signupGroup: "", rule: "None"};
+    const row = {
+      name: Setting.getNewRowNameForTable(table, "Please select a provider"),
+      canSignUp: true,
+      canSignIn: true,
+      canUnlink: true,
+      prompted: false,
+      signupGroup: "",
+      rule: "None",
+    };
     if (table === undefined) {
       table = [];
     }
@@ -75,24 +83,49 @@ class ProviderTable extends React.Component {
         key: "name",
         render: (text, record, index) => {
           return (
-            <Select virtual={false} style={{width: "100%"}}
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
               value={text}
-              onChange={value => {
+              onChange={(value) => {
                 this.updateField(table, index, "name", value);
-                const provider = Setting.getArrayItem(this.props.providers, "name", value);
+                const provider = Setting.getArrayItem(
+                  this.props.providers,
+                  "name",
+                  value
+                );
                 this.updateField(table, index, "provider", provider);
 
                 // If the provider is email or SMS, set the rule to "all" instead of the default "None"
-                if (provider.category === "Email" || provider.category === "SMS") {
+                if (
+                  provider.category === "Email" ||
+                  provider.category === "SMS"
+                ) {
                   this.updateField(table, index, "rule", "All");
                 }
-              }} >
-              {
-                Setting.getDeduplicatedArray(this.props.providers, table, "name").filter(provider => provider.category !== "Captcha" || !table.some(tableItem => {
-                  const existingProvider = Setting.getArrayItem(this.props.providers, "name", tableItem.name);
-                  return existingProvider && existingProvider.category === "Captcha";
-                })).map((provider, index) => <Option key={index} value={provider.name}>{provider.name}</Option>)
-              }
+              }}
+            >
+              {Setting.getDeduplicatedArray(this.props.providers, table, "name")
+                .filter(
+                  (provider) =>
+                    provider.category !== "Captcha" ||
+                    !table.some((tableItem) => {
+                      const existingProvider = Setting.getArrayItem(
+                        this.props.providers,
+                        "name",
+                        tableItem.name
+                      );
+                      return (
+                        existingProvider &&
+                        existingProvider.category === "Captcha"
+                      );
+                    })
+                )
+                .map((provider, index) => (
+                  <Option key={index} value={provider.name}>
+                    {provider.name}
+                  </Option>
+                ))}
             </Select>
           );
         },
@@ -103,7 +136,11 @@ class ProviderTable extends React.Component {
         key: "category",
         width: "100px",
         render: (text, record, index) => {
-          const provider = Setting.getArrayItem(this.props.providers, "name", record.name);
+          const provider = Setting.getArrayItem(
+            this.props.providers,
+            "name",
+            record.name
+          );
           return provider?.category;
         },
       },
@@ -113,7 +150,11 @@ class ProviderTable extends React.Component {
         key: "type",
         width: "80px",
         render: (text, record, index) => {
-          const provider = Setting.getArrayItem(this.props.providers, "name", record.name);
+          const provider = Setting.getArrayItem(
+            this.props.providers,
+            "name",
+            record.name
+          );
           return Provider.getProviderLogoWidget(provider);
         },
       },
@@ -129,7 +170,7 @@ class ProviderTable extends React.Component {
 
           return (
             <CountryCodeSelect
-              style={{width: "100%"}}
+              style={{ width: "100%" }}
               hasDefault={true}
               mode={"multiple"}
               initValue={text ? text : ["All"]}
@@ -152,9 +193,12 @@ class ProviderTable extends React.Component {
           }
 
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "canSignUp", checked);
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "canSignUp", checked);
+              }}
+            />
           );
         },
       },
@@ -169,9 +213,12 @@ class ProviderTable extends React.Component {
           }
 
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "canSignIn", checked);
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "canSignIn", checked);
+              }}
+            />
           );
         },
       },
@@ -186,9 +233,12 @@ class ProviderTable extends React.Component {
           }
 
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "canUnlink", checked);
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "canUnlink", checked);
+              }}
+            />
           );
         },
       },
@@ -203,9 +253,12 @@ class ProviderTable extends React.Component {
           }
 
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "prompted", checked);
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "prompted", checked);
+              }}
+            />
           );
         },
       },
@@ -220,9 +273,12 @@ class ProviderTable extends React.Component {
           }
 
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "signupGroup", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "signupGroup", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -237,48 +293,86 @@ class ProviderTable extends React.Component {
               text = "Default";
             }
             return (
-              <Select virtual={false} style={{width: "100%"}}
+              <Select
+                virtual={false}
+                style={{ width: "100%" }}
                 value={text}
                 defaultValue="Default"
-                onChange={value => {
+                onChange={(value) => {
                   this.updateField(table, index, "rule", value);
-                }} >
-                <Option key="Default" value="Default">{i18next.t("general:Default")}</Option>
-                <Option key="OneTap" value="OneTap">{"One Tap"}</Option>
+                }}
+              >
+                <Option key="Default" value="Default">
+                  {i18next.t("general:Default")}
+                </Option>
+                <Option key="OneTap" value="OneTap">
+                  {"One Tap"}
+                </Option>
               </Select>
             );
           } else if (record.provider?.category === "Captcha") {
             return (
-              <Select virtual={false} style={{width: "100%"}}
+              <Select
+                virtual={false}
+                style={{ width: "100%" }}
                 value={text}
                 defaultValue="None"
-                onChange={value => {
+                onChange={(value) => {
                   this.updateField(table, index, "rule", value);
-                }} >
-                <Option key="None" value="None">{i18next.t("general:None")}</Option>
-                <Option key="Dynamic" value="Dynamic">{i18next.t("application:Dynamic")}</Option>
-                <Option key="Always" value="Always">{i18next.t("application:Always")}</Option>
-                <Option key="Internet-Only" value="Internet-Only">{i18next.t("application:Internet-Only")}</Option>
+                }}
+              >
+                <Option key="None" value="None">
+                  {i18next.t("general:None")}
+                </Option>
+                <Option key="Dynamic" value="Dynamic">
+                  {i18next.t("application:Dynamic")}
+                </Option>
+                <Option key="Always" value="Always">
+                  {i18next.t("application:Always")}
+                </Option>
+                <Option key="Internet-Only" value="Internet-Only">
+                  {i18next.t("application:Internet-Only")}
+                </Option>
               </Select>
             );
-          } else if (record.provider?.category === "SMS" || record.provider?.category === "Email") {
+          } else if (
+            record.provider?.category === "SMS" ||
+            record.provider?.category === "Email"
+          ) {
             if (text === "None") {
               text = "All";
             }
             return (
-              <Select virtual={false} style={{width: "100%"}}
+              <Select
+                virtual={false}
+                style={{ width: "100%" }}
                 value={text}
                 defaultValue="All"
-                onChange={value => {
+                onChange={(value) => {
                   this.updateField(table, index, "rule", value);
-                }}>
-                <Option key="all" value="all">{"All"}</Option>
-                <Option key="signup" value="signup">{"Signup"}</Option>
-                <Option key="login" value="login">{"Login"}</Option>
-                <Option key="forget" value="forget">{"Forget Password"}</Option>
-                <Option key="reset" value="reset">{"Reset Password"}</Option>
-                <Option key="mfaSetup" value="mfaSetup">{"Set MFA"}</Option>
-                <Option key="mfaAuth" value="mfaAuth">{"MFA Auth"}</Option>
+                }}
+              >
+                <Option key="all" value="all">
+                  {"All"}
+                </Option>
+                <Option key="signup" value="signup">
+                  {"Signup"}
+                </Option>
+                <Option key="login" value="login">
+                  {"Login"}
+                </Option>
+                <Option key="forget" value="forget">
+                  {"Forget Password"}
+                </Option>
+                <Option key="reset" value="reset">
+                  {"Reset Password"}
+                </Option>
+                <Option key="mfaSetup" value="mfaSetup">
+                  {"Set MFA"}
+                </Option>
+                <Option key="mfaAuth" value="mfaAuth">
+                  {"MFA Auth"}
+                </Option>
               </Select>
             );
           } else {
@@ -294,13 +388,29 @@ class ProviderTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -309,15 +419,29 @@ class ProviderTable extends React.Component {
     ];
 
     if (!this.props.application.enableSignUp) {
-      columns = columns.filter(column => column.key !== "canSignUp");
+      columns = columns.filter((column) => column.key !== "canSignUp");
     }
 
     return (
-      <Table scroll={{x: "max-content"}} rowKey="name" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        scroll={{ x: "max-content" }}
+        rowKey="name"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {this.props.title}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
           </div>
         )}
       />
@@ -327,12 +451,8 @@ class ProviderTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.props.table)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.props.table)}</Col>
         </Row>
       </div>
     );

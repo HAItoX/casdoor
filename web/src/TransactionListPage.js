@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
 
 import BaseListPage from "./BaseListPage";
 import i18next from "i18next";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as Setting from "./Setting";
 import * as Provider from "./auth/Provider";
-import {Button, Table} from "antd";
+import { Button, Table } from "antd";
 import PopconfirmModal from "./common/modal/PopconfirmModal";
 import React from "react";
 import * as TransactionBackend from "./backend/TransactionBackend";
@@ -53,19 +53,32 @@ class TransactionListPage extends BaseListPage {
     TransactionBackend.deleteTransaction(this.state.data[i])
       .then((res) => {
         if (res.status === "ok") {
-          Setting.showMessage("success", i18next.t("general:Successfully deleted"));
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully deleted")
+          );
           this.fetch({
             pagination: {
               ...this.state.pagination,
-              current: this.state.pagination.current > 1 && this.state.data.length === 1 ? this.state.pagination.current - 1 : this.state.pagination.current,
+              current:
+                this.state.pagination.current > 1 &&
+                this.state.data.length === 1
+                  ? this.state.pagination.current - 1
+                  : this.state.pagination.current,
             },
           });
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to delete")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to delete")}: ${res.msg}`
+          );
         }
       })
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
@@ -74,15 +87,26 @@ class TransactionListPage extends BaseListPage {
     TransactionBackend.addTransaction(newTransaction)
       .then((res) => {
         if (res.status === "ok") {
-          this.props.history.push({pathname: `/transactions/${newTransaction.owner}/${newTransaction.name}`, mode: "add"});
-          Setting.showMessage("success", i18next.t("general:Successfully added"));
+          this.props.history.push({
+            pathname: `/transactions/${newTransaction.owner}/${newTransaction.name}`,
+            mode: "add",
+          });
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully added")
+          );
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to add")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to add")}: ${res.msg}`
+          );
         }
-      }
-      )
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      })
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
@@ -98,9 +122,7 @@ class TransactionListPage extends BaseListPage {
         ...this.getColumnSearchProps("name"),
         render: (text, record, index) => {
           return (
-            <Link to={`/transactions/${record.owner}/${text}`}>
-              {text}
-            </Link>
+            <Link to={`/transactions/${record.owner}/${text}`}>{text}</Link>
           );
         },
       },
@@ -113,11 +135,7 @@ class TransactionListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("owner"),
         render: (text, record, index) => {
-          return (
-            <Link to={`/organizations/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/organizations/${text}`}>{text}</Link>;
         },
       },
       {
@@ -128,11 +146,7 @@ class TransactionListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("provider"),
         render: (text, record, index) => {
-          return (
-            <Link to={`/providers/${record.owner}/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/providers/${record.owner}/${text}`}>{text}</Link>;
         },
       },
       {
@@ -143,11 +157,7 @@ class TransactionListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("user"),
         render: (text, record, index) => {
-          return (
-            <Link to={`/users/${record.owner}/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/users/${record.owner}/${text}`}>{text}</Link>;
         },
       },
 
@@ -168,7 +178,9 @@ class TransactionListPage extends BaseListPage {
         width: "140px",
         align: "center",
         filterMultiple: false,
-        filters: Setting.getProviderTypeOptions("Payment").map((o) => {return {text: o.id, value: o.name};}),
+        filters: Setting.getProviderTypeOptions("Payment").map((o) => {
+          return { text: o.id, value: o.name };
+        }),
         sorter: true,
         render: (text, record, index) => {
           record.category = "Payment";
@@ -257,16 +269,31 @@ class TransactionListPage extends BaseListPage {
         dataIndex: "",
         key: "op",
         width: "240px",
-        fixed: (Setting.isMobile()) ? "false" : "right",
+        fixed: Setting.isMobile() ? "false" : "right",
         render: (text, record, index) => {
           return (
             <div>
-              <Button style={{marginTop: "10px", marginBottom: "10px", marginRight: "10px"}} type="primary" onClick={() => this.props.history.push(`/transactions/${record.owner}/${record.name}`)}>{i18next.t("general:Edit")}</Button>
-              <PopconfirmModal
-                title={i18next.t("general:Sure to delete") + `: ${record.name} ?`}
-                onConfirm={() => this.deleteTransaction(index)}
+              <Button
+                style={{
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                  marginRight: "10px",
+                }}
+                type="primary"
+                onClick={() =>
+                  this.props.history.push(
+                    `/transactions/${record.owner}/${record.name}`
+                  )
+                }
               >
-              </PopconfirmModal>
+                {i18next.t("general:Edit")}
+              </Button>
+              <PopconfirmModal
+                title={
+                  i18next.t("general:Sure to delete") + `: ${record.name} ?`
+                }
+                onConfirm={() => this.deleteTransaction(index)}
+              ></PopconfirmModal>
             </div>
           );
         },
@@ -277,16 +304,32 @@ class TransactionListPage extends BaseListPage {
       total: this.state.pagination.total,
       showQuickJumper: true,
       showSizeChanger: true,
-      showTotal: () => i18next.t("general:{total} in total").replace("{total}", this.state.pagination.total),
+      showTotal: () =>
+        i18next
+          .t("general:{total} in total")
+          .replace("{total}", this.state.pagination.total),
     };
 
     return (
       <div>
-        <Table scroll={{x: "max-content"}} columns={columns} dataSource={transactions} rowKey={(record) => `${record.owner}/${record.name}`} size="middle" bordered pagination={paginationProps}
+        <Table
+          scroll={{ x: "max-content" }}
+          columns={columns}
+          dataSource={transactions}
+          rowKey={(record) => `${record.owner}/${record.name}`}
+          size="middle"
+          bordered
+          pagination={paginationProps}
           title={() => (
             <div>
               {i18next.t("general:Transactions")}&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button type="primary" size="small" onClick={this.addTransaction.bind(this)}>{i18next.t("general:Add")}</Button>
+              <Button
+                type="primary"
+                size="small"
+                onClick={this.addTransaction.bind(this)}
+              >
+                {i18next.t("general:Add")}
+              </Button>
             </div>
           )}
           loading={this.state.loading}
@@ -297,38 +340,49 @@ class TransactionListPage extends BaseListPage {
   }
 
   fetch = (params = {}) => {
-    let field = params.searchedColumn, value = params.searchText;
-    const sortField = params.sortField, sortOrder = params.sortOrder;
+    let field = params.searchedColumn,
+      value = params.searchText;
+    const sortField = params.sortField,
+      sortOrder = params.sortOrder;
     if (params.type !== undefined && params.type !== null) {
       field = "type";
       value = params.type;
     }
-    this.setState({loading: true});
-    TransactionBackend.getTransactions(Setting.isDefaultOrganizationSelected(this.props.account) ? "" : Setting.getRequestOrganization(this.props.account), params.pagination.current, params.pagination.pageSize, field, value, sortField, sortOrder)
-      .then((res) => {
+    this.setState({ loading: true });
+    TransactionBackend.getTransactions(
+      Setting.isDefaultOrganizationSelected(this.props.account)
+        ? ""
+        : Setting.getRequestOrganization(this.props.account),
+      params.pagination.current,
+      params.pagination.pageSize,
+      field,
+      value,
+      sortField,
+      sortOrder
+    ).then((res) => {
+      this.setState({
+        loading: false,
+      });
+      if (res.status === "ok") {
         this.setState({
-          loading: false,
+          data: res.data,
+          pagination: {
+            ...params.pagination,
+            total: res.data2,
+          },
+          searchText: params.searchText,
+          searchedColumn: params.searchedColumn,
         });
-        if (res.status === "ok") {
+      } else {
+        if (Setting.isResponseDenied(res)) {
           this.setState({
-            data: res.data,
-            pagination: {
-              ...params.pagination,
-              total: res.data2,
-            },
-            searchText: params.searchText,
-            searchedColumn: params.searchedColumn,
+            isAuthorized: false,
           });
         } else {
-          if (Setting.isResponseDenied(res)) {
-            this.setState({
-              isAuthorized: false,
-            });
-          } else {
-            Setting.showMessage("error", res.msg);
-          }
+          Setting.showMessage("error", res.msg);
         }
-      });
+      }
+    });
   };
 }
 

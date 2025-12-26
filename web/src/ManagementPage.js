@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -108,6 +108,8 @@ import { clearWeb3AuthToken } from "./auth/Web3Auth";
 import TransactionListPage from "./TransactionListPage";
 import TransactionEditPage from "./TransactionEditPage";
 import VerificationListPage from "./VerificationListPage";
+// 导入微前端子应用容器组件
+import SubAppContainer from "./microfrontend/SubAppContainer";
 
 function ManagementPage(props) {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -1206,6 +1208,13 @@ function ManagementPage(props) {
           exact
           path="/.well-known/openid-configuration"
           render={(props) => <OdicDiscoveryPage />}
+        />
+        {/* 微前端子应用路由 */}
+        <Route
+          path="/subapp/:appName*"
+          render={(props) =>
+            renderLoginIfNotLoggedIn(<SubAppContainer {...props} />)
+          }
         />
         <Route
           path=""

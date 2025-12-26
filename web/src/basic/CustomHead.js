@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 let customHeadLoaded = false;
 
@@ -21,11 +21,13 @@ function CustomHead(props) {
     if (!customHeadLoaded) {
       const suffix = new Date().getTime().toString();
 
-      if (!props.headerHtml) {return;}
+      if (!props.headerHtml) {
+        return;
+      }
       const node = document.createElement("div");
       node.innerHTML = props.headerHtml;
 
-      node.childNodes.forEach(el => {
+      node.childNodes.forEach((el) => {
         if (el.nodeName === "#text") {
           return;
         }
@@ -34,7 +36,7 @@ function CustomHead(props) {
 
         if (innerNode.localName === "script") {
           const scriptNode = document.createElement("script");
-          Array.from(innerNode.attributes).forEach(attr => {
+          Array.from(innerNode.attributes).forEach((attr) => {
             scriptNode.setAttribute(attr.name, attr.value);
           });
           scriptNode.text = innerNode.textContent;

@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Card, ConfigProvider, Form, Layout, Switch, theme} from "antd";
+import { Card, ConfigProvider, Form, Layout, Switch, theme } from "antd";
 import ThemePicker from "./ThemePicker";
-import ColorPicker, {GREEN_COLOR, PINK_COLOR} from "./ColorPicker";
+import ColorPicker, { GREEN_COLOR, PINK_COLOR } from "./ColorPicker";
 import RadiusPicker from "./RadiusPicker";
 import * as React from "react";
-import {useEffect, useLayoutEffect} from "react";
-import {Content} from "antd/es/layout/layout";
+import { useEffect, useLayoutEffect } from "react";
+import { Content } from "antd/es/layout/layout";
 import i18next from "i18next";
 import * as Conf from "../../Conf";
 
@@ -43,7 +43,7 @@ export default function ThemeEditor(props) {
   const themeData = props.themeData ?? Conf.ThemeDefault;
   const onThemeChange = props.onThemeChange ?? onChange;
 
-  const {isCompact, themeType, ...themeToken} = themeData;
+  const { isCompact, themeType, ...themeToken } = themeData;
   const isLight = themeType !== "dark";
   const [form] = Form.useForm();
 
@@ -63,7 +63,10 @@ export default function ThemeEditor(props) {
   }, []);
 
   useLayoutEffect(() => {
-    const mergedData = Object.assign(Object.assign(Object.assign({}, Conf.ThemeDefault), {themeType}), ThemesInfo[themeType]);
+    const mergedData = Object.assign(
+      Object.assign(Object.assign({}, Conf.ThemeDefault), { themeType }),
+      ThemesInfo[themeType]
+    );
     onThemeChange(null, mergedData);
     form.setFieldsValue(mergedData);
   }, [themeType]);
@@ -78,29 +81,37 @@ export default function ThemeEditor(props) {
         algorithm: algorithmFn,
       }}
     >
-      <Layout style={{width: "800px", backgroundColor: "white"}}>
-        <Content >
-          <Card
-            title={i18next.t("theme:Theme")}
-          >
+      <Layout style={{ width: "800px", backgroundColor: "white" }}>
+        <Content>
+          <Card title={i18next.t("theme:Theme")}>
             <Form
               form={form}
               initialValues={themeData}
               onValuesChange={onThemeChange}
-              labelCol={{span: 4}}
-              wrapperCol={{span: 20}}
-              style={{width: "800px"}}
+              labelCol={{ span: 4 }}
+              wrapperCol={{ span: 20 }}
+              style={{ width: "800px" }}
             >
               <Form.Item label={i18next.t("theme:Theme")} name="themeType">
                 <ThemePicker />
               </Form.Item>
-              <Form.Item label={i18next.t("theme:Primary color")} name="colorPrimary">
+              <Form.Item
+                label={i18next.t("theme:Primary color")}
+                name="colorPrimary"
+              >
                 <ColorPicker />
               </Form.Item>
-              <Form.Item label={i18next.t("theme:Border radius")} name="borderRadius">
+              <Form.Item
+                label={i18next.t("theme:Border radius")}
+                name="borderRadius"
+              >
                 <RadiusPicker />
               </Form.Item>
-              <Form.Item label={i18next.t("theme:Is compact")} valuePropName="checked" name="isCompact">
+              <Form.Item
+                label={i18next.t("theme:Is compact")}
+                valuePropName="checked"
+                name="isCompact"
+              >
                 <Switch />
               </Form.Item>
             </Form>

@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,26 +13,43 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Popover, Row, Select, Space, Switch, Table, Tooltip} from "antd";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Input,
+  Popover,
+  Row,
+  Select,
+  Space,
+  Switch,
+  Table,
+  Tooltip,
+} from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 import Editor from "../common/Editor";
 
-const {Option} = Select;
+const { Option } = Select;
 
 export const SigninTableDefaultCssMap = {
-  "Back button": ".back-button {\n      top: 65px;\n      left: 15px;\n      position: absolute;\n}\n.back-inner-button{}",
-  "Languages": ".login-languages {\n    top: 60px;\n    right: 10px;\n    position: absolute;\n}",
-  "Logo": ".login-logo-box {}",
+  "Back button":
+    ".back-button {\n      top: 65px;\n      left: 15px;\n      position: absolute;\n}\n.back-inner-button{}",
+  Languages:
+    ".login-languages {\n    top: 60px;\n    right: 10px;\n    position: absolute;\n}",
+  Logo: ".login-logo-box {}",
   "Signin methods": ".signin-methods {}",
-  "Username": ".login-username {}\n.login-username-input{}",
-  "Password": ".login-password {}\n.login-password-input{}",
-  "Agreement": ".login-agreement {}",
-  "Forgot password?": ".login-forget-password {\n    display: inline-flex;\n    justify-content: space-between;\n    width: 320px;\n    margin-bottom: 25px;\n}",
-  "Login button": ".login-button-box {\n    margin-bottom: 5px;\n}\n.login-button {\n    width: 100%;\n}",
-  "Signup link": ".login-signup-link {\n    margin-bottom: 24px;\n    display: flex;\n    justify-content: end;\n}",
-  "Providers": ".provider-img {\n      width: 30px;\n      margin: 5px;\n}\n.provider-big-img {\n      margin-bottom: 10px;\n}",
+  Username: ".login-username {}\n.login-username-input{}",
+  Password: ".login-password {}\n.login-password-input{}",
+  Agreement: ".login-agreement {}",
+  "Forgot password?":
+    ".login-forget-password {\n    display: inline-flex;\n    justify-content: space-between;\n    width: 320px;\n    margin-bottom: 25px;\n}",
+  "Login button":
+    ".login-button-box {\n    margin-bottom: 5px;\n}\n.login-button {\n    width: 100%;\n}",
+  "Signup link":
+    ".login-signup-link {\n    margin-bottom: 24px;\n    display: flex;\n    justify-content: end;\n}",
+  Providers:
+    ".provider-img {\n      width: 30px;\n      margin: 5px;\n}\n.provider-big-img {\n      margin-bottom: 10px;\n}",
 };
 
 class SigninTable extends React.Component {
@@ -56,7 +73,12 @@ class SigninTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {name: Setting.getNewRowNameForTable(table, "Please select a signin item"), visible: true, required: true, rule: "None"};
+    const row = {
+      name: Setting.getNewRowNameForTable(table, "Please select a signin item"),
+      visible: true,
+      required: true,
+      rule: "None",
+    };
     if (table === undefined) {
       table = [];
     }
@@ -66,7 +88,11 @@ class SigninTable extends React.Component {
 
   addCustomRow(table) {
     const randomName = "Text " + Date.now().toString();
-    const row = {name: Setting.getNewRowNameForTable(table, randomName), visible: true, isCustom: true};
+    const row = {
+      name: Setting.getNewRowNameForTable(table, randomName),
+      visible: true,
+      isCustom: true,
+    };
     if (table === undefined) {
       table = [];
     }
@@ -98,32 +124,58 @@ class SigninTable extends React.Component {
         key: "name",
         render: (text, record, index) => {
           if (record.isCustom) {
-            return <Input style={{width: "100%"}}
-              value={text} onPressEnter={e => {
-                this.updateField(table, index, "name", e.target.value);
-              }} disabled>
-            </Input>;
+            return (
+              <Input
+                style={{ width: "100%" }}
+                value={text}
+                onPressEnter={(e) => {
+                  this.updateField(table, index, "name", e.target.value);
+                }}
+                disabled
+              ></Input>
+            );
           }
 
           const items = [
-            {name: "Signin methods", displayName: i18next.t("application:Signin methods")},
-            {name: "Logo", displayName: i18next.t("general:Logo")},
-            {name: "Back button", displayName: i18next.t("login:Back button")},
-            {name: "Languages", displayName: i18next.t("general:Languages")},
-            {name: "Username", displayName: i18next.t("signup:Username")},
-            {name: "Password", displayName: i18next.t("general:Password")},
-            {name: "Providers", displayName: i18next.t("general:Providers")},
-            {name: "Agreement", displayName: i18next.t("signup:Agreement")},
-            {name: "Forgot password?", displayName: i18next.t("login:Forgot password?")},
-            {name: "Login button", displayName: i18next.t("login:Signin button")},
-            {name: "Signup link", displayName: i18next.t("general:Signup link")},
-            {name: "Captcha", displayName: i18next.t("general:Captcha")},
-            {name: "Auto sign in", displayName: i18next.t("login:Auto sign in")},
-            {name: "Select organization", displayName: i18next.t("login:Select organization")},
+            {
+              name: "Signin methods",
+              displayName: i18next.t("application:Signin methods"),
+            },
+            { name: "Logo", displayName: i18next.t("general:Logo") },
+            {
+              name: "Back button",
+              displayName: i18next.t("login:Back button"),
+            },
+            { name: "Languages", displayName: i18next.t("general:Languages") },
+            { name: "Username", displayName: i18next.t("signup:Username") },
+            { name: "Password", displayName: i18next.t("general:Password") },
+            { name: "Providers", displayName: i18next.t("general:Providers") },
+            { name: "Agreement", displayName: i18next.t("signup:Agreement") },
+            {
+              name: "Forgot password?",
+              displayName: i18next.t("login:Forgot password?"),
+            },
+            {
+              name: "Login button",
+              displayName: i18next.t("login:Signin button"),
+            },
+            {
+              name: "Signup link",
+              displayName: i18next.t("general:Signup link"),
+            },
+            { name: "Captcha", displayName: i18next.t("general:Captcha") },
+            {
+              name: "Auto sign in",
+              displayName: i18next.t("login:Auto sign in"),
+            },
+            {
+              name: "Select organization",
+              displayName: i18next.t("login:Select organization"),
+            },
           ];
 
           const getItemDisplayName = (text) => {
-            const item = items.filter(item => item.name === text);
+            const item = items.filter((item) => item.name === text);
             if (item.length === 0) {
               return "";
             }
@@ -131,15 +183,27 @@ class SigninTable extends React.Component {
           };
 
           return (
-            <Select virtual={false} style={{width: "100%"}}
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
               value={getItemDisplayName(text)}
-              onChange={value => {
+              onChange={(value) => {
                 this.updateField(table, index, "name", value);
-                this.updateField(table, index, "customCss", SigninTableDefaultCssMap[value]);
-              }} >
-              {
-                Setting.getDeduplicatedArray(items, table, "name").map((item, index) => <Option key={index} value={item.name}>{item.displayName}</Option>)
-              }
+                this.updateField(
+                  table,
+                  index,
+                  "customCss",
+                  SigninTableDefaultCssMap[value]
+                );
+              }}
+            >
+              {Setting.getDeduplicatedArray(items, table, "name").map(
+                (item, index) => (
+                  <Option key={index} value={item.name}>
+                    {item.displayName}
+                  </Option>
+                )
+              )}
             </Select>
           );
         },
@@ -155,14 +219,17 @@ class SigninTable extends React.Component {
           }
 
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "visible", checked);
-              if (!checked) {
-                this.updateField(table, index, "required", false);
-              } else {
-                this.updateField(table, index, "required", true);
-              }
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "visible", checked);
+                if (!checked) {
+                  this.updateField(table, index, "required", false);
+                } else {
+                  this.updateField(table, index, "required", true);
+                }
+              }}
+            />
           );
         },
       },
@@ -174,22 +241,51 @@ class SigninTable extends React.Component {
         render: (text, record, index) => {
           if (record.name.startsWith("Text ") || record?.isCustom) {
             return (
-              <Popover placement="right" content={
-                <div style={{width: "900px", height: "300px"}} >
-                  <Editor value={text} lang="html" fillHeight dark onChange={value => {
-                    this.updateField(table, index, "label", value);
-                  }} />
-                </div>
-              } title={i18next.t("signup:Label HTML")} trigger="click">
-                <Input value={text} style={{marginBottom: "10px"}} onChange={e => {
-                  this.updateField(table, index, "label", e.target.value);
-                }} />
+              <Popover
+                placement="right"
+                content={
+                  <div style={{ width: "900px", height: "300px" }}>
+                    <Editor
+                      value={text}
+                      lang="html"
+                      fillHeight
+                      dark
+                      onChange={(value) => {
+                        this.updateField(table, index, "label", value);
+                      }}
+                    />
+                  </div>
+                }
+                title={i18next.t("signup:Label HTML")}
+                trigger="click"
+              >
+                <Input
+                  value={text}
+                  style={{ marginBottom: "10px" }}
+                  onChange={(e) => {
+                    this.updateField(table, index, "label", e.target.value);
+                  }}
+                />
               </Popover>
             );
-          } else if (["Username", "Password", "Signup link", "Forgot password?", "Login button"].includes(record.name)) {
-            return <Input value={text} style={{marginBottom: "10px"}} onChange={e => {
-              this.updateField(table, index, "label", e.target.value);
-            }} />;
+          } else if (
+            [
+              "Username",
+              "Password",
+              "Signup link",
+              "Forgot password?",
+              "Login button",
+            ].includes(record.name)
+          ) {
+            return (
+              <Input
+                value={text}
+                style={{ marginBottom: "10px" }}
+                onChange={(e) => {
+                  this.updateField(table, index, "label", e.target.value);
+                }}
+              />
+            );
           }
           return null;
         },
@@ -202,22 +298,34 @@ class SigninTable extends React.Component {
         render: (text, record, index) => {
           if (!record.name.startsWith("Text ") && !record?.isCustom) {
             return (
-              <Popover placement="right" content={
-                <div style={{width: "900px", height: "300px"}} >
-                  <Editor
-                    value={text?.replaceAll("<style>", "").replaceAll("</style>", "")}
-                    lang="css"
-                    fillHeight
-                    dark
-                    onChange={value => {
-                      this.updateField(table, index, "customCss", value);
-                    }}
-                  />
-                </div>
-              } title={i18next.t("application:CSS style")} trigger="click">
-                <Input value={text?.replaceAll("<style>", "").replaceAll("</style>", "")} onChange={e => {
-                  this.updateField(table, index, "customCss", e.target.value);
-                }} />
+              <Popover
+                placement="right"
+                content={
+                  <div style={{ width: "900px", height: "300px" }}>
+                    <Editor
+                      value={text
+                        ?.replaceAll("<style>", "")
+                        .replaceAll("</style>", "")}
+                      lang="css"
+                      fillHeight
+                      dark
+                      onChange={(value) => {
+                        this.updateField(table, index, "customCss", value);
+                      }}
+                    />
+                  </div>
+                }
+                title={i18next.t("application:CSS style")}
+                trigger="click"
+              >
+                <Input
+                  value={text
+                    ?.replaceAll("<style>", "")
+                    .replaceAll("</style>", "")}
+                  onChange={(e) => {
+                    this.updateField(table, index, "customCss", e.target.value);
+                  }}
+                />
               </Popover>
             );
           }
@@ -236,9 +344,12 @@ class SigninTable extends React.Component {
           }
 
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "placeholder", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "placeholder", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -251,20 +362,30 @@ class SigninTable extends React.Component {
           let options = [];
           if (record.name === "Providers") {
             options = [
-              {id: "big", name: i18next.t("application:Big icon")},
-              {id: "small", name: i18next.t("application:Small icon")},
+              { id: "big", name: i18next.t("application:Big icon") },
+              { id: "small", name: i18next.t("application:Small icon") },
             ];
           }
           if (record.name === "Captcha") {
             options = [
-              {id: "pop up", name: i18next.t("application:Pop up")},
-              {id: "inline", name: i18next.t("application:Inline")},
+              { id: "pop up", name: i18next.t("application:Pop up") },
+              { id: "inline", name: i18next.t("application:Inline") },
             ];
           }
           if (record.name === "Forgot password?") {
             options = [
-              {id: "None", name: `${i18next.t("login:Auto sign in")} - ${i18next.t("general:True")}`},
-              {id: "Auto sign in - False", name: `${i18next.t("login:Auto sign in")} - ${i18next.t("general:False")}`},
+              {
+                id: "None",
+                name: `${i18next.t("login:Auto sign in")} - ${i18next.t(
+                  "general:True"
+                )}`,
+              },
+              {
+                id: "Auto sign in - False",
+                name: `${i18next.t("login:Auto sign in")} - ${i18next.t(
+                  "general:False"
+                )}`,
+              },
             ];
           }
 
@@ -273,9 +394,17 @@ class SigninTable extends React.Component {
           }
 
           return (
-            <Select virtual={false} style={{width: "100%"}} value={text} onChange={(value => {
-              this.updateField(table, index, "rule", value);
-            })} options={options.map(item => Setting.getOption(item.name, item.id))} />
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
+              value={text}
+              onChange={(value) => {
+                this.updateField(table, index, "rule", value);
+              }}
+              options={options.map((item) =>
+                Setting.getOption(item.name, item.id)
+              )}
+            />
           );
         },
       },
@@ -287,13 +416,29 @@ class SigninTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -302,12 +447,33 @@ class SigninTable extends React.Component {
     ];
 
     return (
-      <Table scroll={{x: "max-content"}} rowKey="name" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        scroll={{ x: "max-content" }}
+        rowKey="name"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <Space>
             {this.props.title}
-            <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
-            <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addCustomRow(table)}>{i18next.t("general:Add custom item")}</Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addCustomRow(table)}
+            >
+              {i18next.t("general:Add custom item")}
+            </Button>
           </Space>
         )}
       />
@@ -317,12 +483,8 @@ class SigninTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.props.table)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.props.table)}</Col>
         </Row>
       </div>
     );

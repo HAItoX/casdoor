@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,22 +13,30 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, LinkOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Row, Select, Table, Tooltip} from "antd";
+import {
+  DeleteOutlined,
+  DownOutlined,
+  LinkOutlined,
+  UpOutlined,
+} from "@ant-design/icons";
+import { Button, Col, Input, Row, Select, Table, Tooltip } from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 
-const {Option} = Select;
+const { Option } = Select;
 
 class ManagedAccountTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       classes: props,
-      managedAccounts: this.props.table !== null ? this.props.table.map((item, index) => {
-        item.key = index;
-        return item;
-      }) : [],
+      managedAccounts:
+        this.props.table !== null
+          ? this.props.table.map((item, index) => {
+              item.key = index;
+              return item;
+            })
+          : [],
     };
   }
 
@@ -39,11 +47,13 @@ class ManagedAccountTable extends React.Component {
       managedAccounts: table,
     });
 
-    this.props.onUpdateTable([...table].map((item) => {
-      const newItem = Setting.deepCopy(item);
-      delete newItem.key;
-      return newItem;
-    }));
+    this.props.onUpdateTable(
+      [...table].map((item) => {
+        const newItem = Setting.deepCopy(item);
+        delete newItem.key;
+        return newItem;
+      })
+    );
   }
 
   updateField(table, index, key, value) {
@@ -52,7 +62,12 @@ class ManagedAccountTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {key: this.count, application: "", username: "", password: ""};
+    const row = {
+      key: this.count,
+      application: "",
+      username: "",
+      password: "",
+    };
     if (table === undefined || table === null) {
       table = [];
     }
@@ -86,14 +101,19 @@ class ManagedAccountTable extends React.Component {
         render: (text, record, index) => {
           const items = this.props.applications;
           return (
-            <Select virtual={false} style={{width: "100%"}}
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
               value={text}
-              onChange={value => {
+              onChange={(value) => {
                 this.updateField(table, index, "application", value);
-              }} >
-              {
-                items.map((item, index) => <Option key={index} value={item.name}>{item.name}</Option>)
-              }
+              }}
+            >
+              {items.map((item, index) => (
+                <Option key={index} value={item.name}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           );
         },
@@ -105,9 +125,13 @@ class ManagedAccountTable extends React.Component {
         // width: "420px",
         render: (text, record, index) => {
           return (
-            <Input prefix={<LinkOutlined />} value={text} onChange={e => {
-              this.updateField(table, index, "signinUrl", e.target.value);
-            }} />
+            <Input
+              prefix={<LinkOutlined />}
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "signinUrl", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -118,9 +142,12 @@ class ManagedAccountTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "username", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "username", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -131,9 +158,12 @@ class ManagedAccountTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Input.Password value={text} onChange={e => {
-              this.updateField(table, index, "password", e.target.value);
-            }} />
+            <Input.Password
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "password", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -145,13 +175,29 @@ class ManagedAccountTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -160,11 +206,25 @@ class ManagedAccountTable extends React.Component {
     ];
 
     return (
-      <Table scroll={{x: "max-content"}} rowKey="key" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        scroll={{ x: "max-content" }}
+        rowKey="key"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {this.props.title}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
           </div>
         )}
       />
@@ -174,12 +234,8 @@ class ManagedAccountTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.state.managedAccounts)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.state.managedAccounts)}</Col>
         </Row>
       </div>
     );

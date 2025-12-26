@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Row, Select, Switch, Table, Tooltip} from "antd";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Button, Col, Input, Row, Select, Switch, Table, Tooltip } from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 
-const {Option} = Select;
+const { Option } = Select;
 
 class SyncerTableColumnTable extends React.Component {
   constructor(props) {
@@ -38,7 +38,12 @@ class SyncerTableColumnTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {name: `column${table.length}`, type: "string", values: [], isKey: table.filter(row => row.isKey).length === 0};
+    const row = {
+      name: `column${table.length}`,
+      type: "string",
+      values: [],
+      isKey: table.filter((row) => row.isKey).length === 0,
+    };
     if (table === undefined) {
       table = [];
     }
@@ -69,9 +74,12 @@ class SyncerTableColumnTable extends React.Component {
         key: "name",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "name", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "name", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -81,25 +89,43 @@ class SyncerTableColumnTable extends React.Component {
         key: "type",
         render: (text, record, index) => {
           return (
-            <Select virtual={false} style={{width: "100%"}} value={text} onChange={(value => {this.updateField(table, index, "type", value);})}>
-              {
-                ["string", "integer", "boolean"]
-                  .map((item, index) => <Option key={index} value={item}>{item}</Option>)
-              }
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
+              value={text}
+              onChange={(value) => {
+                this.updateField(table, index, "type", value);
+              }}
+            >
+              {["string", "integer", "boolean"].map((item, index) => (
+                <Option key={index} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           );
         },
       },
       {
-        title: i18next.t("syncer:Casdoor column"),
+        title: i18next.t("syncer:HitoFlowcolumn"),
         dataIndex: "casdoorName",
         key: "casdoorName",
         render: (text, record, index) => {
           return (
-            <Select virtual={false} showSearch style={{width: "100%"}} value={text} onChange={(value => {this.updateField(table, index, "casdoorName", value);})}>
-              {
-                Setting.getUserCommonFields().map((item, index) => <Option key={index} value={item}>{item}</Option>)
-              }
+            <Select
+              virtual={false}
+              showSearch
+              style={{ width: "100%" }}
+              value={text}
+              onChange={(value) => {
+                this.updateField(table, index, "casdoorName", value);
+              }}
+            >
+              {Setting.getUserCommonFields().map((item, index) => (
+                <Option key={index} value={item}>
+                  {item}
+                </Option>
+              ))}
             </Select>
           );
         },
@@ -110,17 +136,20 @@ class SyncerTableColumnTable extends React.Component {
         key: "isKey",
         render: (text, record, index) => {
           return (
-            <Switch checked={text} onChange={checked => {
-              if (!record.isKey && checked) {
-                table.forEach((row, i) => {
-                  this.updateField(table, i, "isKey", false);
-                });
-              } else if (record.isKey && !checked) {
-                return;
-              }
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                if (!record.isKey && checked) {
+                  table.forEach((row, i) => {
+                    this.updateField(table, i, "isKey", false);
+                  });
+                } else if (record.isKey && !checked) {
+                  return;
+                }
 
-              this.updateField(table, index, "isKey", checked);
-            }} />
+                this.updateField(table, index, "isKey", checked);
+              }}
+            />
           );
         },
       },
@@ -130,9 +159,12 @@ class SyncerTableColumnTable extends React.Component {
         key: "isHashed",
         render: (text, record, index) => {
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "isHashed", checked);
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "isHashed", checked);
+              }}
+            />
           );
         },
       },
@@ -144,13 +176,30 @@ class SyncerTableColumnTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} disabled={record.isKey && table.length > 1} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  disabled={record.isKey && table.length > 1}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -159,11 +208,24 @@ class SyncerTableColumnTable extends React.Component {
     ];
 
     return (
-      <Table rowKey="index" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        rowKey="index"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {this.props.title}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
           </div>
         )}
       />
@@ -173,12 +235,8 @@ class SyncerTableColumnTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.props.table)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.props.table)}</Col>
         </Row>
       </div>
     );

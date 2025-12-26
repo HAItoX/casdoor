@@ -1,4 +1,4 @@
-// Copyright 2025 The Casdoor Authors. All Rights Reserved.
+// Copyright 2025 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Button, Modal, Progress, message} from "antd";
-import React, {useState} from "react";
+import { Button, Modal, Progress, message } from "antd";
+import React, { useState } from "react";
 import i18next from "i18next";
 
 const FaceRecognitionCommonModal = (props) => {
-  const {visible, onOk, onCancel} = props;
+  const { visible, onOk, onCancel } = props;
 
   const videoRef = React.useRef();
   const canvasRef = React.useRef();
@@ -51,7 +51,13 @@ const FaceRecognitionCommonModal = (props) => {
               canvas.width = videoRef.current.videoWidth;
               canvas.height = videoRef.current.videoHeight;
               const context = canvas.getContext("2d");
-              context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+              context.drawImage(
+                videoRef.current,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+              );
               const b64 = canvas.toDataURL("image/png");
               capturedImageArray.push(b64);
               setCapturedImageArray(capturedImageArray);
@@ -65,7 +71,7 @@ const FaceRecognitionCommonModal = (props) => {
         }
       }, 100);
     } else {
-      mediaStreamRef.current?.getTracks().forEach(track => track.stop());
+      mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
       if (videoRef.current) {
         videoRef.current.srcObject = null;
       }
@@ -75,11 +81,12 @@ const FaceRecognitionCommonModal = (props) => {
   React.useEffect(() => {
     if (visible) {
       navigator.mediaDevices
-        .getUserMedia({video: {facingMode: "user"}})
+        .getUserMedia({ video: { facingMode: "user" } })
         .then((stream) => {
           mediaStreamRef.current = stream;
           setIsCameraCaptured(true);
-        }).catch((error) => {
+        })
+        .catch((error) => {
           handleCameraError(error);
         });
     } else {
@@ -90,88 +97,127 @@ const FaceRecognitionCommonModal = (props) => {
 
   const handleCameraError = (error) => {
     if (error instanceof DOMException) {
-      if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
-        message.error(i18next.t("login:Please ensure that you have a camera device for facial recognition"));
-      } else if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        message.error(i18next.t("login:Please provide permission to access the camera"));
-      } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
-        message.error(i18next.t("login:The camera is currently in use by another webpage"));
+      if (
+        error.name === "NotFoundError" ||
+        error.name === "DevicesNotFoundError"
+      ) {
+        message.error(
+          i18next.t(
+            "login:Please ensure that you have a camera device for facial recognition"
+          )
+        );
+      } else if (
+        error.name === "NotAllowedError" ||
+        error.name === "PermissionDeniedError"
+      ) {
+        message.error(
+          i18next.t("login:Please provide permission to access the camera")
+        );
+      } else if (
+        error.name === "NotReadableError" ||
+        error.name === "TrackStartError"
+      ) {
+        message.error(
+          i18next.t("login:The camera is currently in use by another webpage")
+        );
       } else if (error.name === "TypeError") {
-        message.error(i18next.t("login:Please load the webpage using HTTPS, otherwise the camera cannot be accessed"));
+        message.error(
+          i18next.t(
+            "login:Please load the webpage using HTTPS, otherwise the camera cannot be accessed"
+          )
+        );
       } else {
         message.error(error.message);
       }
     }
   };
 
-  return <div>
-    <Modal
-      closable={false}
-      maskClosable={false}
-      title={i18next.t("login:Face Recognition")}
-      width={350}
-      footer={[
-        <Button key="ok" type={"primary"} disabled={capturedImageArray.length === 0} onClick={() => {
-          onOk(capturedImageArray);
-        }}>
-        Ok
-        </Button>,
-        <Button key="back" onClick={onCancel}>
-        Cancel
-        </Button>,
-      ]}
-      destroyOnClose={true}
-      open={visible}>
-      <Progress percent={percent} />
-      <div style={{
-        marginTop: "20px",
-        marginBottom: "50px",
-        justifyContent: "center",
-        alignContent: "center",
-        position: "relative",
-        flexDirection: "column",
-      }}>
-        {
-          <div style={{display: "flex", justifyContent: "center", alignContent: "center"}}>
-            <video
-              ref={videoRef}
+  return (
+    <div>
+      <Modal
+        closable={false}
+        maskClosable={false}
+        title={i18next.t("login:Face Recognition")}
+        width={350}
+        footer={[
+          <Button
+            key="ok"
+            type={"primary"}
+            disabled={capturedImageArray.length === 0}
+            onClick={() => {
+              onOk(capturedImageArray);
+            }}
+          >
+            Ok
+          </Button>,
+          <Button key="back" onClick={onCancel}>
+            Cancel
+          </Button>,
+        ]}
+        destroyOnClose={true}
+        open={visible}
+      >
+        <Progress percent={percent} />
+        <div
+          style={{
+            marginTop: "20px",
+            marginBottom: "50px",
+            justifyContent: "center",
+            alignContent: "center",
+            position: "relative",
+            flexDirection: "column",
+          }}
+        >
+          {
+            <div
               style={{
-                borderRadius: "50%",
-                height: "220px",
-                verticalAlign: "middle",
-                width: "220px",
-                objectFit: "cover",
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
               }}
-            ></video>
-            <div style={{
-              position: "absolute",
-              width: "240px",
-              height: "240px",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-            }}>
-              <svg width="240" height="240" fill="none">
-                <circle
-                  strokeDasharray="700"
-                  strokeDashoffset={700 - 6.9115 * percent}
-                  strokeWidth="4"
-                  cx="120"
-                  cy="120"
-                  r="110"
-                  stroke="#5734d3"
-                  transform="rotate(-90, 120, 120)"
-                  strokeLinecap="round"
-                  style={{transition: "all .2s linear"}}
-                ></circle>
-              </svg>
+            >
+              <video
+                ref={videoRef}
+                style={{
+                  borderRadius: "50%",
+                  height: "220px",
+                  verticalAlign: "middle",
+                  width: "220px",
+                  objectFit: "cover",
+                }}
+              ></video>
+              <div
+                style={{
+                  position: "absolute",
+                  width: "240px",
+                  height: "240px",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <svg width="240" height="240" fill="none">
+                  <circle
+                    strokeDasharray="700"
+                    strokeDashoffset={700 - 6.9115 * percent}
+                    strokeWidth="4"
+                    cx="120"
+                    cy="120"
+                    r="110"
+                    stroke="#5734d3"
+                    transform="rotate(-90, 120, 120)"
+                    strokeLinecap="round"
+                    style={{ transition: "all .2s linear" }}
+                  ></circle>
+                </svg>
+              </div>
+              <canvas ref={canvasRef} style={{ position: "absolute" }} />
             </div>
-            <canvas ref={canvasRef} style={{position: "absolute"}} />
-          </div>
-        }
-      </div>
-    </Modal>
-  </div>;
+          }
+        </div>
+      </Modal>
+    </div>
+  );
 };
 
 export default FaceRecognitionCommonModal;

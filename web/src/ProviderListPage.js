@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import React from "react";
-import {Link} from "react-router-dom";
-import {Button, Table} from "antd";
+import { Link } from "react-router-dom";
+import { Button, Table } from "antd";
 import moment from "moment";
 import * as Setting from "./Setting";
 import * as ProviderBackend from "./backend/ProviderBackend";
@@ -31,13 +31,17 @@ class ProviderListPage extends BaseListPage {
   componentDidMount() {
     super.componentDidMount();
     this.setState({
-      owner: Setting.isAdminUser(this.props.account) ? "admin" : this.props.account.owner,
+      owner: Setting.isAdminUser(this.props.account)
+        ? "admin"
+        : this.props.account.owner,
     });
   }
 
   newProvider() {
     const randomName = Setting.getRandomName();
-    const owner = Setting.isDefaultOrganizationSelected(this.props.account) ? this.state.owner : Setting.getRequestOrganization(this.props.account);
+    const owner = Setting.isDefaultOrganizationSelected(this.props.account)
+      ? this.state.owner
+      : Setting.getRequestOrganization(this.props.account);
     return {
       owner: owner,
       name: `provider_${randomName}`,
@@ -51,7 +55,8 @@ class ProviderListPage extends BaseListPage {
       enableSignUp: true,
       host: "",
       port: 0,
-      providerUrl: "https://github.com/organizations/xxx/settings/applications/1234567",
+      providerUrl:
+        "https://github.com/organizations/xxx/settings/applications/1234567",
     };
   }
 
@@ -60,14 +65,26 @@ class ProviderListPage extends BaseListPage {
     ProviderBackend.addProvider(newProvider)
       .then((res) => {
         if (res.status === "ok") {
-          this.props.history.push({pathname: `/providers/${newProvider.owner}/${newProvider.name}`, mode: "add"});
-          Setting.showMessage("success", i18next.t("general:Successfully added"));
+          this.props.history.push({
+            pathname: `/providers/${newProvider.owner}/${newProvider.name}`,
+            mode: "add",
+          });
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully added")
+          );
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to add")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to add")}: ${res.msg}`
+          );
         }
       })
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
@@ -75,19 +92,32 @@ class ProviderListPage extends BaseListPage {
     ProviderBackend.deleteProvider(this.state.data[i])
       .then((res) => {
         if (res.status === "ok") {
-          Setting.showMessage("success", i18next.t("general:Successfully deleted"));
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully deleted")
+          );
           this.fetch({
             pagination: {
               ...this.state.pagination,
-              current: this.state.pagination.current > 1 && this.state.data.length === 1 ? this.state.pagination.current - 1 : this.state.pagination.current,
+              current:
+                this.state.pagination.current > 1 &&
+                this.state.data.length === 1
+                  ? this.state.pagination.current - 1
+                  : this.state.pagination.current,
             },
           });
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to delete")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to delete")}: ${res.msg}`
+          );
         }
       })
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
@@ -102,11 +132,7 @@ class ProviderListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("name"),
         render: (text, record, index) => {
-          return (
-            <Link to={`/providers/${record.owner}/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/providers/${record.owner}/${text}`}>{text}</Link>;
         },
       },
       {
@@ -117,7 +143,7 @@ class ProviderListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("owner"),
         render: (text, record, index) => {
-          return (text !== "admin") ? text : i18next.t("provider:admin (Shared)");
+          return text !== "admin" ? text : i18next.t("provider:admin (Shared)");
         },
       },
       {
@@ -144,15 +170,15 @@ class ProviderListPage extends BaseListPage {
         key: "category",
         filterMultiple: false,
         filters: [
-          {text: "Captcha", value: "Captcha"},
-          {text: "Email", value: "Email"},
-          {text: "Notification", value: "Notification"},
-          {text: "OAuth", value: "OAuth"},
-          {text: "Payment", value: "Payment"},
-          {text: "SAML", value: "SAML"},
-          {text: "SMS", value: "SMS"},
-          {text: "Storage", value: "Storage"},
-          {text: "Web3", value: "Web3"},
+          { text: "Captcha", value: "Captcha" },
+          { text: "Email", value: "Email" },
+          { text: "Notification", value: "Notification" },
+          { text: "OAuth", value: "OAuth" },
+          { text: "Payment", value: "Payment" },
+          { text: "SAML", value: "SAML" },
+          { text: "SMS", value: "SMS" },
+          { text: "Storage", value: "Storage" },
+          { text: "Web3", value: "Web3" },
         ],
         width: "110px",
         sorter: true,
@@ -165,15 +191,71 @@ class ProviderListPage extends BaseListPage {
         align: "center",
         filterMultiple: false,
         filters: [
-          {text: "Captcha", value: "Captcha", children: Setting.getProviderTypeOptions("Captcha").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "Email", value: "Email", children: Setting.getProviderTypeOptions("Email").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "Notification", value: "Notification", children: Setting.getProviderTypeOptions("Notification").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "OAuth", value: "OAuth", children: Setting.getProviderTypeOptions("OAuth").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "Payment", value: "Payment", children: Setting.getProviderTypeOptions("Payment").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "SAML", value: "SAML", children: Setting.getProviderTypeOptions("SAML").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "SMS", value: "SMS", children: Setting.getProviderTypeOptions("SMS").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "Storage", value: "Storage", children: Setting.getProviderTypeOptions("Storage").map((o) => {return {text: o.id, value: o.name};})},
-          {text: "Web3", value: "Web3", children: Setting.getProviderTypeOptions("Web3").map((o) => {return {text: o.id, value: o.name};})},
+          {
+            text: "Captcha",
+            value: "Captcha",
+            children: Setting.getProviderTypeOptions("Captcha").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "Email",
+            value: "Email",
+            children: Setting.getProviderTypeOptions("Email").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "Notification",
+            value: "Notification",
+            children: Setting.getProviderTypeOptions("Notification").map(
+              (o) => {
+                return { text: o.id, value: o.name };
+              }
+            ),
+          },
+          {
+            text: "OAuth",
+            value: "OAuth",
+            children: Setting.getProviderTypeOptions("OAuth").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "Payment",
+            value: "Payment",
+            children: Setting.getProviderTypeOptions("Payment").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "SAML",
+            value: "SAML",
+            children: Setting.getProviderTypeOptions("SAML").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "SMS",
+            value: "SMS",
+            children: Setting.getProviderTypeOptions("SMS").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "Storage",
+            value: "Storage",
+            children: Setting.getProviderTypeOptions("Storage").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
+          {
+            text: "Web3",
+            value: "Web3",
+            children: Setting.getProviderTypeOptions("Web3").map((o) => {
+              return { text: o.id, value: o.name };
+            }),
+          },
         ],
         sorter: true,
         render: (text, record, index) => {
@@ -201,9 +283,7 @@ class ProviderListPage extends BaseListPage {
         render: (text, record, index) => {
           return (
             <a target="_blank" rel="noreferrer" href={text}>
-              {
-                Setting.getShortText(text)
-              }
+              {Setting.getShortText(text)}
             </a>
           );
         },
@@ -213,17 +293,39 @@ class ProviderListPage extends BaseListPage {
         dataIndex: "",
         key: "op",
         width: "170px",
-        fixed: (Setting.isMobile()) ? "false" : "right",
+        fixed: Setting.isMobile() ? "false" : "right",
         render: (text, record, index) => {
           return (
             <div>
-              <Button disabled={!Setting.isAdminUser(this.props.account) && (record.owner !== this.props.account.owner)} style={{marginTop: "10px", marginBottom: "10px", marginRight: "10px"}} type="primary" onClick={() => this.props.history.push(`/providers/${record.owner}/${record.name}`)}>{i18next.t("general:Edit")}</Button>
-              <PopconfirmModal
-                title={i18next.t("general:Sure to delete") + `: ${record.name} ?`}
-                onConfirm={() => this.deleteProvider(index)}
-                disabled={!Setting.isAdminUser(this.props.account) && (record.owner !== this.props.account.owner)}
+              <Button
+                disabled={
+                  !Setting.isAdminUser(this.props.account) &&
+                  record.owner !== this.props.account.owner
+                }
+                style={{
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                  marginRight: "10px",
+                }}
+                type="primary"
+                onClick={() =>
+                  this.props.history.push(
+                    `/providers/${record.owner}/${record.name}`
+                  )
+                }
               >
-              </PopconfirmModal>
+                {i18next.t("general:Edit")}
+              </Button>
+              <PopconfirmModal
+                title={
+                  i18next.t("general:Sure to delete") + `: ${record.name} ?`
+                }
+                onConfirm={() => this.deleteProvider(index)}
+                disabled={
+                  !Setting.isAdminUser(this.props.account) &&
+                  record.owner !== this.props.account.owner
+                }
+              ></PopconfirmModal>
             </div>
           );
         },
@@ -234,16 +336,33 @@ class ProviderListPage extends BaseListPage {
       total: this.state.pagination.total,
       showQuickJumper: true,
       showSizeChanger: true,
-      showTotal: () => i18next.t("general:{total} in total").replace("{total}", this.state.pagination.total),
+      showTotal: () =>
+        i18next
+          .t("general:{total} in total")
+          .replace("{total}", this.state.pagination.total),
     };
 
     return (
       <div>
-        <Table scroll={{x: "max-content"}} columns={columns} dataSource={providers} rowKey={(record) => `${record.owner}/${record.name}`} size="middle" bordered pagination={paginationProps}
+        <Table
+          scroll={{ x: "max-content" }}
+          columns={columns}
+          dataSource={providers}
+          rowKey={(record) => `${record.owner}/${record.name}`}
+          size="middle"
+          bordered
+          pagination={paginationProps}
           title={() => (
             <div>
               {i18next.t("general:Providers")}&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button id="add-button" type="primary" size="small" onClick={this.addProvider.bind(this)}>{i18next.t("general:Add")}</Button>
+              <Button
+                id="add-button"
+                type="primary"
+                size="small"
+                onClick={this.addProvider.bind(this)}
+              >
+                {i18next.t("general:Add")}
+              </Button>
             </div>
           )}
           loading={this.state.loading}
@@ -254,8 +373,10 @@ class ProviderListPage extends BaseListPage {
   }
 
   fetch = (params = {}) => {
-    let field = params.searchedColumn, value = params.searchText;
-    const sortField = params.sortField, sortOrder = params.sortOrder;
+    let field = params.searchedColumn,
+      value = params.searchText;
+    const sortField = params.sortField,
+      sortOrder = params.sortOrder;
     if (params.category !== undefined && params.category !== null) {
       field = "category";
       value = params.category;
@@ -263,33 +384,49 @@ class ProviderListPage extends BaseListPage {
       field = "type";
       value = params.type;
     }
-    this.setState({loading: true});
-    (Setting.isDefaultOrganizationSelected(this.props.account) ? ProviderBackend.getGlobalProviders(params.pagination.current, params.pagination.pageSize, field, value, sortField, sortOrder)
-      : ProviderBackend.getProviders(Setting.getRequestOrganization(this.props.account), params.pagination.current, params.pagination.pageSize, field, value, sortField, sortOrder))
-      .then((res) => {
+    this.setState({ loading: true });
+    (Setting.isDefaultOrganizationSelected(this.props.account)
+      ? ProviderBackend.getGlobalProviders(
+          params.pagination.current,
+          params.pagination.pageSize,
+          field,
+          value,
+          sortField,
+          sortOrder
+        )
+      : ProviderBackend.getProviders(
+          Setting.getRequestOrganization(this.props.account),
+          params.pagination.current,
+          params.pagination.pageSize,
+          field,
+          value,
+          sortField,
+          sortOrder
+        )
+    ).then((res) => {
+      this.setState({
+        loading: false,
+      });
+      if (res.status === "ok") {
         this.setState({
-          loading: false,
+          data: res.data,
+          pagination: {
+            ...params.pagination,
+            total: res.data2,
+          },
+          searchText: params.searchText,
+          searchedColumn: params.searchedColumn,
         });
-        if (res.status === "ok") {
+      } else {
+        if (Setting.isResponseDenied(res)) {
           this.setState({
-            data: res.data,
-            pagination: {
-              ...params.pagination,
-              total: res.data2,
-            },
-            searchText: params.searchText,
-            searchedColumn: params.searchedColumn,
+            isAuthorized: false,
           });
         } else {
-          if (Setting.isResponseDenied(res)) {
-            this.setState({
-              isAuthorized: false,
-            });
-          } else {
-            Setting.showMessage("error", res.msg);
-          }
+          Setting.showMessage("error", res.msg);
         }
-      });
+      }
+    });
   };
 }
 

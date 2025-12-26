@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,20 +13,27 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Col, Form, Input, Popover, Row, Select, Steps} from "antd";
+import { Button, Col, Form, Input, Popover, Row, Select, Steps } from "antd";
 import * as AuthBackend from "./AuthBackend";
 import * as ApplicationBackend from "../backend/ApplicationBackend";
 import * as Util from "./Util";
 import * as Setting from "../Setting";
 import i18next from "i18next";
-import {SendCodeInput} from "../common/SendCodeInput";
+import { SendCodeInput } from "../common/SendCodeInput";
 import * as UserBackend from "../backend/UserBackend";
-import {ArrowLeftOutlined, CheckCircleOutlined, KeyOutlined, LockOutlined, SolutionOutlined, UserOutlined} from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  CheckCircleOutlined,
+  KeyOutlined,
+  LockOutlined,
+  SolutionOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import CustomGithubCorner from "../common/CustomGithubCorner";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import * as PasswordChecker from "../common/PasswordChecker";
 
-const {Option} = Select;
+const { Option } = Select;
 
 class ForgetPage extends React.Component {
   constructor(props) {
@@ -34,7 +41,8 @@ class ForgetPage extends React.Component {
     const queryParams = new URLSearchParams(location.search);
     this.state = {
       classes: props,
-      applicationName: props.applicationName ?? props.match.params?.applicationName,
+      applicationName:
+        props.applicationName ?? props.match.params?.applicationName,
       msg: null,
       name: props.account ? props.account.name : queryParams.get("username"),
       username: props.account ? props.account.name : "",
@@ -55,7 +63,10 @@ class ForgetPage extends React.Component {
       if (this.state.applicationName !== undefined) {
         this.getApplication();
       } else {
-        Setting.showMessage("error", i18next.t("forget:Unknown forget type") + ": " + this.state.type);
+        Setting.showMessage(
+          "error",
+          i18next.t("forget:Unknown forget type") + ": " + this.state.type
+        );
       }
     }
   }
@@ -65,14 +76,15 @@ class ForgetPage extends React.Component {
       return;
     }
 
-    ApplicationBackend.getApplication("admin", this.state.applicationName)
-      .then((res) => {
+    ApplicationBackend.getApplication("admin", this.state.applicationName).then(
+      (res) => {
         if (res.status === "error") {
           Setting.showMessage("error", res.msg);
           return;
         }
         this.onUpdateApplication(res.data);
-      });
+      }
+    );
   }
   getApplicationObj() {
     return this.props.application;
@@ -84,10 +96,12 @@ class ForgetPage extends React.Component {
 
   onFormFinish(name, info, forms) {
     switch (name) {
-    case "step1":
-      const username = forms.step1.getFieldValue("username");
-      AuthBackend.getEmailAndPhone(forms.step1.getFieldValue("organization"), username)
-        .then((res) => {
+      case "step1":
+        const username = forms.step1.getFieldValue("username");
+        AuthBackend.getEmailAndPhone(
+          forms.step1.getFieldValue("organization"),
+          username
+        ).then((res) => {
           if (res.status === "ok") {
             const phone = res.data.phone;
             const email = res.data.email;
@@ -110,14 +124,16 @@ class ForgetPage extends React.Component {
               };
 
               switch (res.data2) {
-              case "email":
-                saveFields("email", email, true);
-                break;
-              case "phone":
-                saveFields("phone", phone, true);
-                break;
-              case "username":
-                phone !== "" ? saveFields("phone", phone, false) : saveFields("email", email, false);
+                case "email":
+                  saveFields("email", email, true);
+                  break;
+                case "phone":
+                  saveFields("phone", phone, true);
+                  break;
+                case "username":
+                  phone !== ""
+                    ? saveFields("phone", phone, false)
+                    : saveFields("email", email, false);
               }
 
               this.setState({
@@ -128,26 +144,29 @@ class ForgetPage extends React.Component {
             Setting.showMessage("error", res.msg);
           }
         });
-      break;
-    case "step2":
-      UserBackend.verifyCode({
-        application: forms.step2.getFieldValue("application"),
-        organization: forms.step2.getFieldValue("organization"),
-        username: forms.step2.getFieldValue("dest"),
-        name: this.state.name,
-        code: forms.step2.getFieldValue("code"),
-        type: "login",
-      }).then(res => {
-        if (res.status === "ok") {
-          this.setState({current: 2, code: forms.step2.getFieldValue("code")});
-        } else {
-          Setting.showMessage("error", res.msg);
-        }
-      });
+        break;
+      case "step2":
+        UserBackend.verifyCode({
+          application: forms.step2.getFieldValue("application"),
+          organization: forms.step2.getFieldValue("organization"),
+          username: forms.step2.getFieldValue("dest"),
+          name: this.state.name,
+          code: forms.step2.getFieldValue("code"),
+          type: "login",
+        }).then((res) => {
+          if (res.status === "ok") {
+            this.setState({
+              current: 2,
+              code: forms.step2.getFieldValue("code"),
+            });
+          } else {
+            Setting.showMessage("error", res.msg);
+          }
+        });
 
-      break;
-    default:
-      break;
+        break;
+      default:
+        break;
     }
   }
 
@@ -171,13 +190,22 @@ class ForgetPage extends React.Component {
       }
     }
 
-    UserBackend.setPassword(values.userOwner, values.username, "", values?.newPassword, this.state.code).then(res => {
+    UserBackend.setPassword(
+      values.userOwner,
+      values.username,
+      "",
+      values?.newPassword,
+      this.state.code
+    ).then((res) => {
       if (res.status === "ok") {
         const linkInStorage = sessionStorage.getItem("signinUrl");
         if (linkInStorage !== null && linkInStorage !== "") {
           Setting.goToLinkSoft(this, linkInStorage);
         } else {
-          Setting.redirectToLoginPage(this.getApplicationObj(), this.props.history);
+          Setting.redirectToLoginPage(
+            this.getApplicationObj(),
+            this.props.history
+          );
         }
       } else {
         Setting.showMessage("error", res.msg);
@@ -192,7 +220,7 @@ class ForgetPage extends React.Component {
 
     if (this.state.phone !== "") {
       options.push(
-        <Option key={"phone"} value={this.state.phone} >
+        <Option key={"phone"} value={this.state.phone}>
           &nbsp;&nbsp;{this.state.phone}
         </Option>
       );
@@ -200,7 +228,7 @@ class ForgetPage extends React.Component {
 
     if (this.state.email !== "") {
       options.push(
-        <Option key={"email"} value={this.state.email} >
+        <Option key={"email"} value={this.state.email}>
           &nbsp;&nbsp;{this.state.email}
         </Option>
       );
@@ -211,11 +239,13 @@ class ForgetPage extends React.Component {
 
   renderForm(application) {
     return (
-      <Form.Provider onFormFinish={(name, {info, forms}) => {
-        this.onFormFinish(name, info, forms);
-      }}>
+      <Form.Provider
+        onFormFinish={(name, { info, forms }) => {
+          this.onFormFinish(name, info, forms);
+        }}
+      >
         {/* STEP 1: input username -> get email & phone */}
-        {this.state.current === 0 ?
+        {this.state.current === 0 ? (
           <Form
             ref={this.form}
             name="step1"
@@ -226,7 +256,7 @@ class ForgetPage extends React.Component {
               organization: application.organization,
               username: this.state.name,
             }}
-            style={{width: "300px"}}
+            style={{ width: "300px" }}
             size="large"
           >
             <Form.Item
@@ -235,7 +265,9 @@ class ForgetPage extends React.Component {
               rules={[
                 {
                   required: true,
-                  message: i18next.t("application:Please input your application!"),
+                  message: i18next.t(
+                    "application:Please input your application!"
+                  ),
                 },
               ]}
             />
@@ -245,7 +277,9 @@ class ForgetPage extends React.Component {
               rules={[
                 {
                   required: true,
-                  message: i18next.t("application:Please input your organization!"),
+                  message: i18next.t(
+                    "application:Please input your organization!"
+                  ),
                 },
               ]}
             />
@@ -270,103 +304,110 @@ class ForgetPage extends React.Component {
                 {i18next.t("forget:Next Step")}
               </Button>
             </Form.Item>
-          </Form> : null}
+          </Form>
+        ) : null}
 
         {/* STEP 2: verify email or phone */}
-        {this.state.current === 1 ? <Form
-          ref={this.form}
-          name="step2"
-          onFinishFailed={(errorInfo) =>
-            this.onFinishFailed(
-              errorInfo.values,
-              errorInfo.errorFields,
-              errorInfo.outOfDate
-            )
-          }
-          onValuesChange={(changedValues, allValues) => {
-            if (!changedValues.dest) {
-              return;
+        {this.state.current === 1 ? (
+          <Form
+            ref={this.form}
+            name="step2"
+            onFinishFailed={(errorInfo) =>
+              this.onFinishFailed(
+                errorInfo.values,
+                errorInfo.errorFields,
+                errorInfo.outOfDate
+              )
             }
-            const verifyType = changedValues.dest?.indexOf("@") === -1 ? "phone" : "email";
-            this.setState({
-              dest: changedValues.dest,
-              verifyType: verifyType,
-            });
-          }}
-          initialValues={{
-            application: application.name,
-            organization: application.organization,
-            dest: this.state.dest,
-          }}
-          style={{width: "300px"}}
-          size="large"
-        >
-          <Form.Item
-            style={{height: 0, visibility: "hidden"}}
-            name="application"
-            rules={[
-              {
-                required: true,
-                message: i18next.t("application:Please input your application!"),
-              },
-            ]}
-          />
-          <Form.Item
-            hidden
-            name="organization"
-            rules={[
-              {
-                required: true,
-                message: i18next.t("application:Please input your organization!"),
-              },
-            ]}
-          />
-          <Form.Item
-            name="dest"
-            validateFirst
-            hasFeedback
+            onValuesChange={(changedValues, allValues) => {
+              if (!changedValues.dest) {
+                return;
+              }
+              const verifyType =
+                changedValues.dest?.indexOf("@") === -1 ? "phone" : "email";
+              this.setState({
+                dest: changedValues.dest,
+                verifyType: verifyType,
+              });
+            }}
+            initialValues={{
+              application: application.name,
+              organization: application.organization,
+              dest: this.state.dest,
+            }}
+            style={{ width: "300px" }}
+            size="large"
           >
-            {
-              <Select virtual={false}
-                disabled={this.state.isVerifyTypeFixed}
-                style={{textAlign: "left"}}
-                placeholder={i18next.t("forget:Choose email or phone")}
-              >
+            <Form.Item
+              style={{ height: 0, visibility: "hidden" }}
+              name="application"
+              rules={[
                 {
-                  this.renderOptions()
-                }
-              </Select>
-            }
-          </Form.Item>
-          <Form.Item
-            name="code"
-            rules={[
-              {
-                required: true,
-                message: i18next.t("code:Please input your verification code!"),
-              },
-            ]}
-          >
-            <SendCodeInput disabled={this.state.dest === ""}
-              method={"forget"}
-              onButtonClickArgs={[this.state.dest, this.state.verifyType, Setting.getApplicationName(this.getApplicationObj()), this.state.name]}
-              application={application}
+                  required: true,
+                  message: i18next.t(
+                    "application:Please input your application!"
+                  ),
+                },
+              ]}
             />
-          </Form.Item>
-          <br />
-          <Form.Item>
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
+            <Form.Item
+              hidden
+              name="organization"
+              rules={[
+                {
+                  required: true,
+                  message: i18next.t(
+                    "application:Please input your organization!"
+                  ),
+                },
+              ]}
+            />
+            <Form.Item name="dest" validateFirst hasFeedback>
+              {
+                <Select
+                  virtual={false}
+                  disabled={this.state.isVerifyTypeFixed}
+                  style={{ textAlign: "left" }}
+                  placeholder={i18next.t("forget:Choose email or phone")}
+                >
+                  {this.renderOptions()}
+                </Select>
+              }
+            </Form.Item>
+            <Form.Item
+              name="code"
+              rules={[
+                {
+                  required: true,
+                  message: i18next.t(
+                    "code:Please input your verification code!"
+                  ),
+                },
+              ]}
             >
-              {i18next.t("forget:Next Step")}
-            </Button>
-          </Form.Item>
-        </Form> : null}
+              <SendCodeInput
+                disabled={this.state.dest === ""}
+                method={"forget"}
+                onButtonClickArgs={[
+                  this.state.dest,
+                  this.state.verifyType,
+                  Setting.getApplicationName(this.getApplicationObj()),
+                  this.state.name,
+                ]}
+                application={application}
+              />
+            </Form.Item>
+            <br />
+            <Form.Item>
+              <Button block type="primary" htmlType="submit">
+                {i18next.t("forget:Next Step")}
+              </Button>
+            </Form.Item>
+          </Form>
+        ) : null}
 
         {/* STEP 3 */}
-        {this.state.current === 2 ?
+        {this.state.current === 2 ? (
           <Form
             ref={this.form}
             name="step3"
@@ -382,7 +423,7 @@ class ForgetPage extends React.Component {
               application: application.name,
               organization: application.organization,
             }}
-            style={{width: "300px"}}
+            style={{ width: "300px" }}
             size="large"
           >
             <Form.Item
@@ -391,7 +432,9 @@ class ForgetPage extends React.Component {
               rules={[
                 {
                   required: true,
-                  message: i18next.t("application:Please input your application!"),
+                  message: i18next.t(
+                    "application:Please input your application!"
+                  ),
                 },
               ]}
             />
@@ -401,11 +444,17 @@ class ForgetPage extends React.Component {
               rules={[
                 {
                   required: true,
-                  message: i18next.t("application:Please input your organization!"),
+                  message: i18next.t(
+                    "application:Please input your organization!"
+                  ),
                 },
               ]}
             />
-            <Popover placement={window.innerWidth >= 960 ? "right" : "top"} content={this.state.passwordPopover} open={this.state.passwordPopoverOpen}>
+            <Popover
+              placement={window.innerWidth >= 960 ? "right" : "top"}
+              content={this.state.passwordPopover}
+              open={this.state.passwordPopoverOpen}
+            >
               <Form.Item
                 name="newPassword"
                 hidden={this.state.current !== 2}
@@ -414,7 +463,10 @@ class ForgetPage extends React.Component {
                     required: true,
                     validateTrigger: "onChange",
                     validator: (rule, value) => {
-                      const errorMsg = PasswordChecker.checkPasswordComplexity(value, application.organizationObj.passwordOptions);
+                      const errorMsg = PasswordChecker.checkPasswordComplexity(
+                        value,
+                        application.organizationObj.passwordOptions
+                      );
                       if (errorMsg === "") {
                         return Promise.resolve();
                       } else {
@@ -430,13 +482,20 @@ class ForgetPage extends React.Component {
                   placeholder={i18next.t("general:Password")}
                   onChange={(e) => {
                     this.setState({
-                      passwordPopover: PasswordChecker.renderPasswordPopover(application.organizationObj.passwordOptions, e.target.value),
+                      passwordPopover: PasswordChecker.renderPasswordPopover(
+                        application.organizationObj.passwordOptions,
+                        e.target.value
+                      ),
                     });
                   }}
                   onFocus={() => {
                     this.setState({
-                      passwordPopoverOpen: application.organizationObj.passwordOptions?.length > 0,
-                      passwordPopover: PasswordChecker.renderPasswordPopover(application.organizationObj.passwordOptions, this.form.current?.getFieldValue("newPassword") ?? ""),
+                      passwordPopoverOpen:
+                        application.organizationObj.passwordOptions?.length > 0,
+                      passwordPopover: PasswordChecker.renderPasswordPopover(
+                        application.organizationObj.passwordOptions,
+                        this.form.current?.getFieldValue("newPassword") ?? ""
+                      ),
                     });
                   }}
                   onBlur={() => {
@@ -456,13 +515,15 @@ class ForgetPage extends React.Component {
                   required: true,
                   message: i18next.t("signup:Please confirm your password!"),
                 },
-                ({getFieldValue}) => ({
+                ({ getFieldValue }) => ({
                   validator(rule, value) {
                     if (!value || getFieldValue("newPassword") === value) {
                       return Promise.resolve();
                     }
                     return Promise.reject(
-                      i18next.t("signup:Your confirmed password is inconsistent with the password!")
+                      i18next.t(
+                        "signup:Your confirmed password is inconsistent with the password!"
+                      )
                     );
                   },
                 }),
@@ -479,7 +540,8 @@ class ForgetPage extends React.Component {
                 {i18next.t("forget:Change Password")}
               </Button>
             </Form.Item>
-          </Form> : null}
+          </Form>
+        ) : null}
       </Form.Provider>
     );
   }
@@ -508,32 +570,53 @@ class ForgetPage extends React.Component {
     return (
       <React.Fragment>
         <CustomGithubCorner />
-        <div className="forget-content" style={{padding: Setting.isMobile() ? "0" : null, boxShadow: Setting.isMobile() ? "none" : null}}>
-          {Setting.inIframe() || Setting.isMobile() ? null : <div dangerouslySetInnerHTML={{__html: application.formCss}} />}
-          {Setting.inIframe() || !Setting.isMobile() ? null : <div dangerouslySetInnerHTML={{__html: application.formCssMobile}} />}
-          <Button type="text"
-            style={{position: "relative", left: Setting.isMobile() ? "10px" : "-90px", top: 0}}
-            icon={<ArrowLeftOutlined style={{fontSize: "24px"}} />}
+        <div
+          className="forget-content"
+          style={{
+            padding: Setting.isMobile() ? "0" : null,
+            boxShadow: Setting.isMobile() ? "none" : null,
+          }}
+        >
+          {Setting.inIframe() || Setting.isMobile() ? null : (
+            <div dangerouslySetInnerHTML={{ __html: application.formCss }} />
+          )}
+          {Setting.inIframe() || !Setting.isMobile() ? null : (
+            <div
+              dangerouslySetInnerHTML={{ __html: application.formCssMobile }}
+            />
+          )}
+          <Button
+            type="text"
+            style={{
+              position: "relative",
+              left: Setting.isMobile() ? "10px" : "-90px",
+              top: 0,
+            }}
+            icon={<ArrowLeftOutlined style={{ fontSize: "24px" }} />}
             size={"large"}
-            onClick={() => {this.stepBack();}}
+            onClick={() => {
+              this.stepBack();
+            }}
           />
           <Row>
-            <Col span={24} style={{justifyContent: "center"}}>
+            <Col span={24} style={{ justifyContent: "center" }}>
               <Row>
                 <Col span={24}>
-                  <div style={{marginTop: "80px", marginBottom: "10px", textAlign: "center"}}>
-                    {
-                      Setting.renderHelmet(application)
-                    }
-                    {
-                      Setting.renderLogo(application)
-                    }
+                  <div
+                    style={{
+                      marginTop: "80px",
+                      marginBottom: "10px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {Setting.renderHelmet(application)}
+                    {Setting.renderLogo(application)}
                   </div>
                 </Col>
               </Row>
               <Row>
                 <Col span={24}>
-                  <div style={{textAlign: "center", fontSize: "28px"}}>
+                  <div style={{ textAlign: "center", fontSize: "28px" }}>
                     {i18next.t("forget:Reset password")}
                   </div>
                 </Col>
@@ -562,13 +645,15 @@ class ForgetPage extends React.Component {
                       margin: "auto",
                       marginTop: "80px",
                     }}
-                  >
-                  </Steps>
+                  ></Steps>
                 </Col>
               </Row>
             </Col>
-            <Col span={24} style={{display: "flex", justifyContent: "center"}}>
-              <div style={{marginTop: "40px", textAlign: "center"}}>
+            <Col
+              span={24}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <div style={{ marginTop: "40px", textAlign: "center" }}>
                 {this.renderForm(application)}
               </div>
             </Col>

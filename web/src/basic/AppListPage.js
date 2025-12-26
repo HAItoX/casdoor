@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,10 +23,12 @@ const AppListPage = (props) => {
     if (props.account === null) {
       return;
     }
-    ApplicationBackend.getApplicationsByOrganization("admin", props.account.owner)
-      .then((res) => {
-        setApplications(res.data || []);
-      });
+    ApplicationBackend.getApplicationsByOrganization(
+      "admin",
+      props.account.owner
+    ).then((res) => {
+      setApplications(res.data || []);
+    });
   }, [props.account]);
 
   const getItems = () => {
@@ -34,7 +36,7 @@ const AppListPage = (props) => {
       return null;
     }
 
-    return applications.map(application => {
+    return applications.map((application) => {
       let homepageUrl = application.homepageUrl;
       if (homepageUrl === "<custom-url>") {
         homepageUrl = props.account.homepage;
@@ -48,11 +50,17 @@ const AppListPage = (props) => {
         createdTime: "",
       };
     });
-
   };
 
   return (
-    <div style={{display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center"}}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <GridCards items={getItems()} />
     </div>
   );

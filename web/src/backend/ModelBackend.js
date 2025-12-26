@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,36 +14,57 @@
 
 import * as Setting from "../Setting";
 
-export function getModels(owner, page = "", pageSize = "", field = "", value = "", sortField = "", sortOrder = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-models?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+export function getModels(
+  owner,
+  page = "",
+  pageSize = "",
+  field = "",
+  value = "",
+  sortField = "",
+  sortOrder = ""
+) {
+  return fetch(
+    `${Setting.ServerUrl}/api/get-models?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function getModel(owner, name) {
-  return fetch(`${Setting.ServerUrl}/api/get-model?id=${owner}/${encodeURIComponent(name)}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/get-model?id=${owner}/${encodeURIComponent(
+      name
+    )}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function updateModel(owner, name, model) {
   const newModel = Setting.deepCopy(model);
-  return fetch(`${Setting.ServerUrl}/api/update-model?id=${owner}/${encodeURIComponent(name)}`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(newModel),
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/update-model?id=${owner}/${encodeURIComponent(
+      name
+    )}`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(newModel),
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function addModel(model) {
@@ -55,7 +76,7 @@ export function addModel(model) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function deleteModel(model) {
@@ -67,5 +88,5 @@ export function deleteModel(model) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }

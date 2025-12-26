@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Form} from "antd";
+import { Form } from "antd";
 import i18next from "i18next";
 import * as MfaBackend from "../../backend/MfaBackend";
 import * as Setting from "../../Setting";
 import React from "react";
-import {EmailMfaType, SmsMfaType, TotpMfaType} from "../MfaSetupPage";
+import { EmailMfaType, SmsMfaType, TotpMfaType } from "../MfaSetupPage";
 import MfaVerifySmsForm from "./MfaVerifySmsForm";
 import MfaVerifyTotpForm from "./MfaVerifyTotpForm";
 
 export const mfaAuth = "mfaAuth";
 export const mfaSetup = "mfaSetup";
 
-export function MfaVerifyForm({mfaProps, application, user, onSuccess, onFail}) {
+export function MfaVerifyForm({
+  mfaProps,
+  application,
+  user,
+  onSuccess,
+  onFail,
+}) {
   const [form] = Form.useForm();
-  const onFinish = ({passcode, countryCode, dest}) => {
-    const data = {passcode, mfaType: mfaProps.mfaType, secret: mfaProps.secret, dest: dest, countryCode: countryCode, ...user};
+  const onFinish = ({ passcode, countryCode, dest }) => {
+    const data = {
+      passcode,
+      mfaType: mfaProps.mfaType,
+      secret: mfaProps.secret,
+      dest: dest,
+      countryCode: countryCode,
+      ...user,
+    };
     MfaBackend.MfaSetupVerify(data)
       .then((res) => {
         if (res.status === "ok") {
@@ -39,19 +52,37 @@ export function MfaVerifyForm({mfaProps, application, user, onSuccess, onFail}) 
         }
       })
       .catch((error) => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       })
       .finally(() => {
-        form.setFieldsValue({passcode: ""});
+        form.setFieldsValue({ passcode: "" });
       });
   };
 
-  if (mfaProps === undefined || mfaProps === null || application === undefined || application === null || user === undefined || user === null) {
+  if (
+    mfaProps === undefined ||
+    mfaProps === null ||
+    application === undefined ||
+    application === null ||
+    user === undefined ||
+    user === null
+  ) {
     return <div></div>;
   }
 
   if (mfaProps.mfaType === SmsMfaType || mfaProps.mfaType === EmailMfaType) {
-    return <MfaVerifySmsForm mfaProps={mfaProps} onFinish={onFinish} application={application} method={mfaSetup} user={user} />;
+    return (
+      <MfaVerifySmsForm
+        mfaProps={mfaProps}
+        onFinish={onFinish}
+        application={application}
+        method={mfaSetup}
+        user={user}
+      />
+    );
   } else if (mfaProps.mfaType === TotpMfaType) {
     return <MfaVerifyTotpForm mfaProps={mfaProps} onFinish={onFinish} />;
   } else {

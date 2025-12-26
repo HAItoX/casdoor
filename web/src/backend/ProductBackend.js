@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,36 +14,57 @@
 
 import * as Setting from "../Setting";
 
-export function getProducts(owner, page = "", pageSize = "", field = "", value = "", sortField = "", sortOrder = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-products?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+export function getProducts(
+  owner,
+  page = "",
+  pageSize = "",
+  field = "",
+  value = "",
+  sortField = "",
+  sortOrder = ""
+) {
+  return fetch(
+    `${Setting.ServerUrl}/api/get-products?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function getProduct(owner, name) {
-  return fetch(`${Setting.ServerUrl}/api/get-product?id=${owner}/${encodeURIComponent(name)}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/get-product?id=${owner}/${encodeURIComponent(
+      name
+    )}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function updateProduct(owner, name, product) {
   const newProduct = Setting.deepCopy(product);
-  return fetch(`${Setting.ServerUrl}/api/update-product?id=${owner}/${encodeURIComponent(name)}`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(newProduct),
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/update-product?id=${owner}/${encodeURIComponent(
+      name
+    )}`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(newProduct),
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function addProduct(product) {
@@ -55,7 +76,7 @@ export function addProduct(product) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function deleteProduct(product) {
@@ -67,15 +88,29 @@ export function deleteProduct(product) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
-export function buyProduct(owner, name, providerName, pricingName = "", planName = "", userName = "", paymentEnv = "", customPrice = 0) {
-  return fetch(`${Setting.ServerUrl}/api/buy-product?id=${owner}/${encodeURIComponent(name)}&providerName=${providerName}&pricingName=${pricingName}&planName=${planName}&userName=${userName}&paymentEnv=${paymentEnv}&customPrice=${customPrice}`, {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+export function buyProduct(
+  owner,
+  name,
+  providerName,
+  pricingName = "",
+  planName = "",
+  userName = "",
+  paymentEnv = "",
+  customPrice = 0
+) {
+  return fetch(
+    `${Setting.ServerUrl}/api/buy-product?id=${owner}/${encodeURIComponent(
+      name
+    )}&providerName=${providerName}&pricingName=${pricingName}&planName=${planName}&userName=${userName}&paymentEnv=${paymentEnv}&customPrice=${customPrice}`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }

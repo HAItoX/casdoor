@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,14 +14,25 @@
 
 import * as Setting from "../Setting";
 
-export function getSessions(owner, page = "", pageSize = "", field = "", value = "", sortField = "", sortOrder = "") {
-  return fetch(`${Setting.ServerUrl}/api/get-sessions?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+export function getSessions(
+  owner,
+  page = "",
+  pageSize = "",
+  field = "",
+  value = "",
+  sortField = "",
+  sortOrder = ""
+) {
+  return fetch(
+    `${Setting.ServerUrl}/api/get-sessions?owner=${owner}&p=${page}&pageSize=${pageSize}&field=${field}&value=${value}&sortField=${sortField}&sortOrder=${sortOrder}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function deleteSession(session) {
@@ -32,5 +43,5 @@ export function deleteSession(session) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }

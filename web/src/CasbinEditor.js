@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,24 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as Setting from "./Setting";
 import IframeEditor from "./IframeEditor";
-import {Tabs} from "antd";
+import { Tabs } from "antd";
 import i18next from "i18next";
 import Editor from "./common/Editor";
 
-const CasbinEditor = ({model, onModelTextChange}) => {
+const CasbinEditor = ({ model, onModelTextChange }) => {
   const [activeKey, setActiveKey] = useState("advanced");
   const iframeRef = useRef(null);
   const [localModelText, setLocalModelText] = useState(model.modelText);
 
-  const handleModelTextChange = useCallback((newModelText) => {
-    if (!Setting.builtInObject(model)) {
-      setLocalModelText(newModelText);
-      onModelTextChange(newModelText);
-    }
-  }, [model, onModelTextChange]);
+  const handleModelTextChange = useCallback(
+    (newModelText) => {
+      if (!Setting.builtInObject(model)) {
+        setLocalModelText(newModelText);
+        onModelTextChange(newModelText);
+      }
+    },
+    [model, onModelTextChange]
+  );
 
   const syncModelText = useCallback(() => {
     return new Promise((resolve) => {
@@ -63,29 +66,36 @@ const CasbinEditor = ({model, onModelTextChange}) => {
   }, [model.modelText]);
 
   return (
-    <div style={{height: "100%", width: "100%", display: "flex", flexDirection: "column"}}>
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Tabs
         activeKey={activeKey}
         onChange={handleTabChange}
-        style={{flex: "0 0 auto", marginTop: "-10px"}}
+        style={{ flex: "0 0 auto", marginTop: "-10px" }}
         items={[
-          {key: "basic", label: i18next.t("model:Basic Editor")},
-          {key: "advanced", label: i18next.t("model:Advanced Editor")},
+          { key: "basic", label: i18next.t("model:Basic Editor") },
+          { key: "advanced", label: i18next.t("model:Advanced Editor") },
         ]}
       />
-      <div style={{flex: "1 1 auto", overflow: "hidden"}}>
+      <div style={{ flex: "1 1 auto", overflow: "hidden" }}>
         {activeKey === "advanced" ? (
           <IframeEditor
             ref={iframeRef}
             initialModelText={localModelText}
             onModelTextChange={handleModelTextChange}
-            style={{width: "100%", height: "100%"}}
+            style={{ width: "100%", height: "100%" }}
           />
         ) : (
           <Editor
             value={localModelText}
             readOnly={Setting.builtInObject(model)}
-            onChange={value => {
+            onChange={(value) => {
               handleModelTextChange(value);
             }}
           />

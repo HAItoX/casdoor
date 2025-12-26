@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Button, Col, Input, Modal, Row} from "antd";
+import { Button, Col, Input, Modal, Row } from "antd";
 import i18next from "i18next";
 import React from "react";
 import * as Setting from "../../Setting";
 import * as UserBackend from "../../backend/UserBackend";
-import {SendCodeInput} from "../SendCodeInput";
-import {MailOutlined, PhoneOutlined} from "@ant-design/icons";
+import { SendCodeInput } from "../SendCodeInput";
+import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
 
 export const ResetModal = (props) => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [dest, setDest] = React.useState("");
   const [code, setCode] = React.useState("");
-  const {buttonText, destType, application, countryCode} = props;
+  const { buttonText, destType, application, countryCode } = props;
 
   const showModal = () => {
     setVisible(true);
@@ -49,9 +49,12 @@ export const ResetModal = (props) => {
       return;
     }
     setConfirmLoading(true);
-    UserBackend.resetEmailOrPhone(dest, destType, code).then(res => {
+    UserBackend.resetEmailOrPhone(dest, destType, code).then((res) => {
       if (res.status === "ok") {
-        Setting.showMessage("success", i18next.t("user:Email/phone reset successfully"));
+        Setting.showMessage(
+          "success",
+          i18next.t("user:Email/phone reset successfully")
+        );
         window.location.reload();
       } else {
         Setting.showMessage("error", i18next.t("user:" + res.msg));
@@ -83,21 +86,42 @@ export const ResetModal = (props) => {
         onOk={handleOk}
         width={600}
       >
-        <Col style={{margin: "0px auto 40px auto", width: 1000, height: 300}}>
-          <Row style={{width: "100%", marginBottom: "20px"}}>
+        <Col style={{ margin: "0px auto 40px auto", width: 1000, height: 300 }}>
+          <Row style={{ width: "100%", marginBottom: "20px" }}>
             <Input
-              addonBefore={destType === "email" ? i18next.t("user:New Email") : i18next.t("user:New phone")}
-              prefix={destType === "email" ? <React.Fragment><MailOutlined />&nbsp;&nbsp;</React.Fragment> : (<React.Fragment><PhoneOutlined />&nbsp;&nbsp;{countryCode !== "" ? "+" : null}{Setting.getCountryCode(countryCode)}&nbsp;</React.Fragment>)}
+              addonBefore={
+                destType === "email"
+                  ? i18next.t("user:New Email")
+                  : i18next.t("user:New phone")
+              }
+              prefix={
+                destType === "email" ? (
+                  <React.Fragment>
+                    <MailOutlined />
+                    &nbsp;&nbsp;
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <PhoneOutlined />
+                    &nbsp;&nbsp;{countryCode !== "" ? "+" : null}
+                    {Setting.getCountryCode(countryCode)}&nbsp;
+                  </React.Fragment>
+                )
+              }
               placeholder={placeholder}
-              onChange={e => setDest(e.target.value)}
+              onChange={(e) => setDest(e.target.value)}
             />
           </Row>
-          <Row style={{width: "100%", marginBottom: "20px"}}>
+          <Row style={{ width: "100%", marginBottom: "20px" }}>
             <SendCodeInput
               textBefore={i18next.t("code:Code you received")}
               onChange={setCode}
               method={"reset"}
-              onButtonClickArgs={[dest, destType, Setting.getApplicationName(application)]}
+              onButtonClickArgs={[
+                dest,
+                destType,
+                Setting.getApplicationName(application),
+              ]}
               application={application}
             />
           </Row>

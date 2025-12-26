@@ -40,6 +40,7 @@
     "jwt-decode": "^4.0.0",
     "libphonenumber-js": "^1.10.19",
     "moment": "^2.29.1",
+    "qiankun": "^2.10.16",
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
@@ -67,7 +68,6 @@
     "fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
     "lint:css": "stylelint src/**/*.{css,less} --fix"
   },
-
   "browserslist": {
     "production": [
       ">0.2%",

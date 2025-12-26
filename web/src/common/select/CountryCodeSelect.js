@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Select} from "antd";
+import { Select } from "antd";
 import i18next from "i18next";
 import * as Setting from "../../Setting";
 import React from "react";
 
-const {Option} = Select;
+const { Option } = Select;
 
 export const CountryCodeSelect = (props) => {
-  const {onChange, style, disabled, initValue, mode} = props;
+  const { onChange, style, disabled, initValue, mode } = props;
   const countryCodes = props.countryCodes ?? [];
   const [value, setValue] = React.useState("");
 
@@ -49,18 +49,31 @@ export const CountryCodeSelect = (props) => {
       dropdownMatchSelectWidth={false}
       optionLabelProp={"label"}
       onChange={handleOnChange}
-      filterOption={(input, option) => (option?.text ?? "").toLowerCase().includes(input.toLowerCase())}
+      filterOption={(input, option) =>
+        (option?.text ?? "").toLowerCase().includes(input.toLowerCase())
+      }
     >
-      {
-        props.hasDefault ? (<Option key={"All"} value={"All"} label={i18next.t("organization:All")} text={"organization:All"} >
-          <div style={{display: "flex", justifyContent: "space-between", marginRight: "10px"}}>
+      {props.hasDefault ? (
+        <Option
+          key={"All"}
+          value={"All"}
+          label={i18next.t("organization:All")}
+          text={"organization:All"}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginRight: "10px",
+            }}
+          >
             {i18next.t("organization:All")}
           </div>
-        </Option>) : null
-      }
-      {
-        Setting.getCountryCodeData(countryCodes).map((country) => Setting.getCountryCodeOption(country))
-      }
+        </Option>
+      ) : null}
+      {Setting.getCountryCodeData(countryCodes).map((country) =>
+        Setting.getCountryCodeOption(country)
+      )}
     </Select>
   );
 };

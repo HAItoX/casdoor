@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Col, Row, Table} from "antd";
+import { Button, Col, Row, Table } from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 import * as LdapBackend from "../backend/LdapBackend";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import PopconfirmModal from "../common/modal/PopconfirmModal";
 
 class LdapTable extends React.Component {
@@ -58,18 +58,23 @@ class LdapTable extends React.Component {
     LdapBackend.addLdap(newLdap)
       .then((res) => {
         if (res.status === "ok") {
-          Setting.showMessage("success", i18next.t("general:Successfully added"));
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully added")
+          );
           if (table === undefined) {
             table = [];
           }
           table = Setting.addRow(table, res.data2);
           this.updateTable(table);
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to add")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to add")}: ${res.msg}`
+          );
         }
-      }
-      )
-      .catch(error => {
+      })
+      .catch((error) => {
         Setting.showMessage("error", `Add LDAP server failed: ${error}`);
       });
   }
@@ -78,14 +83,20 @@ class LdapTable extends React.Component {
     LdapBackend.deleteLdap(table[i])
       .then((res) => {
         if (res.status === "ok") {
-          Setting.showMessage("success", i18next.t("general:Successfully deleted"));
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully deleted")
+          );
           table = Setting.deleteRow(table, i);
           this.updateTable(table);
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to delete")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to delete")}: ${res.msg}`
+          );
         }
       })
-      .catch(error => {
+      .catch((error) => {
         Setting.showMessage("error", `Delete LDAP server failed: ${error}`);
       });
   }
@@ -99,11 +110,7 @@ class LdapTable extends React.Component {
         width: "160px",
         sorter: (a, b) => a.serverName.localeCompare(b.serverName),
         render: (text, record, index) => {
-          return (
-            <Link to={`/ldap/${record.owner}/${record.id}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/ldap/${record.owner}/${record.id}`}>{text}</Link>;
         },
       },
       {
@@ -130,8 +137,11 @@ class LdapTable extends React.Component {
         width: "120px",
         sorter: (a, b) => a.autoSync.localeCompare(b.autoSync),
         render: (text, record, index) => {
-          return text === 0 ? (<span style={{color: "#faad14"}}>Disable</span>) : (
-            <span style={{color: "#52c41a"}}>{text + " mins"}</span>);
+          return text === 0 ? (
+            <span style={{ color: "#faad14" }}>Disable</span>
+          ) : (
+            <span style={{ color: "#52c41a" }}>{text + " mins"}</span>
+          );
         },
       },
       {
@@ -152,19 +162,38 @@ class LdapTable extends React.Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Button style={{marginTop: "10px", marginBottom: "10px", marginRight: "10px"}} type="primary"
-                onClick={() => Setting.goToLink(`/ldap/sync/${record.owner}/${record.id}`)}>
+              <Button
+                style={{
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                  marginRight: "10px",
+                }}
+                type="primary"
+                onClick={() =>
+                  Setting.goToLink(`/ldap/sync/${record.owner}/${record.id}`)
+                }
+              >
                 {i18next.t("general:Sync")}
               </Button>
-              <Button style={{marginTop: "10px", marginBottom: "10px", marginRight: "10px"}}
-                onClick={() => Setting.goToLink(`/ldap/${record.owner}/${record.id}`)}>
+              <Button
+                style={{
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                  marginRight: "10px",
+                }}
+                onClick={() =>
+                  Setting.goToLink(`/ldap/${record.owner}/${record.id}`)
+                }
+              >
                 {i18next.t("general:Edit")}
               </Button>
               <PopconfirmModal
-                title={i18next.t("general:Sure to delete") + `: ${record.serverName} ?`}
+                title={
+                  i18next.t("general:Sure to delete") +
+                  `: ${record.serverName} ?`
+                }
                 onConfirm={() => this.deleteRow(table, index)}
-              >
-              </PopconfirmModal>
+              ></PopconfirmModal>
             </div>
           );
         },
@@ -172,12 +201,25 @@ class LdapTable extends React.Component {
     ];
 
     return (
-      <Table scroll={{x: "max-content"}} rowKey="id" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        scroll={{ x: "max-content" }}
+        rowKey="id"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {this.props.title}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button style={{marginRight: "5px"}} type="primary" size="small"
-              onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
           </div>
         )}
       />
@@ -187,12 +229,8 @@ class LdapTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}}>
-          <Col span={24}>
-            {
-              this.renderTable(this.props.table)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.props.table)}</Col>
         </Row>
       </div>
     );

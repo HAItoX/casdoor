@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Button, Popconfirm} from "antd";
+import { Button, Popconfirm } from "antd";
 import i18next from "i18next";
 import React from "react";
 
@@ -27,7 +27,15 @@ export const PopconfirmModal = (props) => {
       okText={i18next.t("general:OK")}
       cancelText={i18next.t("general:Cancel")}
     >
-      <Button style={{...props.style}} size={size} disabled={props.disabled} type="primary" danger>{text}</Button>
+      <Button
+        style={{ ...props.style }}
+        size={size}
+        disabled={props.disabled}
+        type="primary"
+        danger
+      >
+        {text}
+      </Button>
     </Popconfirm>
   );
 };

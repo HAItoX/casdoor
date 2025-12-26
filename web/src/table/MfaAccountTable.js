@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Image, Input, Popover, Row, Table, Tooltip} from "antd";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Button, Col, Image, Input, Popover, Row, Table, Tooltip } from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
-import {CasdoorAppQrCode, CasdoorAppUrl} from "../common/CasdoorAppConnector";
+import { CasdoorAppQrCode, CasdoorAppUrl } from "../common/CasdoorAppConnector";
 
 class MfaAccountTable extends React.Component {
   constructor(props) {
@@ -25,10 +25,13 @@ class MfaAccountTable extends React.Component {
     this.state = {
       classes: props,
       icon: this.props.icon,
-      mfaAccounts: this.props.table !== null ? this.props.table.map((item, index) => {
-        item.key = index;
-        return item;
-      }) : [],
+      mfaAccounts:
+        this.props.table !== null
+          ? this.props.table.map((item, index) => {
+              item.key = index;
+              return item;
+            })
+          : [],
     };
   }
 
@@ -39,11 +42,13 @@ class MfaAccountTable extends React.Component {
       mfaAccounts: table,
     });
 
-    this.props.onUpdateTable([...table].map((item) => {
-      const newItem = Setting.deepCopy(item);
-      delete newItem.key;
-      return newItem;
-    }));
+    this.props.onUpdateTable(
+      [...table].map((item) => {
+        const newItem = Setting.deepCopy(item);
+        delete newItem.key;
+        return newItem;
+      })
+    );
   }
 
   updateField(table, index, key, value) {
@@ -52,7 +57,7 @@ class MfaAccountTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {key: this.count, accountName: "", issuer: "", secretKey: ""};
+    const row = { key: this.count, accountName: "", issuer: "", secretKey: "" };
     if (table === undefined || table === null) {
       table = [];
     }
@@ -86,9 +91,12 @@ class MfaAccountTable extends React.Component {
         width: "400px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "accountName", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "accountName", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -99,9 +107,12 @@ class MfaAccountTable extends React.Component {
         width: "300px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "issuer", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "issuer", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -111,9 +122,12 @@ class MfaAccountTable extends React.Component {
         key: "origin",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "origin", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "origin", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -123,9 +137,12 @@ class MfaAccountTable extends React.Component {
         key: "secretKey",
         render: (text, record, index) => {
           return (
-            <Input.Password value={text} onChange={e => {
-              this.updateField(table, index, "secretKey", e.target.value);
-            }} />
+            <Input.Password
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "secretKey", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -137,10 +154,24 @@ class MfaAccountTable extends React.Component {
         render: (text, record, index) => (
           <Tooltip>
             {text ? (
-              <Image width={36} height={36} preview={false} src={`${Setting.StaticBaseUrl}/img/social_${text.toLowerCase()}.png`}
-                fallback={`${Setting.StaticBaseUrl}/img/social_default.png`} alt={text} />
+              <Image
+                width={36}
+                height={36}
+                preview={false}
+                src={`${
+                  Setting.StaticBaseUrl
+                }/img/social_${text.toLowerCase()}.png`}
+                fallback={`${Setting.StaticBaseUrl}/img/social_default.png`}
+                alt={text}
+              />
             ) : (
-              <Image width={36} height={36} preview={false} src={`${Setting.StaticBaseUrl}/img/social_default.png`} alt="default" />
+              <Image
+                width={36}
+                height={36}
+                preview={false}
+                src={`${Setting.StaticBaseUrl}/img/social_default.png`}
+                alt="default"
+              />
             )}
           </Tooltip>
         ),
@@ -153,13 +184,29 @@ class MfaAccountTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -167,19 +214,40 @@ class MfaAccountTable extends React.Component {
       },
     ];
     return (
-      <Table scroll={{x: "max-content"}} rowKey="key" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        scroll={{ x: "max-content" }}
+        rowKey="key"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {this.props.title}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button style={{marginRight: "10px"}} type="primary" size="small" onClick={() => this.addRow(table)}>
+            <Button
+              style={{ marginRight: "10px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
               {i18next.t("general:Add")}
             </Button>
             <Popover
               trigger="focus"
-              overlayInnerStyle={{padding: 0}}
-              content={<CasdoorAppQrCode accessToken={this.props.accessToken} icon={this.state.icon} />}
+              overlayInnerStyle={{ padding: 0 }}
+              content={
+                <CasdoorAppQrCode
+                  accessToken={this.props.accessToken}
+                  icon={this.state.icon}
+                />
+              }
             >
-              <Button style={{marginRight: "10px"}} type="primary" size="small">
+              <Button
+                style={{ marginRight: "10px" }}
+                type="primary"
+                size="small"
+              >
                 {i18next.t("general:QR Code")}
               </Button>
             </Popover>
@@ -200,12 +268,8 @@ class MfaAccountTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.state.mfaAccounts)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.state.mfaAccounts)}</Col>
         </Row>
       </div>
     );

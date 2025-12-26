@@ -1,4 +1,4 @@
-// // Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// // Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 // //
 // // Licensed under the Apache License, Version 2.0 (the "License");
 // // you may not use this file except in compliance with the License.
@@ -12,12 +12,15 @@
 // // See the License for the specific language governing permissions and
 // // limitations under the License.
 
-import {goToLink, showMessage} from "../Setting";
+import { goToLink, showMessage } from "../Setting";
 import i18next from "i18next";
-import {v4 as uuidv4} from "uuid";
-import {SignTypedDataVersion, recoverTypedSignature} from "@metamask/eth-sig-util";
-import {getAuthUrl} from "./Provider";
-import {Buffer} from "buffer";
+import { v4 as uuidv4 } from "uuid";
+import {
+  SignTypedDataVersion,
+  recoverTypedSignature,
+} from "@metamask/eth-sig-util";
+import { getAuthUrl } from "./Provider";
+import { Buffer } from "buffer";
 import Onboard from "@web3-onboard/core";
 import injectedModule from "@web3-onboard/injected-wallets";
 import infinityWalletModule from "@web3-onboard/infinity-wallet";
@@ -65,7 +68,7 @@ export function delWeb3AuthToken(address) {
 
 export function clearWeb3AuthToken() {
   const keys = Object.keys(localStorage);
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (key.startsWith("Web3AuthToken_")) {
       localStorage.removeItem(key);
     }
@@ -79,7 +82,8 @@ export function detectMetaMaskPlugin() {
 
 export function requestEthereumAccount() {
   const method = "eth_requestAccounts";
-  const selectedAccount = window.ethereum.request({method})
+  const selectedAccount = window.ethereum
+    .request({ method })
     .then((accounts) => {
       return accounts[0];
     });
@@ -96,21 +100,22 @@ export function signEthereumTypedData(from, nonce) {
       version: "1",
     },
     message: {
-      prompt: "In order to authenticate to this website, sign this request and your public address will be sent to the server in a verifiable way.",
+      prompt:
+        "In order to authenticate to this website, sign this request and your public address will be sent to the server in a verifiable way.",
       nonce: nonce,
       createAt: `${date.toLocaleString()}`,
     },
     primaryType: "AuthRequest",
     types: {
       EIP712Domain: [
-        {name: "name", type: "string"},
-        {name: "version", type: "string"},
-        {name: "chainId", type: "uint256"},
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
       ],
       AuthRequest: [
-        {name: "prompt", type: "string"},
-        {name: "nonce", type: "string"},
-        {name: "createAt", type: "string"},
+        { name: "prompt", type: "string" },
+        { name: "nonce", type: "string" },
+        { name: "createAt", type: "string" },
       ],
     },
   });
@@ -118,15 +123,14 @@ export function signEthereumTypedData(from, nonce) {
   const method = "eth_signTypedData_v4";
   const params = [from, typedData];
 
-  return window.ethereum.request({method, params})
-    .then((sign) => {
-      return {
-        address: from,
-        createAt: Math.floor(date.getTime() / 1000),
-        typedData: typedData,
-        signature: sign,
-      };
-    });
+  return window.ethereum.request({ method, params }).then((sign) => {
+    return {
+      address: from,
+      createAt: Math.floor(date.getTime() / 1000),
+      typedData: typedData,
+      signature: sign,
+    };
+  });
 }
 
 export function checkEthereumSignedTypedData(token) {
@@ -159,10 +163,19 @@ export async function authViaMetaMask(application, provider, method) {
       token = await signEthereumTypedData(account, nonce);
       setWeb3AuthToken(token);
     }
-    const redirectUri = `${getAuthUrl(application, provider, method)}&web3AuthTokenKey=${getWeb3AuthTokenKey(account)}`;
+    const redirectUri = `${getAuthUrl(
+      application,
+      provider,
+      method
+    )}&web3AuthTokenKey=${getWeb3AuthTokenKey(account)}`;
     goToLink(redirectUri);
   } catch (err) {
-    showMessage("error", `${i18next.t("login:Failed to obtain MetaMask authorization")}: ${err.message}`);
+    showMessage(
+      "error",
+      `${i18next.t("login:Failed to obtain MetaMask authorization")}: ${
+        err.message
+      }`
+    );
   }
 }
 
@@ -244,7 +257,7 @@ function getWeb3OnboardWallets(options) {
   if (options === null || options === undefined || !Array.isArray(options)) {
     return [];
   }
-  return options.map(walletType => {
+  return options.map((walletType) => {
     if (walletType && web3Wallets[walletType]?.wallet) {
       return web3Wallets[walletType]?.wallet;
     }
@@ -302,8 +315,8 @@ export function initWeb3Onboard(application, provider) {
     name: "Casdoor",
     description: "Connect a wallet using Casdoor",
     recommendedInjectedWallets: [
-      {name: "MetaMask", url: "https://metamask.io"},
-      {name: "Coinbase", url: "https://www.coinbase.com/wallet"},
+      { name: "MetaMask", url: "https://metamask.io" },
+      { name: "Coinbase", url: "https://www.coinbase.com/wallet" },
     ],
   };
 
@@ -329,10 +342,19 @@ export async function authViaWeb3Onboard(application, provider, method) {
         createAt: Math.floor(new Date().getTime() / 1000),
       };
       setWeb3AuthToken(token);
-      const redirectUri = `${getAuthUrl(application, provider, method)}&web3AuthTokenKey=${getWeb3AuthTokenKey(address)}`;
+      const redirectUri = `${getAuthUrl(
+        application,
+        provider,
+        method
+      )}&web3AuthTokenKey=${getWeb3AuthTokenKey(address)}`;
       goToLink(redirectUri);
     }
   } catch (err) {
-    showMessage("error", `${i18next.t("login:Failed to obtain Web3-Onboard authorization")}: ${err}`);
+    showMessage(
+      "error",
+      `${i18next.t(
+        "login:Failed to obtain Web3-Onboard authorization"
+      )}: ${err}`
+    );
   }
 }

@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Tooltip} from "antd";
+import { Tooltip } from "antd";
 import * as Util from "./Util";
 import * as Setting from "../Setting";
 
@@ -103,7 +103,8 @@ const authInfo = {
   },
   AzureADB2C: {
     scope: "openid",
-    endpoint: "https://tenant.b2clogin.com/tenant.onmicrosoft.com/userflow/oauth2/v2.0/authorize",
+    endpoint:
+      "https://tenant.b2clogin.com/tenant.onmicrosoft.com/userflow/oauth2/v2.0/authorize",
   },
   Slack: {
     scope: "users:read",
@@ -183,7 +184,8 @@ const authInfo = {
     endpoint: "https://login.eveonline.com/oauth/authorize",
   },
   Fitbit: {
-    scope: "activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight",
+    scope:
+      "activity%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight",
     endpoint: "https://www.fitbit.com/oauth2/authorize",
   },
   Gitea: {
@@ -369,14 +371,24 @@ export function getProviderLogoWidget(provider) {
     return (
       <Tooltip title={provider.type}>
         <a target="_blank" rel="noreferrer" href={getProviderUrl(provider)}>
-          <img width={36} height={36} src={Setting.getProviderLogoURL(provider)} alt={provider.displayName} />
+          <img
+            width={36}
+            height={36}
+            src={Setting.getProviderLogoURL(provider)}
+            alt={provider.displayName}
+          />
         </a>
       </Tooltip>
     );
   } else {
     return (
       <Tooltip title={provider.type}>
-        <img width={36} height={36} src={Setting.getProviderLogoURL(provider)} alt={provider.displayName} />
+        <img
+          width={36}
+          height={36}
+          src={Setting.getProviderLogoURL(provider)}
+          alt={provider.displayName}
+        />
       </Tooltip>
     );
   }
@@ -388,11 +400,21 @@ export function getAuthUrl(application, provider, method, code) {
   }
 
   let endpoint = authInfo[provider.type].endpoint;
-  const redirectOrigin = application.forcedRedirectOrigin ? application.forcedRedirectOrigin : window.location.origin;
+  const redirectOrigin = application.forcedRedirectOrigin
+    ? application.forcedRedirectOrigin
+    : window.location.origin;
   let redirectUri = `${redirectOrigin}/callback`;
   let scope = authInfo[provider.type].scope;
-  const isShortState = (provider.type === "WeChat" && navigator.userAgent.includes("MicroMessenger")) || (provider.type === "Twitter");
-  const state = Util.getStateFromQueryParams(application.name, provider.name, method, isShortState);
+  const isShortState =
+    (provider.type === "WeChat" &&
+      navigator.userAgent.includes("MicroMessenger")) ||
+    provider.type === "Twitter";
+  const state = Util.getStateFromQueryParams(
+    application.name,
+    provider.name,
+    method,
+    isShortState
+  );
   const codeChallenge = "P3S-a7dr8bgM4bF6vOyiKkKETDl16rcAzao9F8UIL1Y"; // SHA256(Base64-URL-encode("casdoor-verifier"))
 
   if (provider.type === "AzureAD") {
@@ -411,30 +433,93 @@ export function getAuthUrl(application, provider, method, code) {
     endpoint = authInfo[provider.type].endpoint2;
   }
 
-  if (provider.type === "Google" || provider.type === "GitHub" || provider.type === "Facebook"
-    || provider.type === "Weibo" || provider.type === "Gitee" || provider.type === "LinkedIn" || provider.type === "GitLab" || provider.type === "AzureAD"
-    || provider.type === "Slack" || provider.type === "Line" || provider.type === "Amazon" || provider.type === "Auth0" || provider.type === "BattleNet"
-    || provider.type === "Bitbucket" || provider.type === "Box" || provider.type === "CloudFoundry" || provider.type === "Dailymotion"
-    || provider.type === "DigitalOcean" || provider.type === "Discord" || provider.type === "Dropbox" || provider.type === "EveOnline" || provider.type === "Gitea"
-    || provider.type === "Heroku" || provider.type === "InfluxCloud" || provider.type === "Instagram" || provider.type === "Intercom" || provider.type === "Kakao"
-    || provider.type === "MailRu" || provider.type === "Meetup" || provider.type === "MicrosoftOnline" || provider.type === "Naver" || provider.type === "Nextcloud"
-    || provider.type === "OneDrive" || provider.type === "Oura" || provider.type === "Patreon" || provider.type === "PayPal" || provider.type === "SalesForce"
-    || provider.type === "SoundCloud" || provider.type === "Spotify" || provider.type === "Strava" || provider.type === "Stripe" || provider.type === "Tumblr"
-    || provider.type === "Twitch" || provider.type === "Typetalk" || provider.type === "Uber" || provider.type === "VK" || provider.type === "Wepay"
-    || provider.type === "Xero" || provider.type === "Yahoo" || provider.type === "Yammer" || provider.type === "Yandex" || provider.type === "Zoom") {
+  if (
+    provider.type === "Google" ||
+    provider.type === "GitHub" ||
+    provider.type === "Facebook" ||
+    provider.type === "Weibo" ||
+    provider.type === "Gitee" ||
+    provider.type === "LinkedIn" ||
+    provider.type === "GitLab" ||
+    provider.type === "AzureAD" ||
+    provider.type === "Slack" ||
+    provider.type === "Line" ||
+    provider.type === "Amazon" ||
+    provider.type === "Auth0" ||
+    provider.type === "BattleNet" ||
+    provider.type === "Bitbucket" ||
+    provider.type === "Box" ||
+    provider.type === "CloudFoundry" ||
+    provider.type === "Dailymotion" ||
+    provider.type === "DigitalOcean" ||
+    provider.type === "Discord" ||
+    provider.type === "Dropbox" ||
+    provider.type === "EveOnline" ||
+    provider.type === "Gitea" ||
+    provider.type === "Heroku" ||
+    provider.type === "InfluxCloud" ||
+    provider.type === "Instagram" ||
+    provider.type === "Intercom" ||
+    provider.type === "Kakao" ||
+    provider.type === "MailRu" ||
+    provider.type === "Meetup" ||
+    provider.type === "MicrosoftOnline" ||
+    provider.type === "Naver" ||
+    provider.type === "Nextcloud" ||
+    provider.type === "OneDrive" ||
+    provider.type === "Oura" ||
+    provider.type === "Patreon" ||
+    provider.type === "PayPal" ||
+    provider.type === "SalesForce" ||
+    provider.type === "SoundCloud" ||
+    provider.type === "Spotify" ||
+    provider.type === "Strava" ||
+    provider.type === "Stripe" ||
+    provider.type === "Tumblr" ||
+    provider.type === "Twitch" ||
+    provider.type === "Typetalk" ||
+    provider.type === "Uber" ||
+    provider.type === "VK" ||
+    provider.type === "Wepay" ||
+    provider.type === "Xero" ||
+    provider.type === "Yahoo" ||
+    provider.type === "Yammer" ||
+    provider.type === "Yandex" ||
+    provider.type === "Zoom"
+  ) {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}`;
   } else if (provider.type === "QQ") {
-    return `${endpoint}?response_type=code&client_id=${provider.clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(scope)}`;
+    return `${endpoint}?response_type=code&client_id=${
+      provider.clientId
+    }&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&state=${encodeURIComponent(state)}&scope=${encodeURIComponent(scope)}`;
   } else if (provider.type === "AzureADB2C") {
-    return `https://${provider.domain}.b2clogin.com/${provider.domain}.onmicrosoft.com/${provider.appId}/oauth2/v2.0/authorize?client_id=${provider.clientId}&nonce=defaultNonce&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}&response_type=code&state=${state}&prompt=login`;
+    return `https://${provider.domain}.b2clogin.com/${
+      provider.domain
+    }.onmicrosoft.com/${provider.appId}/oauth2/v2.0/authorize?client_id=${
+      provider.clientId
+    }&nonce=defaultNonce&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&scope=${scope}&response_type=code&state=${state}&prompt=login`;
   } else if (provider.type === "DingTalk") {
     return `${endpoint}?client_id=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&prompt=login%20consent&state=${state}`;
   } else if (provider.type === "WeChat") {
     if (navigator.userAgent.includes("MicroMessenger")) {
-      return `${authInfo[provider.type].mpEndpoint}?appid=${provider.clientId2}&redirect_uri=${redirectUri}&state=${state}&scope=${authInfo[provider.type].mpScope}&response_type=code#wechat_redirect`;
+      return `${authInfo[provider.type].mpEndpoint}?appid=${
+        provider.clientId2
+      }&redirect_uri=${redirectUri}&state=${state}&scope=${
+        authInfo[provider.type].mpScope
+      }&response_type=code#wechat_redirect`;
     } else {
-      if (provider.clientId2 && provider?.disableSsl && provider?.signName === "media") {
-        return `${redirectOrigin}/callback?state=${state}&code=${"wechat_oa:" + code}`;
+      if (
+        provider.clientId2 &&
+        provider?.disableSsl &&
+        provider?.signName === "media"
+      ) {
+        return `${redirectOrigin}/callback?state=${state}&code=${
+          "wechat_oa:" + code
+        }`;
       }
       return `${endpoint}?appid=${provider.clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code&state=${state}#wechat_redirect`;
     }

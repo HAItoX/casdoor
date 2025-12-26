@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {authConfig} from "./Auth";
+import { authConfig } from "./Auth";
 import * as Setting from "../Setting";
 
 export function getAccount(query = "") {
@@ -22,7 +22,7 @@ export function getAccount(query = "") {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function signup(values) {
@@ -33,17 +33,24 @@ export function signup(values) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function getEmailAndPhone(organization, username) {
-  return fetch(`${authConfig.serverUrl}/api/get-email-and-phone?organization=${organization}&username=${encodeURIComponent(username)}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then((res) => res.json());
+  return fetch(
+    `${
+      authConfig.serverUrl
+    }/api/get-email-and-phone?organization=${organization}&username=${encodeURIComponent(
+      username
+    )}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function casLoginParamsToQuery(casParams) {
@@ -57,7 +64,15 @@ export function oAuthParamsToQuery(oAuthParams) {
   }
 
   // code
-  return `?clientId=${oAuthParams.clientId}&responseType=${oAuthParams.responseType}&redirectUri=${encodeURIComponent(oAuthParams.redirectUri)}&type=${oAuthParams.type}&scope=${oAuthParams.scope}&state=${oAuthParams.state}&nonce=${oAuthParams.nonce}&code_challenge_method=${oAuthParams.challengeMethod}&code_challenge=${oAuthParams.codeChallenge}`;
+  return `?clientId=${oAuthParams.clientId}&responseType=${
+    oAuthParams.responseType
+  }&redirectUri=${encodeURIComponent(oAuthParams.redirectUri)}&type=${
+    oAuthParams.type
+  }&scope=${oAuthParams.scope}&state=${oAuthParams.state}&nonce=${
+    oAuthParams.nonce
+  }&code_challenge_method=${oAuthParams.challengeMethod}&code_challenge=${
+    oAuthParams.codeChallenge
+  }`;
 }
 
 export function getApplicationLogin(params) {
@@ -75,18 +90,21 @@ export function getApplicationLogin(params) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function login(values, oAuthParams) {
-  return fetch(`${authConfig.serverUrl}/api/login${oAuthParamsToQuery(oAuthParams)}`, {
-    method: "POST",
-    credentials: "include",
-    body: JSON.stringify(values),
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${authConfig.serverUrl}/api/login${oAuthParamsToQuery(oAuthParams)}`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(values),
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function loginCas(values, params) {
@@ -97,7 +115,7 @@ export function loginCas(values, params) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function logout() {
@@ -107,7 +125,7 @@ export function logout() {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function unlink(values) {
@@ -118,17 +136,20 @@ export function unlink(values) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function getSamlLogin(providerId, relayState) {
-  return fetch(`${authConfig.serverUrl}/api/get-saml-login?id=${providerId}&relayState=${relayState}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${authConfig.serverUrl}/api/get-saml-login?id=${providerId}&relayState=${relayState}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }
 
 export function loginWithSaml(values, param) {
@@ -139,7 +160,7 @@ export function loginWithSaml(values, param) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function getWechatMessageEvent(ticket) {
@@ -149,7 +170,7 @@ export function getWechatMessageEvent(ticket) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function getWechatQRCode(providerId) {
@@ -159,15 +180,18 @@ export function getWechatQRCode(providerId) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 export function getCaptchaStatus(values) {
-  return fetch(`${Setting.ServerUrl}/api/get-captcha-status?organization=${values["organization"]}&userId=${values["username"]}&application=${values["application"]}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Accept-Language": Setting.getAcceptLanguage(),
-    },
-  }).then(res => res.json());
+  return fetch(
+    `${Setting.ServerUrl}/api/get-captcha-status?organization=${values["organization"]}&userId=${values["username"]}&application=${values["application"]}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Accept-Language": Setting.getAcceptLanguage(),
+      },
+    }
+  ).then((res) => res.json());
 }

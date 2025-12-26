@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
 // limitations under the License.
 
 import React from "react";
-import {Spin} from "antd";
-import {withRouter} from "react-router-dom";
+import { Spin } from "antd";
+import { withRouter } from "react-router-dom";
 import * as AuthBackend from "./AuthBackend";
 import * as Util from "./Util";
 import * as Setting from "../Setting";
 import i18next from "i18next";
-import {authConfig} from "./Auth";
-import {renderLoginPanel} from "../Setting";
+import { authConfig } from "./Auth";
+import { renderLoginPanel } from "../Setting";
 
 class SamlCallback extends React.Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class SamlCallback extends React.Component {
       return "login";
     }
     const realRedirectUrl = new URL(redirectUri).origin;
-    // For Casdoor itself, we use "login" directly
+    // For HitoFlowitself, we use "login" directly
     if (authServerUrl === realRedirectUrl) {
       return "login";
     } else {
@@ -78,20 +78,22 @@ class SamlCallback extends React.Component {
       param = `?clientId=${clientId}&responseType=${responseType}&redirectUri=${redirectUri}&scope=read&state=${state}`;
     }
 
-    AuthBackend.loginWithSaml(body, param)
-      .then((res) => {
-        if (res.status === "ok") {
-          const responseType = this.getResponseType(redirectUri);
-          const handleLogin = (res2) => {
-            if (responseType === "login") {
-              Setting.showMessage("success", "Logged in successfully");
-              Setting.goToLink(Setting.getFromLink());
-            } else if (responseType === "code") {
-              const code = res2.data;
-              Setting.goToLink(`${redirectUri}?code=${code}&state=${state}`);
-            }
-          };
-          Setting.checkLoginMfa(res, body, {
+    AuthBackend.loginWithSaml(body, param).then((res) => {
+      if (res.status === "ok") {
+        const responseType = this.getResponseType(redirectUri);
+        const handleLogin = (res2) => {
+          if (responseType === "login") {
+            Setting.showMessage("success", "Logged in successfully");
+            Setting.goToLink(Setting.getFromLink());
+          } else if (responseType === "code") {
+            const code = res2.data;
+            Setting.goToLink(`${redirectUri}?code=${code}&state=${state}`);
+          }
+        };
+        Setting.checkLoginMfa(
+          res,
+          body,
+          {
             clientId: clientId,
             responseType: responseType,
             redirectUri: messages[3],
@@ -101,33 +103,49 @@ class SamlCallback extends React.Component {
             challengeMethod: "",
             codeChallenge: "",
             type: "code",
-          }, handleLogin, this);
-        } else {
-          this.setState({
-            msg: res.msg,
-          });
-        }
-      });
+          },
+          handleLogin,
+          this
+        );
+      } else {
+        this.setState({
+          msg: res.msg,
+        });
+      }
+    });
   }
 
   render() {
     if (this.state.getVerifyTotp !== undefined) {
       const application = Setting.getApplicationObj(this);
-      return renderLoginPanel(application, this.state.getVerifyTotp, this, window.location.origin);
+      return renderLoginPanel(
+        application,
+        this.state.getVerifyTotp,
+        this,
+        window.location.origin
+      );
     }
 
     return (
-      <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-          {
-            (this.state.msg === null) ? (
-              <Spin size="large" tip={i18next.t("login:Signing in...")} style={{paddingTop: "10%"}}>
-                <div style={{height: "100px"}} />
-              </Spin>
-            ) : (
-              Util.renderMessageLarge(this, this.state.msg)
-            )
-          }
-        </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {this.state.msg === null ? (
+          <Spin
+            size="large"
+            tip={i18next.t("login:Signing in...")}
+            style={{ paddingTop: "10%" }}
+          >
+            <div style={{ height: "100px" }} />
+          </Spin>
+        ) : (
+          Util.renderMessageLarge(this, this.state.msg)
+        )}
+      </div>
     );
   }
 }

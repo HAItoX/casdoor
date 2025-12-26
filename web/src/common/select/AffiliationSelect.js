@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Cascader, Col, Input, Row, Select} from "antd";
+import { Cascader, Col, Input, Row, Select } from "antd";
 import i18next from "i18next";
 import * as UserBackend from "../../backend/UserBackend";
 import * as Setting from "../../Setting";
@@ -39,12 +39,11 @@ class AffiliationSelect extends React.Component {
     }
 
     const addressUrl = application.affiliationUrl.split("|")[0];
-    UserBackend.getAddressOptions(addressUrl)
-      .then((addressOptions) => {
-        this.setState({
-          addressOptions: addressOptions,
-        });
+    UserBackend.getAddressOptions(addressUrl).then((addressOptions) => {
+      this.setState({
+        addressOptions: addressOptions,
       });
+    });
   }
 
   getAffiliationOptions(application, user) {
@@ -54,12 +53,13 @@ class AffiliationSelect extends React.Component {
 
     const affiliationUrl = application.affiliationUrl.split("|")[1];
     const code = user.address[user.address.length - 1];
-    UserBackend.getAffiliationOptions(affiliationUrl, code)
-      .then((affiliationOptions) => {
+    UserBackend.getAffiliationOptions(affiliationUrl, code).then(
+      (affiliationOptions) => {
         this.setState({
           affiliationOptions: affiliationOptions,
         });
-      });
+      }
+    );
   }
 
   updateUserField(key, value) {
@@ -69,46 +69,78 @@ class AffiliationSelect extends React.Component {
   render() {
     return (
       <React.Fragment>
-        {
-          this.props.application?.affiliationUrl === "" ? null : (
-            <Row style={{marginTop: "20px"}} >
-              <Col style={{marginTop: "5px"}} span={this.props.labelSpan}>
-                {Setting.getLabel(i18next.t("user:Address"), i18next.t("user:Address - Tooltip"))} :
-              </Col>
-              <Col span={24 - this.props.labelSpan} >
-                <Cascader style={{width: "100%", maxWidth: "400px"}} value={this.props.user.address} options={this.state.addressOptions} onChange={value => {
+        {this.props.application?.affiliationUrl === "" ? null : (
+          <Row style={{ marginTop: "20px" }}>
+            <Col style={{ marginTop: "5px" }} span={this.props.labelSpan}>
+              {Setting.getLabel(
+                i18next.t("user:Address"),
+                i18next.t("user:Address - Tooltip")
+              )}{" "}
+              :
+            </Col>
+            <Col span={24 - this.props.labelSpan}>
+              <Cascader
+                style={{ width: "100%", maxWidth: "400px" }}
+                value={this.props.user.address}
+                options={this.state.addressOptions}
+                onChange={(value) => {
                   this.updateUserField("address", value);
                   this.updateUserField("affiliation", "");
                   this.updateUserField("score", 0);
-                  this.getAffiliationOptions(this.props.application, this.props.user);
-                }} placeholder={i18next.t("signup:Please input your address!")} />
-              </Col>
-            </Row>
-          )
-        }
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={this.props.labelSpan}>
-            {Setting.getLabel(i18next.t("user:Affiliation"), i18next.t("user:Affiliation - Tooltip"))} :
+                  this.getAffiliationOptions(
+                    this.props.application,
+                    this.props.user
+                  );
+                }}
+                placeholder={i18next.t("signup:Please input your address!")}
+              />
+            </Col>
+          </Row>
+        )}
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={this.props.labelSpan}>
+            {Setting.getLabel(
+              i18next.t("user:Affiliation"),
+              i18next.t("user:Affiliation - Tooltip")
+            )}{" "}
+            :
           </Col>
-          <Col span={22} >
-            {
-              this.props.application?.affiliationUrl === "" ? (
-                <Input value={this.props.user.affiliation} onChange={e => {
+          <Col span={22}>
+            {this.props.application?.affiliationUrl === "" ? (
+              <Input
+                value={this.props.user.affiliation}
+                onChange={(e) => {
                   this.updateUserField("affiliation", e.target.value);
-                }} />
-              ) : (
-                <Select virtual={false} style={{width: "100%"}} value={this.props.user.affiliation}
-                  onChange={(value => {
-                    const name = value;
-                    const affiliationOption = Setting.getArrayItem(this.state.affiliationOptions, "name", name);
-                    const id = affiliationOption.id;
-                    this.updateUserField("affiliation", name);
-                    this.updateUserField("score", id);
-                  })}
-                  options={[Setting.getOption(`(${i18next.t("general:empty")})`, "")].concat(this.state.affiliationOptions.map((affiliationOption) => Setting.getOption(affiliationOption.name, affiliationOption.name))
-                  )} />
-              )
-            }
+                }}
+              />
+            ) : (
+              <Select
+                virtual={false}
+                style={{ width: "100%" }}
+                value={this.props.user.affiliation}
+                onChange={(value) => {
+                  const name = value;
+                  const affiliationOption = Setting.getArrayItem(
+                    this.state.affiliationOptions,
+                    "name",
+                    name
+                  );
+                  const id = affiliationOption.id;
+                  this.updateUserField("affiliation", name);
+                  this.updateUserField("score", id);
+                }}
+                options={[
+                  Setting.getOption(`(${i18next.t("general:empty")})`, ""),
+                ].concat(
+                  this.state.affiliationOptions.map((affiliationOption) =>
+                    Setting.getOption(
+                      affiliationOption.name,
+                      affiliationOption.name
+                    )
+                  )
+                )}
+              />
+            )}
           </Col>
         </Row>
       </React.Fragment>

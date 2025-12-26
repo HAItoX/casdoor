@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Table} from "antd";
+import { Button, Table } from "antd";
 import i18next from "i18next";
 import * as UserWebauthnBackend from "../backend/UserWebauthnBackend";
 import * as Setting from "../Setting";
@@ -25,17 +25,25 @@ class WebAuthnCredentialTable extends React.Component {
   }
 
   registerWebAuthn() {
-    UserWebauthnBackend.registerWebauthnCredential().then((res) => {
-      if (res.status === "ok") {
-        Setting.showMessage("success", "Successfully added webauthn credentials");
-      } else {
-        Setting.showMessage("error", res.msg);
-      }
+    UserWebauthnBackend.registerWebauthnCredential()
+      .then((res) => {
+        if (res.status === "ok") {
+          Setting.showMessage(
+            "success",
+            "Successfully added webauthn credentials"
+          );
+        } else {
+          Setting.showMessage("error", res.msg);
+        }
 
-      this.props.refresh();
-    }).catch(error => {
-      Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
-    });
+        this.props.refresh();
+      })
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
+      });
   }
 
   render() {
@@ -52,7 +60,18 @@ class WebAuthnCredentialTable extends React.Component {
         width: "170px",
         render: (text, record, index) => {
           return (
-            <Button style={{marginTop: "5px", marginBottom: "5px", marginRight: "5px"}} type="primary" danger onClick={() => {this.deleteRow(this.props.table, index);}}>
+            <Button
+              style={{
+                marginTop: "5px",
+                marginBottom: "5px",
+                marginRight: "5px",
+              }}
+              type="primary"
+              danger
+              onClick={() => {
+                this.deleteRow(this.props.table, index);
+              }}
+            >
               {i18next.t("general:Delete")}
             </Button>
           );
@@ -61,11 +80,25 @@ class WebAuthnCredentialTable extends React.Component {
     ];
 
     return (
-      <Table rowKey={"id"} columns={columns} dataSource={this.props.table} size="middle" bordered pagination={false}
+      <Table
+        rowKey={"id"}
+        columns={columns}
+        dataSource={this.props.table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {i18next.t("user:WebAuthn credentials")}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button disabled={!this.props.isSelf} style={{marginRight: "5px"}} type="primary" size="small" onClick={() => {this.registerWebAuthn();}}>
+            <Button
+              disabled={!this.props.isSelf}
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => {
+                this.registerWebAuthn();
+              }}
+            >
               {i18next.t("general:Add")}
             </Button>
           </div>

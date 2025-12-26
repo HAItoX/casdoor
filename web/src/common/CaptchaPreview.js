@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Button} from "antd";
+import { Button } from "antd";
 import React from "react";
 import i18next from "i18next";
-import {CaptchaModal} from "./modal/CaptchaModal";
+import { CaptchaModal } from "./modal/CaptchaModal";
 import * as UserBackend from "../backend/UserBackend";
 
 export const CaptchaPreview = (props) => {
-  const {owner, name, provider, captchaType, subType, clientId, clientSecret, clientId2, clientSecret2, providerUrl} = props;
+  const {
+    owner,
+    name,
+    provider,
+    captchaType,
+    subType,
+    clientId,
+    clientSecret,
+    clientId2,
+    clientSecret2,
+    providerUrl,
+  } = props;
   const [visible, setVisible] = React.useState(false);
 
   const clickPreview = () => {
@@ -50,7 +61,13 @@ export const CaptchaPreview = (props) => {
   };
 
   const onOk = (captchaType, captchaToken, clientSecret) => {
-    UserBackend.verifyCaptcha(owner, name, captchaType, captchaToken, clientSecret).then(() => {
+    UserBackend.verifyCaptcha(
+      owner,
+      name,
+      captchaType,
+      captchaToken,
+      clientSecret
+    ).then(() => {
       setVisible(false);
     });
   };
@@ -62,7 +79,7 @@ export const CaptchaPreview = (props) => {
   return (
     <React.Fragment>
       <Button
-        style={{fontSize: 14}}
+        style={{ fontSize: 14 }}
         type={"primary"}
         onClick={clickPreview}
         disabled={isButtonDisabled()}

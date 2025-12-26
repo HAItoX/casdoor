@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import React from "react";
-import {Select} from "antd";
+import { Select } from "antd";
 import i18next from "i18next";
 import * as OrganizationBackend from "../../backend/OrganizationBackend";
 import * as Setting from "../../Setting";
 
 function OrganizationSelect(props) {
-  const {onChange, initValue, style, onSelect, withAll, className} = props;
+  const { onChange, initValue, style, onSelect, withAll, className } = props;
   const [organizations, setOrganizations] = React.useState([]);
   const [value, setValue] = React.useState(initValue);
 
@@ -28,22 +28,30 @@ function OrganizationSelect(props) {
       getOrganizations();
     }
     window.addEventListener("storageOrganizationsChanged", getOrganizations);
-    return function() {
-      window.removeEventListener("storageOrganizationsChanged", getOrganizations);
+    return function () {
+      window.removeEventListener(
+        "storageOrganizationsChanged",
+        getOrganizations
+      );
     };
   }, [value]);
 
   const getOrganizations = () => {
-    OrganizationBackend.getOrganizationNames("admin")
-      .then((res) => {
-        if (res.status === "ok") {
-          setOrganizations(res.data);
-          const selectedValueExist = res.data.filter(organization => organization.name === value).length > 0;
-          if (initValue === undefined || !selectedValueExist) {
-            handleOnChange(getOrganizationItems().length > 0 ? getOrganizationItems()[0].value : "");
-          }
+    OrganizationBackend.getOrganizationNames("admin").then((res) => {
+      if (res.status === "ok") {
+        setOrganizations(res.data);
+        const selectedValueExist =
+          res.data.filter((organization) => organization.name === value)
+            .length > 0;
+        if (initValue === undefined || !selectedValueExist) {
+          handleOnChange(
+            getOrganizationItems().length > 0
+              ? getOrganizationItems()[0].value
+              : ""
+          );
         }
-      });
+      }
+    });
   };
 
   const handleOnChange = (value) => {
@@ -54,7 +62,9 @@ function OrganizationSelect(props) {
   const getOrganizationItems = () => {
     const items = [];
 
-    organizations.forEach((organization) => items.push(Setting.getOption(organization.displayName, organization.name)));
+    organizations.forEach((organization) =>
+      items.push(Setting.getOption(organization.displayName, organization.name))
+    );
 
     if (withAll) {
       items.unshift({
@@ -74,12 +84,13 @@ function OrganizationSelect(props) {
       placeholder={i18next.t("login:Please select an organization")}
       value={value}
       onChange={handleOnChange}
-      filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+      filterOption={(input, option) =>
+        (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+      }
       style={style}
       onSelect={onSelect}
       className={className}
-    >
-    </Select>
+    ></Select>
   );
 }
 

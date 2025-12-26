@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@ import * as Setting from "./Setting";
 import moment from "moment/moment";
 import * as VerificationBackend from "./backend/VerificationBackend";
 import i18next from "i18next";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import React from "react";
-import {Switch, Table} from "antd";
+import { Switch, Table } from "antd";
 
 class VerificationListPage extends BaseListPage {
   newVerification() {
@@ -46,11 +46,7 @@ class VerificationListPage extends BaseListPage {
             return `(${i18next.t("general:empty")})`;
           }
 
-          return (
-            <Link to={`/organizations/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/organizations/${text}`}>{text}</Link>;
         },
       },
       {
@@ -88,11 +84,7 @@ class VerificationListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("user"),
         render: (text, record, index) => {
-          return (
-            <Link to={`/users/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/users/${text}`}>{text}</Link>;
         },
       },
       {
@@ -103,11 +95,7 @@ class VerificationListPage extends BaseListPage {
         sorter: true,
         ...this.getColumnSearchProps("provider"),
         render: (text, record, index) => {
-          return (
-            <Link to={`/providers/${record.owner}/${text}`}>
-              {text}
-            </Link>
-          );
+          return <Link to={`/providers/${record.owner}/${text}`}>{text}</Link>;
         },
       },
       {
@@ -124,7 +112,11 @@ class VerificationListPage extends BaseListPage {
           }
 
           return (
-            <a target="_blank" rel="noreferrer" href={`https://db-ip.com/${clientIp}`}>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={`https://db-ip.com/${clientIp}`}
+            >
               {clientIp}
             </a>
           );
@@ -154,7 +146,12 @@ class VerificationListPage extends BaseListPage {
         sorter: true,
         render: (text, record, index) => {
           return (
-            <Switch disabled checkedChildren="ON" unCheckedChildren="OFF" checked={text} />
+            <Switch
+              disabled
+              checkedChildren="ON"
+              unCheckedChildren="OFF"
+              checked={text}
+            />
           );
         },
       },
@@ -164,12 +161,22 @@ class VerificationListPage extends BaseListPage {
       total: this.state.pagination.total,
       showQuickJumper: true,
       showSizeChanger: true,
-      showTotal: () => i18next.t("general:{total} in total").replace("{total}", this.state.pagination.total),
+      showTotal: () =>
+        i18next
+          .t("general:{total} in total")
+          .replace("{total}", this.state.pagination.total),
     };
 
     return (
       <div>
-        <Table scroll={{x: "max-content"}} columns={columns} dataSource={verifications} rowKey={(record) => `${record.owner}/${record.name}`} size="middle" bordered pagination={paginationProps}
+        <Table
+          scroll={{ x: "max-content" }}
+          columns={columns}
+          dataSource={verifications}
+          rowKey={(record) => `${record.owner}/${record.name}`}
+          size="middle"
+          bordered
+          pagination={paginationProps}
           title={() => (
             <div>
               {i18next.t("general:Verifications")}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -183,38 +190,50 @@ class VerificationListPage extends BaseListPage {
   }
 
   fetch = (params = {}) => {
-    let field = params.searchedColumn, value = params.searchText;
-    const sortField = params.sortField, sortOrder = params.sortOrder;
+    let field = params.searchedColumn,
+      value = params.searchText;
+    const sortField = params.sortField,
+      sortOrder = params.sortOrder;
     if (params.type !== undefined && params.type !== null) {
       field = "type";
       value = params.type;
     }
-    this.setState({loading: true});
-    VerificationBackend.getVerifications("", Setting.isDefaultOrganizationSelected(this.props.account) ? "" : Setting.getRequestOrganization(this.props.account), params.pagination.current, params.pagination.pageSize, field, value, sortField, sortOrder)
-      .then((res) => {
+    this.setState({ loading: true });
+    VerificationBackend.getVerifications(
+      "",
+      Setting.isDefaultOrganizationSelected(this.props.account)
+        ? ""
+        : Setting.getRequestOrganization(this.props.account),
+      params.pagination.current,
+      params.pagination.pageSize,
+      field,
+      value,
+      sortField,
+      sortOrder
+    ).then((res) => {
+      this.setState({
+        loading: false,
+      });
+      if (res.status === "ok") {
         this.setState({
-          loading: false,
+          data: res.data,
+          pagination: {
+            ...params.pagination,
+            total: res.data2,
+          },
+          searchText: params.searchText,
+          searchedColumn: params.searchedColumn,
         });
-        if (res.status === "ok") {
+      } else {
+        if (Setting.isResponseDenied(res)) {
           this.setState({
-            data: res.data,
-            pagination: {
-              ...params.pagination,
-              total: res.data2,
-            },
-            searchText: params.searchText,
-            searchedColumn: params.searchedColumn,
+            isAuthorized: false,
           });
         } else {
-          if (Setting.isResponseDenied(res)) {
-            this.setState({
-              isAuthorized: false,
-            });
-          } else {
-            Setting.showMessage("error", res.msg);
-          }
+          Setting.showMessage("error", res.msg);
         }
-      });
+      }
+    });
   };
 }
 

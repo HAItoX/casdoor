@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
 
 /** @jsxImportSource @emotion/react */
 
-import {Input, Popover, Space, theme} from "antd";
-import React, {useEffect, useMemo, useState} from "react";
-import {css} from "@emotion/react";
-import {TinyColor} from "@ctrl/tinycolor";
+import { Input, Popover, Space, theme } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
+import { css } from "@emotion/react";
+import { TinyColor } from "@ctrl/tinycolor";
 import ColorPanel from "antd-token-previewer/es/ColorPanel";
 
 export const BLUE_COLOR = "#1677FF";
@@ -51,14 +51,14 @@ export const COLORS = [
   },
 ];
 
-export const PRESET_COLORS = COLORS.map(({color}) => color);
+export const PRESET_COLORS = COLORS.map(({ color }) => color);
 
-const {useToken} = theme;
+const { useToken } = theme;
 
 const useStyle = () => {
-  const {token} = useToken();
+  const { token } = useToken();
   return {
-    color: css `
+    color: css`
       width: ${token.controlHeightLG / 2}px;
       height: ${token.controlHeightLG / 2}px;
       border-radius: 100%;
@@ -72,14 +72,14 @@ const useStyle = () => {
         opacity: 0;
       }
     `,
-    colorActive: css `
+    colorActive: css`
       box-shadow: 0 0 0 1px ${token.colorBgContainer},
         0 0 0 ${token.controlOutlineWidth * 2 + 1}px ${token.colorPrimary};
     `,
   };
 };
 
-const DebouncedColorPanel = ({color, onChange}) => {
+const DebouncedColorPanel = ({ color, onChange }) => {
   const [value, setValue] = useState(color);
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const DebouncedColorPanel = ({color, onChange}) => {
   return <ColorPanel color={value} onChange={setValue} />;
 };
 
-export default function ColorPicker({value, onChange}) {
+export default function ColorPicker({ value, onChange }) {
   const style = useStyle();
 
   const matchColors = useMemo(() => {
@@ -108,7 +108,7 @@ export default function ColorPicker({value, onChange}) {
       const active = colorStr === valueStr;
       existActive = existActive || active;
 
-      return {color, active, picker: false};
+      return { color, active, picker: false };
     });
 
     return [
@@ -128,10 +128,10 @@ export default function ColorPicker({value, onChange}) {
         onChange={(event) => {
           onChange?.(event.target.value);
         }}
-        style={{width: 120}}
+        style={{ width: 120 }}
       />
       <Space size="middle">
-        {matchColors.map(({color, active, picker}) => {
+        {matchColors.map(({ color, active, picker }) => {
           let colorNode = (
             <label
               key={color}
@@ -145,7 +145,11 @@ export default function ColorPicker({value, onChange}) {
                 }
               }}
             >
-              <input type="radio" name={picker ? "picker" : "color"} tabIndex={picker ? -1 : 0} />
+              <input
+                type="radio"
+                name={picker ? "picker" : "color"}
+                tabIndex={picker ? -1 : 0}
+              />
             </label>
           );
 
@@ -153,9 +157,12 @@ export default function ColorPicker({value, onChange}) {
             colorNode = (
               <Popover
                 key={color}
-                overlayInnerStyle={{padding: 0}}
+                overlayInnerStyle={{ padding: 0 }}
                 content={
-                  <DebouncedColorPanel color={value || ""} onChange={(c) => onChange?.(c)} />
+                  <DebouncedColorPanel
+                    color={value || ""}
+                    onChange={(c) => onChange?.(c)}
+                  />
                 }
                 trigger="click"
                 showArrow={false}

@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {createButton} from "react-social-login-buttons";
-import {StaticBaseUrl} from "../Setting";
+import { createButton } from "react-social-login-buttons";
+import { StaticBaseUrl } from "../Setting";
 
-function Icon({width = 24, height = 24, color}) {
-  return <img src={`${StaticBaseUrl}/buttons/wechat.svg`} alt="Sign in with Wechat" />;
+function Icon({ width = 24, height = 24, color }) {
+  return (
+    <img
+      src={`${StaticBaseUrl}/buttons/wechat.svg`}
+      alt="Sign in with Wechat"
+    />
+  );
 }
 
 const config = {
   text: "Sign in with Wechat",
   icon: Icon,
-  iconFormat: name => `fa fa-${name}`,
-  style: {background: "rgb(0,194,80)"},
-  activeStyle: {background: "rgb(0,158,64)"},
+  iconFormat: (name) => `fa fa-${name}`,
+  style: { background: "rgb(0,194,80)" },
+  activeStyle: { background: "rgb(0,158,64)" },
 };
 
 const WechatLoginButton = createButton(config);

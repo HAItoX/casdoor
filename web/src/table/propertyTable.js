@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Input, Table} from "antd";
+import { Button, Input, Table } from "antd";
 import i18next from "i18next";
-import {DeleteOutlined} from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import * as Setting from "../Setting";
 
 class PropertyTable extends React.Component {
@@ -28,17 +28,24 @@ class PropertyTable extends React.Component {
     // transfer the Object to object[]
     if (this.props.properties !== null) {
       Object.entries(this.props.properties).map((item, index) => {
-        this.state.properties.push({key: index, name: item[0], value: item[1]});
+        this.state.properties.push({
+          key: index,
+          name: item[0],
+          value: item[1],
+        });
       });
     }
   }
 
   page = 1;
   pageSize = 10;
-  count = this.props.properties !== null ? Object.entries(this.props.properties).length : 0;
+  count =
+    this.props.properties !== null
+      ? Object.entries(this.props.properties).length
+      : 0;
 
   updateTable(table) {
-    this.setState({properties: table});
+    this.setState({ properties: table });
     const properties = {};
     table.map((item) => {
       properties[item.name] = item.value;
@@ -47,7 +54,7 @@ class PropertyTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {key: this.count, name: "", value: ""};
+    const row = { key: this.count, name: "", value: "" };
     if (table === undefined) {
       table = [];
     }
@@ -79,9 +86,12 @@ class PropertyTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "name", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "name", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -91,9 +101,12 @@ class PropertyTable extends React.Component {
         width: "200px",
         render: (text, record, index) => {
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "value", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "value", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -103,34 +116,48 @@ class PropertyTable extends React.Component {
         width: "20px",
         render: (text, record, index) => {
           return (
-            <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+            <Button
+              icon={<DeleteOutlined />}
+              size="small"
+              onClick={() => this.deleteRow(table, index)}
+            />
           );
         },
       },
     ];
 
     return (
-      <Table title={() => (
-        <div>
-          <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
-        </div>
-      )}
-      pagination={{
-        defaultPageSize: this.pageSize,
-        onChange: page => {this.page = page;},
-      }}
-      columns={columns} dataSource={table} rowKey="key" size="middle" bordered
+      <Table
+        title={() => (
+          <div>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
+          </div>
+        )}
+        pagination={{
+          defaultPageSize: this.pageSize,
+          onChange: (page) => {
+            this.page = page;
+          },
+        }}
+        columns={columns}
+        dataSource={table}
+        rowKey="key"
+        size="middle"
+        bordered
       />
     );
   }
 
   render() {
     return (
-      <React.Fragment>
-        {
-          this.renderTable(this.state.properties)
-        }
-      </React.Fragment>
+      <React.Fragment>{this.renderTable(this.state.properties)}</React.Fragment>
     );
   }
 }

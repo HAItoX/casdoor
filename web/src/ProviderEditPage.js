@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -595,7 +595,7 @@ class ProviderEditPage extends React.Component {
                 this.updateProviderField("host", "smtp.example.com");
                 this.updateProviderField("port", 465);
                 this.updateProviderField("disableSsl", false);
-                this.updateProviderField("title", "Casdoor Verification Code");
+                this.updateProviderField("title", "HitoFlowVerification Code");
                 this.updateProviderField("content", Setting.getDefaultHtmlEmailContent());
                 this.updateProviderField("receiver", this.props.account.email);
               } else if (value === "SMS") {

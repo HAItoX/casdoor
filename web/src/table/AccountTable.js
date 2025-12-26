@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import React from "react";
-import {DeleteOutlined, DownOutlined, UpOutlined} from "@ant-design/icons";
-import {Button, Col, Input, Row, Select, Switch, Table, Tooltip} from "antd";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Button, Col, Input, Row, Select, Switch, Table, Tooltip } from "antd";
 import * as Setting from "../Setting";
 import i18next from "i18next";
 
-const {Option} = Select;
+const { Option } = Select;
 
 class AccountTable extends React.Component {
   constructor(props) {
@@ -38,7 +38,15 @@ class AccountTable extends React.Component {
   }
 
   addRow(table) {
-    const row = {name: Setting.getNewRowNameForTable(table, "Please select an account item"), visible: true, viewRule: "Public", modifyRule: "Self"};
+    const row = {
+      name: Setting.getNewRowNameForTable(
+        table,
+        "Please select an account item"
+      ),
+      visible: true,
+      viewRule: "Public",
+      modifyRule: "Self",
+    };
     if (table === undefined) {
       table = [];
     }
@@ -63,54 +71,66 @@ class AccountTable extends React.Component {
 
   getItems = () => {
     return [
-      {name: "Organization", label: i18next.t("general:Organization")},
-      {name: "ID", label: i18next.t("general:ID")},
-      {name: "Name", label: i18next.t("general:Name")},
-      {name: "Display name", label: i18next.t("general:Display name")},
-      {name: "Avatar", label: i18next.t("general:Avatar")},
-      {name: "User type", label: i18next.t("general:User type")},
-      {name: "Password", label: i18next.t("general:Password")},
-      {name: "Email", label: i18next.t("general:Email")},
-      {name: "Phone", label: i18next.t("general:Phone")},
-      {name: "Country code", label: i18next.t("user:Country code")},
-      {name: "Country/Region", label: i18next.t("user:Country/Region")},
-      {name: "Location", label: i18next.t("user:Location")},
-      {name: "Address", label: i18next.t("user:Address")},
-      {name: "Affiliation", label: i18next.t("user:Affiliation")},
-      {name: "Title", label: i18next.t("user:Title")},
-      {name: "ID card type", label: i18next.t("user:ID card type")},
-      {name: "ID card", label: i18next.t("user:ID card")},
-      {name: "ID card info", label: i18next.t("user:ID card info")},
-      {name: "Homepage", label: i18next.t("user:Homepage")},
-      {name: "Bio", label: i18next.t("user:Bio")},
-      {name: "Tag", label: i18next.t("user:Tag")},
-      {name: "Language", label: i18next.t("user:Language")},
-      {name: "Gender", label: i18next.t("user:Gender")},
-      {name: "Birthday", label: i18next.t("user:Birthday")},
-      {name: "Education", label: i18next.t("user:Education")},
-      {name: "Balance", label: i18next.t("user:Balance")},
-      {name: "Score", label: i18next.t("user:Score")},
-      {name: "Karma", label: i18next.t("user:Karma")},
-      {name: "Ranking", label: i18next.t("user:Ranking")},
-      {name: "Signup application", label: i18next.t("general:Signup application")},
-      {name: "API key", label: i18next.t("general:API key")},
-      {name: "Groups", label: i18next.t("general:Groups")},
-      {name: "Roles", label: i18next.t("general:Roles")},
-      {name: "Permissions", label: i18next.t("general:Permissions")},
-      {name: "3rd-party logins", label: i18next.t("user:3rd-party logins")},
-      {name: "Properties", label: i18next.t("user:Properties")},
-      {name: "Is online", label: i18next.t("user:Is online")},
-      {name: "Is admin", label: i18next.t("user:Is admin")},
-      {name: "Is forbidden", label: i18next.t("user:Is forbidden")},
-      {name: "Is deleted", label: i18next.t("user:Is deleted")},
-      {name: "Need update password", label: i18next.t("user:Need update password")},
-      {name: "IP whitelist", label: i18next.t("general:IP whitelist")},
-      {name: "Multi-factor authentication", label: i18next.t("user:Multi-factor authentication")},
-      {name: "WebAuthn credentials", label: i18next.t("user:WebAuthn credentials")},
-      {name: "Managed accounts", label: i18next.t("user:Managed accounts")},
-      {name: "Face ID", label: i18next.t("user:Face ID")},
-      {name: "MFA accounts", label: i18next.t("user:MFA accounts")},
-      {name: "MFA items", label: i18next.t("general:MFA items")},
+      { name: "Organization", label: i18next.t("general:Organization") },
+      { name: "ID", label: i18next.t("general:ID") },
+      { name: "Name", label: i18next.t("general:Name") },
+      { name: "Display name", label: i18next.t("general:Display name") },
+      { name: "Avatar", label: i18next.t("general:Avatar") },
+      { name: "User type", label: i18next.t("general:User type") },
+      { name: "Password", label: i18next.t("general:Password") },
+      { name: "Email", label: i18next.t("general:Email") },
+      { name: "Phone", label: i18next.t("general:Phone") },
+      { name: "Country code", label: i18next.t("user:Country code") },
+      { name: "Country/Region", label: i18next.t("user:Country/Region") },
+      { name: "Location", label: i18next.t("user:Location") },
+      { name: "Address", label: i18next.t("user:Address") },
+      { name: "Affiliation", label: i18next.t("user:Affiliation") },
+      { name: "Title", label: i18next.t("user:Title") },
+      { name: "ID card type", label: i18next.t("user:ID card type") },
+      { name: "ID card", label: i18next.t("user:ID card") },
+      { name: "ID card info", label: i18next.t("user:ID card info") },
+      { name: "Homepage", label: i18next.t("user:Homepage") },
+      { name: "Bio", label: i18next.t("user:Bio") },
+      { name: "Tag", label: i18next.t("user:Tag") },
+      { name: "Language", label: i18next.t("user:Language") },
+      { name: "Gender", label: i18next.t("user:Gender") },
+      { name: "Birthday", label: i18next.t("user:Birthday") },
+      { name: "Education", label: i18next.t("user:Education") },
+      { name: "Balance", label: i18next.t("user:Balance") },
+      { name: "Score", label: i18next.t("user:Score") },
+      { name: "Karma", label: i18next.t("user:Karma") },
+      { name: "Ranking", label: i18next.t("user:Ranking") },
+      {
+        name: "Signup application",
+        label: i18next.t("general:Signup application"),
+      },
+      { name: "API key", label: i18next.t("general:API key") },
+      { name: "Groups", label: i18next.t("general:Groups") },
+      { name: "Roles", label: i18next.t("general:Roles") },
+      { name: "Permissions", label: i18next.t("general:Permissions") },
+      { name: "3rd-party logins", label: i18next.t("user:3rd-party logins") },
+      { name: "Properties", label: i18next.t("user:Properties") },
+      { name: "Is online", label: i18next.t("user:Is online") },
+      { name: "Is admin", label: i18next.t("user:Is admin") },
+      { name: "Is forbidden", label: i18next.t("user:Is forbidden") },
+      { name: "Is deleted", label: i18next.t("user:Is deleted") },
+      {
+        name: "Need update password",
+        label: i18next.t("user:Need update password"),
+      },
+      { name: "IP whitelist", label: i18next.t("general:IP whitelist") },
+      {
+        name: "Multi-factor authentication",
+        label: i18next.t("user:Multi-factor authentication"),
+      },
+      {
+        name: "WebAuthn credentials",
+        label: i18next.t("user:WebAuthn credentials"),
+      },
+      { name: "Managed accounts", label: i18next.t("user:Managed accounts") },
+      { name: "Face ID", label: i18next.t("user:Face ID") },
+      { name: "MFA accounts", label: i18next.t("user:MFA accounts") },
+      { name: "MFA items", label: i18next.t("general:MFA items") },
     ];
   };
 
@@ -123,13 +143,17 @@ class AccountTable extends React.Component {
         render: (text, record, index) => {
           const items = this.getItems();
           return (
-            <Select virtual={false} style={{width: "100%"}}
-              options={Setting.getDeduplicatedArray(items, table, "name").map(item => Setting.getOption(item.label, item.name))}
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
+              options={Setting.getDeduplicatedArray(items, table, "name").map(
+                (item) => Setting.getOption(item.label, item.name)
+              )}
               value={text}
-              onChange={value => {
+              onChange={(value) => {
                 this.updateField(table, index, "name", value);
-              }} >
-            </Select>
+              }}
+            ></Select>
           );
         },
       },
@@ -140,9 +164,12 @@ class AccountTable extends React.Component {
         width: "120px",
         render: (text, record, index) => {
           return (
-            <Switch checked={text} onChange={checked => {
-              this.updateField(table, index, "visible", checked);
-            }} />
+            <Switch
+              checked={text}
+              onChange={(checked) => {
+                this.updateField(table, index, "visible", checked);
+              }}
+            />
           );
         },
       },
@@ -152,17 +179,32 @@ class AccountTable extends React.Component {
         key: "regex",
         width: "200px",
         render: (text, record, index) => {
-          const regexIncludeList = ["Display name", "Password", "Email", "Phone", "Location",
-            "Title", "Homepage", "Bio", "Gender", "Birthday", "Education", "ID card",
-            "ID card type"];
+          const regexIncludeList = [
+            "Display name",
+            "Password",
+            "Email",
+            "Phone",
+            "Location",
+            "Title",
+            "Homepage",
+            "Bio",
+            "Gender",
+            "Birthday",
+            "Education",
+            "ID card",
+            "ID card type",
+          ];
           if (!regexIncludeList.includes(record.name)) {
             return null;
           }
 
           return (
-            <Input value={text} onChange={e => {
-              this.updateField(table, index, "regex", e.target.value);
-            }} />
+            <Input
+              value={text}
+              onChange={(e) => {
+                this.updateField(table, index, "regex", e.target.value);
+              }}
+            />
           );
         },
       },
@@ -177,18 +219,25 @@ class AccountTable extends React.Component {
           }
 
           const options = [
-            {id: "Public", name: "Public"},
-            {id: "Self", name: "Self"},
-            {id: "Admin", name: "Admin"},
+            { id: "Public", name: "Public" },
+            { id: "Self", name: "Self" },
+            { id: "Admin", name: "Admin" },
           ];
 
           return (
-            <Select virtual={false} style={{width: "100%"}} value={text} onChange={(value => {
-              this.updateField(table, index, "viewRule", value);
-            })}>
-              {
-                options.map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
-              }
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
+              value={text}
+              onChange={(value) => {
+                this.updateField(table, index, "viewRule", value);
+              }}
+            >
+              {options.map((item, index) => (
+                <Option key={index} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           );
         },
@@ -206,24 +255,31 @@ class AccountTable extends React.Component {
           let options;
           if (record.viewRule === "Admin" || record.name === "Is admin") {
             options = [
-              {id: "Admin", name: "Admin"},
-              {id: "Immutable", name: "Immutable"},
+              { id: "Admin", name: "Admin" },
+              { id: "Immutable", name: "Immutable" },
             ];
           } else {
             options = [
-              {id: "Self", name: "Self"},
-              {id: "Admin", name: "Admin"},
-              {id: "Immutable", name: "Immutable"},
+              { id: "Self", name: "Self" },
+              { id: "Admin", name: "Admin" },
+              { id: "Immutable", name: "Immutable" },
             ];
           }
 
           return (
-            <Select virtual={false} style={{width: "100%"}} value={text} onChange={(value => {
-              this.updateField(table, index, "modifyRule", value);
-            })}>
-              {
-                options.map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
-              }
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
+              value={text}
+              onChange={(value) => {
+                this.updateField(table, index, "modifyRule", value);
+              }}
+            >
+              {options.map((item, index) => (
+                <Option key={index} value={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           );
         },
@@ -236,13 +292,29 @@ class AccountTable extends React.Component {
           return (
             <div>
               <Tooltip placement="bottomLeft" title={i18next.t("general:Up")}>
-                <Button style={{marginRight: "5px"}} disabled={index === 0} icon={<UpOutlined />} size="small" onClick={() => this.upRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === 0}
+                  icon={<UpOutlined />}
+                  size="small"
+                  onClick={() => this.upRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Down")}>
-                <Button style={{marginRight: "5px"}} disabled={index === table.length - 1} icon={<DownOutlined />} size="small" onClick={() => this.downRow(table, index)} />
+                <Button
+                  style={{ marginRight: "5px" }}
+                  disabled={index === table.length - 1}
+                  icon={<DownOutlined />}
+                  size="small"
+                  onClick={() => this.downRow(table, index)}
+                />
               </Tooltip>
               <Tooltip placement="topLeft" title={i18next.t("general:Delete")}>
-                <Button icon={<DeleteOutlined />} size="small" onClick={() => this.deleteRow(table, index)} />
+                <Button
+                  icon={<DeleteOutlined />}
+                  size="small"
+                  onClick={() => this.deleteRow(table, index)}
+                />
               </Tooltip>
             </div>
           );
@@ -251,11 +323,25 @@ class AccountTable extends React.Component {
     ];
 
     return (
-      <Table scroll={{x: "max-content"}} rowKey="name" columns={columns} dataSource={table} size="middle" bordered pagination={false}
+      <Table
+        scroll={{ x: "max-content" }}
+        rowKey="name"
+        columns={columns}
+        dataSource={table}
+        size="middle"
+        bordered
+        pagination={false}
         title={() => (
           <div>
             {this.props.title}&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button style={{marginRight: "5px"}} type="primary" size="small" onClick={() => this.addRow(table)}>{i18next.t("general:Add")}</Button>
+            <Button
+              style={{ marginRight: "5px" }}
+              type="primary"
+              size="small"
+              onClick={() => this.addRow(table)}
+            >
+              {i18next.t("general:Add")}
+            </Button>
           </div>
         )}
       />
@@ -265,12 +351,8 @@ class AccountTable extends React.Component {
   render() {
     return (
       <div>
-        <Row style={{marginTop: "20px"}} >
-          <Col span={24}>
-            {
-              this.renderTable(this.props.table)
-            }
-          </Col>
+        <Row style={{ marginTop: "20px" }}>
+          <Col span={24}>{this.renderTable(this.props.table)}</Col>
         </Row>
       </div>
     );

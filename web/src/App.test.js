@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import React from "react";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
 import App from "./App";
 
 // eslint-disable-next-line no-undef
 test("renders learn react link", () => {
-  const {getByText} = render(<App />);
+  const { getByText } = render(<App />);
   const linkElement = getByText(/learn react/i);
   // eslint-disable-next-line no-undef
   expect(linkElement).toBeInTheDocument();

@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Descriptions, InputNumber, Space, Spin} from "antd";
+import { Button, Descriptions, InputNumber, Space, Spin } from "antd";
 import i18next from "i18next";
 import * as ProductBackend from "./backend/ProductBackend";
 import * as PlanBackend from "./backend/PlanBackend";
@@ -26,9 +26,15 @@ class ProductBuyPage extends React.Component {
     const params = new URLSearchParams(window.location.search);
     this.state = {
       classes: props,
-      owner: props?.organizationName ?? props?.match?.params?.organizationName ?? props?.match?.params?.owner ?? null,
-      productName: props?.productName ?? props?.match?.params?.productName ?? null,
-      pricingName: props?.pricingName ?? props?.match?.params?.pricingName ?? null,
+      owner:
+        props?.organizationName ??
+        props?.match?.params?.organizationName ??
+        props?.match?.params?.owner ??
+        null,
+      productName:
+        props?.productName ?? props?.match?.params?.productName ?? null,
+      pricingName:
+        props?.pricingName ?? props?.match?.params?.pricingName ?? null,
       planName: params.get("plan"),
       userName: params.get("user"),
       paymentEnv: "",
@@ -70,16 +76,22 @@ class ProductBuyPage extends React.Component {
   }
 
   async getProduct() {
-    if (!this.state.owner || (!this.state.productName && !this.state.pricingName)) {
-      return ;
+    if (
+      !this.state.owner ||
+      (!this.state.productName && !this.state.pricingName)
+    ) {
+      return;
     }
     try {
       // load pricing & plan
       if (this.state.pricingName) {
         if (!this.state.planName || !this.state.userName) {
-          return ;
+          return;
         }
-        let res = await PricingBackend.getPricing(this.state.owner, this.state.pricingName);
+        let res = await PricingBackend.getPricing(
+          this.state.owner,
+          this.state.pricingName
+        );
         if (res.status !== "ok") {
           throw new Error(res.msg);
         }
@@ -97,7 +109,10 @@ class ProductBuyPage extends React.Component {
         this.onUpdatePricing(pricing);
       }
       // load product
-      const res = await ProductBackend.getProduct(this.state.owner, this.state.productName);
+      const res = await ProductBackend.getProduct(
+        this.state.owner,
+        this.state.productName
+      );
       if (res.status !== "ok") {
         throw new Error(res.msg);
       }
@@ -177,32 +192,38 @@ class ProductBuyPage extends React.Component {
   }
 
   getPrice(product) {
-    return `${this.getCurrencySymbol(product)}${product?.price} (${Setting.getCurrencyText(product)})`;
+    return `${this.getCurrencySymbol(product)}${
+      product?.price
+    } (${Setting.getCurrencyText(product)})`;
   }
 
   // Call Weechat Pay via jsapi
   onBridgeReady(attachInfo) {
-    const {WeixinJSBridge} = window;
+    const { WeixinJSBridge } = window;
     // Setting.showMessage("success", "attachInfo is " + JSON.stringify(attachInfo));
     this.setState({
       isPlacingOrder: false,
     });
     WeixinJSBridge.invoke(
-      "getBrandWCPayRequest", {
-        "appId": attachInfo.appId,
-        "timeStamp": attachInfo.timeStamp,
-        "nonceStr": attachInfo.nonceStr,
-        "package": attachInfo.package,
-        "signType": attachInfo.signType,
-        "paySign": attachInfo.paySign,
+      "getBrandWCPayRequest",
+      {
+        appId: attachInfo.appId,
+        timeStamp: attachInfo.timeStamp,
+        nonceStr: attachInfo.nonceStr,
+        package: attachInfo.package,
+        signType: attachInfo.signType,
+        paySign: attachInfo.paySign,
       },
-      function(res) {
+      function (res) {
         if (res.err_msg === "get_brand_wcpay_request:ok") {
           Setting.goToLink(attachInfo.payment.successUrl);
-          return ;
+          return;
         } else {
           if (res.err_msg === "get_brand_wcpay_request:cancel") {
-            Setting.showMessage("error", i18next.t("product:Payment cancelled"));
+            Setting.showMessage(
+              "error",
+              i18next.t("product:Payment cancelled")
+            );
           } else {
             Setting.showMessage("error", i18next.t("product:Payment failed"));
           }
@@ -213,13 +234,21 @@ class ProductBuyPage extends React.Component {
 
   // In Wechat browser, call this function to pay via jsapi
   callWechatPay(attachInfo) {
-    const {WeixinJSBridge} = window;
+    const { WeixinJSBridge } = window;
     if (typeof WeixinJSBridge === "undefined") {
       if (document.addEventListener) {
-        document.addEventListener("WeixinJSBridgeReady", () => this.onBridgeReady(attachInfo), false);
+        document.addEventListener(
+          "WeixinJSBridgeReady",
+          () => this.onBridgeReady(attachInfo),
+          false
+        );
       } else if (document.attachEvent) {
-        document.attachEvent("WeixinJSBridgeReady", () => this.onBridgeReady(attachInfo));
-        document.attachEvent("onWeixinJSBridgeReady", () => this.onBridgeReady(attachInfo));
+        document.attachEvent("WeixinJSBridgeReady", () =>
+          this.onBridgeReady(attachInfo)
+        );
+        document.attachEvent("onWeixinJSBridgeReady", () =>
+          this.onBridgeReady(attachInfo)
+        );
       }
     } else {
       this.onBridgeReady(attachInfo);
@@ -231,7 +260,16 @@ class ProductBuyPage extends React.Component {
       isPlacingOrder: true,
     });
 
-    ProductBackend.buyProduct(product.owner, product.name, provider.name, this.state.pricingName ?? "", this.state.planName ?? "", this.state.userName ?? "", this.state.paymentEnv, this.state.customPrice)
+    ProductBackend.buyProduct(
+      product.owner,
+      product.name,
+      provider.name,
+      this.state.pricingName ?? "",
+      this.state.planName ?? "",
+      this.state.userName ?? "",
+      this.state.paymentEnv,
+      this.state.customPrice
+    )
       .then((res) => {
         if (res.status === "ok") {
           const payment = res.data;
@@ -241,20 +279,30 @@ class ProductBuyPage extends React.Component {
             if (this.state.paymentEnv === "WechatBrowser") {
               attachInfo.payment = payment;
               this.callWechatPay(attachInfo);
-              return ;
+              return;
             }
-            payUrl = `/qrcode/${payment.owner}/${payment.name}?providerName=${provider.name}&payUrl=${encodeURI(payment.payUrl)}&successUrl=${encodeURI(payment.successUrl)}`;
+            payUrl = `/qrcode/${payment.owner}/${payment.name}?providerName=${
+              provider.name
+            }&payUrl=${encodeURI(payment.payUrl)}&successUrl=${encodeURI(
+              payment.successUrl
+            )}`;
           }
           Setting.goToLink(payUrl);
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to save")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to save")}: ${res.msg}`
+          );
           this.setState({
             isPlacingOrder: false,
           });
         }
       })
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
@@ -275,23 +323,36 @@ class ProductBuyPage extends React.Component {
     }
 
     return (
-      <Button style={{height: "50px", borderWidth: "2px"}} shape="round" icon={
-        <img style={{marginRight: "10px"}} width={36} height={36} src={Setting.getProviderLogoURL(provider)} alt={provider.displayName} />
-      } size={"large"} >
-        {
-          text
+      <Button
+        style={{ height: "50px", borderWidth: "2px" }}
+        shape="round"
+        icon={
+          <img
+            style={{ marginRight: "10px" }}
+            width={36}
+            height={36}
+            src={Setting.getProviderLogoURL(provider)}
+            alt={provider.displayName}
+          />
         }
+        size={"large"}
+      >
+        {text}
       </Button>
     );
   }
 
   renderProviderButton(provider, product) {
     return (
-      <span key={provider.name} style={{width: "200px", marginRight: "20px", marginBottom: "10px"}}>
-        <span style={{width: "200px", cursor: "pointer"}} onClick={() => this.buyProduct(product, provider)}>
-          {
-            this.getPayButton(provider)
-          }
+      <span
+        key={provider.name}
+        style={{ width: "200px", marginRight: "20px", marginBottom: "10px" }}
+      >
+        <span
+          style={{ width: "200px", cursor: "pointer" }}
+          onClick={() => this.buyProduct(product, provider)}
+        >
+          {this.getPayButton(provider)}
         </span>
       </span>
     );
@@ -309,7 +370,7 @@ class ProductBuyPage extends React.Component {
       return i18next.t("product:There is no payment channel for this product.");
     }
 
-    return product.providerObjs.map(provider => {
+    return product.providerObjs.map((provider) => {
       return this.renderProviderButton(provider, product);
     });
   }
@@ -323,44 +384,78 @@ class ProductBuyPage extends React.Component {
 
     return (
       <div className="login-content">
-        <Spin spinning={this.state.isPlacingOrder} size="large" tip={i18next.t("product:Placing order...")} style={{paddingTop: "10%"}} >
-          <Descriptions title={<span style={Setting.isMobile() ? {fontSize: 20} : {fontSize: 28}}>{i18next.t("product:Buy Product")}</span>} bordered>
+        <Spin
+          spinning={this.state.isPlacingOrder}
+          size="large"
+          tip={i18next.t("product:Placing order...")}
+          style={{ paddingTop: "10%" }}
+        >
+          <Descriptions
+            title={
+              <span
+                style={Setting.isMobile() ? { fontSize: 20 } : { fontSize: 28 }}
+              >
+                {i18next.t("product:Buy Product")}
+              </span>
+            }
+            bordered
+          >
             <Descriptions.Item label={i18next.t("general:Name")} span={3}>
-              <span style={{fontSize: 25}}>
+              <span style={{ fontSize: 25 }}>
                 {Setting.getLanguageText(product?.displayName)}
               </span>
             </Descriptions.Item>
-            <Descriptions.Item label={i18next.t("product:Detail")}><span style={{fontSize: 16}}>{Setting.getLanguageText(product?.detail)}</span></Descriptions.Item>
-            <Descriptions.Item label={i18next.t("user:Tag")}><span style={{fontSize: 16}}>{product?.tag}</span></Descriptions.Item>
-            <Descriptions.Item label={i18next.t("product:SKU")}><span style={{fontSize: 16}}>{product?.name}</span></Descriptions.Item>
-            <Descriptions.Item label={i18next.t("product:Image")} span={3}>
-              <img src={product?.image} alt={product?.name} height={90} style={{marginBottom: "20px"}} />
+            <Descriptions.Item label={i18next.t("product:Detail")}>
+              <span style={{ fontSize: 16 }}>
+                {Setting.getLanguageText(product?.detail)}
+              </span>
             </Descriptions.Item>
-            {
-              product.isRecharge ? (
-                <Descriptions.Item span={3} label={i18next.t("product:Price")}>
-                  <Space>
-                    <InputNumber min={0} value={this.state.customPrice} onChange={(e) => {this.setState({customPrice: e});}} /> {Setting.getCurrencyText(product)}
-                  </Space>
+            <Descriptions.Item label={i18next.t("user:Tag")}>
+              <span style={{ fontSize: 16 }}>{product?.tag}</span>
+            </Descriptions.Item>
+            <Descriptions.Item label={i18next.t("product:SKU")}>
+              <span style={{ fontSize: 16 }}>{product?.name}</span>
+            </Descriptions.Item>
+            <Descriptions.Item label={i18next.t("product:Image")} span={3}>
+              <img
+                src={product?.image}
+                alt={product?.name}
+                height={90}
+                style={{ marginBottom: "20px" }}
+              />
+            </Descriptions.Item>
+            {product.isRecharge ? (
+              <Descriptions.Item span={3} label={i18next.t("product:Price")}>
+                <Space>
+                  <InputNumber
+                    min={0}
+                    value={this.state.customPrice}
+                    onChange={(e) => {
+                      this.setState({ customPrice: e });
+                    }}
+                  />{" "}
+                  {Setting.getCurrencyText(product)}
+                </Space>
+              </Descriptions.Item>
+            ) : (
+              <React.Fragment>
+                <Descriptions.Item label={i18next.t("product:Price")}>
+                  <span
+                    style={{ fontSize: 28, color: "red", fontWeight: "bold" }}
+                  >
+                    {this.getPrice(product)}
+                  </span>
                 </Descriptions.Item>
-              ) : (
-                <React.Fragment>
-                  <Descriptions.Item label={i18next.t("product:Price")}>
-                    <span style={{fontSize: 28, color: "red", fontWeight: "bold"}}>
-                      {
-                        this.getPrice(product)
-                      }
-                    </span>
-                  </Descriptions.Item>
-                  <Descriptions.Item label={i18next.t("product:Quantity")}><span style={{fontSize: 16}}>{product?.quantity}</span></Descriptions.Item>
-                  <Descriptions.Item label={i18next.t("product:Sold")}><span style={{fontSize: 16}}>{product?.sold}</span></Descriptions.Item>
-                </React.Fragment>
-              )
-            }
+                <Descriptions.Item label={i18next.t("product:Quantity")}>
+                  <span style={{ fontSize: 16 }}>{product?.quantity}</span>
+                </Descriptions.Item>
+                <Descriptions.Item label={i18next.t("product:Sold")}>
+                  <span style={{ fontSize: 16 }}>{product?.sold}</span>
+                </Descriptions.Item>
+              </React.Fragment>
+            )}
             <Descriptions.Item label={i18next.t("product:Pay")} span={3}>
-              {
-                this.renderPay(product)
-              }
+              {this.renderPay(product)}
             </Descriptions.Item>
           </Descriptions>
         </Spin>

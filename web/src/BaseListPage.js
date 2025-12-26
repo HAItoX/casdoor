@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,8 +13,8 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Input, Result, Space, Tour} from "antd";
-import {SearchOutlined} from "@ant-design/icons";
+import { Button, Input, Result, Space, Tour } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import i18next from "i18next";
 import * as Setting from "./Setting";
@@ -25,7 +25,9 @@ class BaseListPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
-      organizationName: this.props.match?.params.organizationName || Setting.getRequestOrganization(this.props.account),
+      organizationName:
+        this.props.match?.params.organizationName ||
+        Setting.getRequestOrganization(this.props.account),
       data: [],
       pagination: {
         current: 1,
@@ -41,19 +43,24 @@ class BaseListPage extends React.Component {
 
   handleOrganizationChange = () => {
     this.setState({
-      organizationName: this.props.match?.params.organizationName || Setting.getRequestOrganization(this.props.account),
+      organizationName:
+        this.props.match?.params.organizationName ||
+        Setting.getRequestOrganization(this.props.account),
     });
 
-    const {pagination} = this.state;
-    this.fetch({pagination});
+    const { pagination } = this.state;
+    this.fetch({ pagination });
   };
 
   handleTourChange = () => {
-    this.setState({isTourVisible: TourConfig.getTourVisible()});
+    this.setState({ isTourVisible: TourConfig.getTourVisible() });
   };
 
   componentDidMount() {
-    window.addEventListener("storageOrganizationChanged", this.handleOrganizationChange);
+    window.addEventListener(
+      "storageOrganizationChanged",
+      this.handleOrganizationChange
+    );
     window.addEventListener("storageTourChanged", this.handleTourChange);
     if (!Setting.isAdminUser(this.props.account)) {
       Setting.setOrganization("All");
@@ -65,26 +72,38 @@ class BaseListPage extends React.Component {
       clearInterval(this.state.intervalId);
     }
     window.removeEventListener("storageTourChanged", this.handleTourChange);
-    window.removeEventListener("storageOrganizationChanged", this.handleOrganizationChange);
+    window.removeEventListener(
+      "storageOrganizationChanged",
+      this.handleOrganizationChange
+    );
   }
 
   UNSAFE_componentWillMount() {
-    const {pagination} = this.state;
-    this.fetch({pagination});
+    const { pagination } = this.state;
+    this.fetch({ pagination });
   }
 
   getColumnSearchProps = (dataIndex, customRender = null) => ({
-    filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-      <div style={{padding: 8}}>
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{marginBottom: 8, display: "block"}}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
         />
 
         <Space>
@@ -93,65 +112,81 @@ class BaseListPage extends React.Component {
             onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
-            style={{width: 90}}
+            style={{ width: 90 }}
           >
-                        Search
+            Search
           </Button>
-          <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{width: 90}}>
-                        Reset
+          <Button
+            onClick={() => this.handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
           </Button>
           <Button
             type="link"
             size="small"
             onClick={() => {
-              confirm({closeDropdown: false});
+              confirm({ closeDropdown: false });
               this.setState({
                 searchText: selectedKeys[0],
                 searchedColumn: dataIndex,
               });
             }}
           >
-                        Filter
+            Filter
           </Button>
         </Space>
       </div>
     ),
-    filterIcon: filtered => <SearchOutlined style={{color: filtered ? "#1890ff" : undefined}} />,
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
     onFilter: (value, record) =>
       record[dataIndex]
-        ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
+        ? record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
         : "",
     filterDropdownProps: {
-      onOpenChange: visible => {
+      onOpenChange: (visible) => {
         if (visible) {
           setTimeout(() => this.searchInput.select(), 100);
         }
       },
     },
     render: (text, record, index) => {
-      const highlightContent = this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{backgroundColor: "#ffc069", padding: 0}}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      );
+      const highlightContent =
+        this.state.searchedColumn === dataIndex ? (
+          <Highlighter
+            highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+            searchWords={[this.state.searchText]}
+            autoEscape
+            textToHighlight={text ? text.toString() : ""}
+          />
+        ) : (
+          text
+        );
 
-      return customRender ? customRender({text, record, index}, highlightContent) : highlightContent;
+      return customRender
+        ? customRender({ text, record, index }, highlightContent)
+        : highlightContent;
     },
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
-    this.fetch({searchText: selectedKeys[0], searchedColumn: dataIndex, pagination: this.state.pagination});
+    this.fetch({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+      pagination: this.state.pagination,
+    });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
-    const {pagination} = this.state;
-    this.fetch({pagination});
+    const { pagination } = this.state;
+    this.fetch({ pagination });
   };
 
   handleTableChange = (pagination, filters, sorter) => {
@@ -167,7 +202,7 @@ class BaseListPage extends React.Component {
 
   setIsTourVisible = () => {
     TourConfig.setIsTourVisible(false);
-    this.setState({isTourVisible: false});
+    this.setState({ isTourVisible: false });
   };
 
   getSteps = () => {
@@ -179,9 +214,18 @@ class BaseListPage extends React.Component {
       } else {
         item.target = () => document.getElementById(item.id) || null;
       }
+      // 设置上一步按钮文字
+      item.prevButtonProps = {
+        children: "上一步",
+      };
+      // 设置下一步按钮文字，最后一步使用特殊文字
       if (index === steps.length - 1) {
         item.nextButtonProps = {
           children: TourConfig.getNextButtonChild(nextPathName),
+        };
+      } else {
+        item.nextButtonProps = {
+          children: "下一步",
         };
       }
     });
@@ -202,17 +246,21 @@ class BaseListPage extends React.Component {
         <Result
           status="403"
           title="403 Unauthorized"
-          subTitle={i18next.t("general:Sorry, you do not have permission to access this page or logged in status invalid.")}
-          extra={<a href="/"><Button type="primary">{i18next.t("general:Back Home")}</Button></a>}
+          subTitle={i18next.t(
+            "general:Sorry, you do not have permission to access this page or logged in status invalid."
+          )}
+          extra={
+            <a href="/">
+              <Button type="primary">{i18next.t("general:Back Home")}</Button>
+            </a>
+          }
         />
       );
     }
 
     return (
       <div>
-        {
-          this.renderTable(this.state.data)
-        }
+        {this.renderTable(this.state.data)}
         <Tour
           open={Setting.isMobile() ? false : this.state.isTourVisible}
           onClose={this.setIsTourVisible}
@@ -223,6 +271,12 @@ class BaseListPage extends React.Component {
             </span>
           )}
           onFinish={this.handleTourComplete}
+          prevButtonProps={{
+            children: "上一步",
+          }}
+          nextButtonProps={{
+            children: "下一步",
+          }}
         />
       </div>
     );

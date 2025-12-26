@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Checkbox, Form, Modal} from "antd";
+import { Checkbox, Form, Modal } from "antd";
 import i18next from "i18next";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as Setting from "../../Setting";
 
 export const AgreementModal = (props) => {
-  const {open, onOk, onCancel, application} = props;
+  const { open, onOk, onCancel, application } = props;
   const [doc, setDoc] = useState("");
 
   useEffect(() => {
@@ -28,7 +28,6 @@ export const AgreementModal = (props) => {
   }, []);
 
   return (
-
     <Modal
       title={i18next.t("signup:Terms of Use")}
       open={open}
@@ -38,10 +37,18 @@ export const AgreementModal = (props) => {
       cancelText={i18next.t("signup:Decline")}
       onOk={onOk}
       onCancel={onCancel}
-      style={{top: Setting.isMobile() ? "5px" : ""}}
-      maskStyle={{backgroundColor: Setting.isMobile() ? "white" : ""}}
+      style={{ top: Setting.isMobile() ? "5px" : "" }}
+      maskStyle={{ backgroundColor: Setting.isMobile() ? "white" : "" }}
     >
-      <iframe title={"terms"} style={{border: 0, width: "100%", height: Setting.isMobile() ? "80vh" : "60vh"}} srcDoc={doc} />
+      <iframe
+        title={"terms"}
+        style={{
+          border: 0,
+          width: "100%",
+          height: Setting.isMobile() ? "80vh" : "60vh",
+        }}
+        srcDoc={doc}
+      />
     </Modal>
   );
 };
@@ -50,16 +57,25 @@ function getTermsOfUseContent(url) {
   return fetch(url, {
     method: "GET",
   })
-    .then(r => r.text())
-    .catch(error => {
-      Setting.showMessage("error", `${i18next.t("general:Failed to get TermsOfUse URL")}: ${url}, ${error}`);
+    .then((r) => r.text())
+    .catch((error) => {
+      Setting.showMessage(
+        "error",
+        `${i18next.t("general:Failed to get TermsOfUse URL")}: ${url}, ${error}`
+      );
     });
 }
 
 export function isAgreementRequired(application) {
   if (application) {
-    const agreementItem = application.signupItems.find(item => item.name === "Agreement");
-    if (!agreementItem || agreementItem.rule === "None" || !agreementItem.rule) {
+    const agreementItem = application.signupItems.find(
+      (item) => item.name === "Agreement"
+    );
+    if (
+      !agreementItem ||
+      agreementItem.rule === "None" ||
+      !agreementItem.rule
+    ) {
       return false;
     }
     if (agreementItem.required) {
@@ -70,65 +86,77 @@ export function isAgreementRequired(application) {
 }
 
 function initDefaultValue(application) {
-  const agreementItem = application.signupItems.find(item => item.name === "Agreement");
+  const agreementItem = application.signupItems.find(
+    (item) => item.name === "Agreement"
+  );
 
-  return isAgreementRequired(application) && agreementItem.rule === "Signin (Default True)";
+  return (
+    isAgreementRequired(application) &&
+    agreementItem.rule === "Signin (Default True)"
+  );
 }
 
 export function renderAgreementFormItem(application, required, layout, ths) {
-  return (<React.Fragment>
-    <Form.Item
-      name="agreement"
-      key="agreement"
-      valuePropName="checked"
-      className="login-agreement"
-      rules={[
-        {
-          required: required,
-        },
-        () => ({
-          validator: (_, value) => {
-            if (!required) {
-              return Promise.resolve();
-            }
-
-            if (!value) {
-              return Promise.reject(i18next.t("signup:Please accept the agreement!"));
-            } else {
-              return Promise.resolve();
-            }
+  return (
+    <React.Fragment>
+      <Form.Item
+        name="agreement"
+        key="agreement"
+        valuePropName="checked"
+        className="login-agreement"
+        rules={[
+          {
+            required: required,
           },
-        }),
-      ]
-      }
-      {...layout}
-      initialValue={initDefaultValue(application)}
-    >
-      <Checkbox style={{float: "left"}}>
-        {i18next.t("signup:Accept")}&nbsp;
-        <a onClick={() => {
+          () => ({
+            validator: (_, value) => {
+              if (!required) {
+                return Promise.resolve();
+              }
+
+              if (!value) {
+                return Promise.reject(
+                  i18next.t("signup:Please accept the agreement!")
+                );
+              } else {
+                return Promise.resolve();
+              }
+            },
+          }),
+        ]}
+        {...layout}
+        initialValue={initDefaultValue(application)}
+      >
+        <Checkbox style={{ float: "left" }}>
+          {i18next.t("signup:Accept")}&nbsp;
+          <a
+            onClick={() => {
+              ths.setState({
+                isTermsOfUseVisible: true,
+              });
+            }}
+          >
+            {i18next.t("signup:Terms of Use")}
+          </a>
+        </Checkbox>
+      </Form.Item>
+      <AgreementModal
+        application={application}
+        layout={layout}
+        open={ths.state.isTermsOfUseVisible}
+        onOk={() => {
+          ths.form.current.setFieldsValue({ agreement: true });
           ths.setState({
-            isTermsOfUseVisible: true,
+            isTermsOfUseVisible: false,
           });
         }}
-        >
-          {i18next.t("signup:Terms of Use")}
-        </a>
-      </Checkbox>
-    </Form.Item>
-    <AgreementModal application={application} layout={layout} open={ths.state.isTermsOfUseVisible}
-      onOk={() => {
-        ths.form.current.setFieldsValue({agreement: true});
-        ths.setState({
-          isTermsOfUseVisible: false,
-        });
-      }}
-      onCancel={() => {
-        ths.form.current.setFieldsValue({agreement: false});
-        ths.setState({
-          isTermsOfUseVisible: false,
-        });
-      }} />
-  </React.Fragment>
+        onCancel={() => {
+          ths.form.current.setFieldsValue({ agreement: false });
+          ths.setState({
+            isTermsOfUseVisible: false,
+          });
+        }}
+      />
+    </React.Fragment>
   );
 }

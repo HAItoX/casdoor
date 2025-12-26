@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import React from "react";
-import {Card, Col} from "antd";
+import { Card, Col } from "antd";
 import * as Setting from "../Setting";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
-const {Meta} = Card;
+const { Meta } = Card;
 
 class SingleCard extends React.Component {
   constructor(props) {
@@ -41,15 +41,25 @@ class SingleCard extends React.Component {
       cursor: "pointer",
     };
     const silentSigninLink = this.wrappedAsSilentSigninLink(link);
-    const displayLogo = this.props.icon || <img src={logo} alt="logo" width={"100%"} style={{marginBottom: "20px"}} />;
+    const displayLogo = this.props.icon || (
+      <img
+        src={logo}
+        alt="logo"
+        width={"100%"}
+        style={{ marginBottom: "20px" }}
+      />
+    );
 
     return (
-      <Card.Grid style={gridStyle} onClick={() => Setting.goToLinkSoft(this, silentSigninLink)}>
+      <Card.Grid
+        style={gridStyle}
+        onClick={() => Setting.goToLinkSoft(this, silentSigninLink)}
+      >
         {displayLogo}
         <Meta
           title={title}
           description={desc}
-          style={{justifyContent: "center"}}
+          style={{ justifyContent: "center" }}
         />
       </Card.Grid>
     );
@@ -57,19 +67,50 @@ class SingleCard extends React.Component {
 
   renderCard(logo, link, title, desc, time, isSingle) {
     const silentSigninLink = this.wrappedAsSilentSigninLink(link);
-    const displayLogo = this.props.icon || <img alt="logo" src={logo} style={{width: "100%", height: "200px", padding: "20px", objectFit: "scale-down"}} />;
+    const displayLogo = this.props.icon || (
+      <img
+        alt="logo"
+        src={logo}
+        style={{
+          width: "100%",
+          height: "200px",
+          padding: "20px",
+          objectFit: "scale-down",
+        }}
+      />
+    );
 
     return (
-      <Col style={{paddingLeft: "20px", paddingRight: "20px", paddingBottom: "20px", marginBottom: "20px"}} span={6}>
+      <Col
+        style={{
+          paddingLeft: "20px",
+          paddingRight: "20px",
+          paddingBottom: "20px",
+          marginBottom: "20px",
+        }}
+        span={6}
+      >
         <Card
           hoverable
           cover={
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "200px", padding: "20px"}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+                padding: "20px",
+              }}
+            >
               {displayLogo}
             </div>
           }
           onClick={() => Setting.goToLinkSoft(this, silentSigninLink)}
-          style={isSingle ? {width: "320px", height: "100%"} : {width: "100%", height: "100%"}}
+          style={
+            isSingle
+              ? { width: "320px", height: "100%" }
+              : { width: "100%", height: "100%" }
+          }
         >
           <Meta title={title} description={desc} />
           <br />
@@ -82,9 +123,23 @@ class SingleCard extends React.Component {
 
   render() {
     if (Setting.isMobile()) {
-      return this.renderCardMobile(this.props.logo, this.props.link, this.props.title, this.props.desc, this.props.time, this.props.isSingle);
+      return this.renderCardMobile(
+        this.props.logo,
+        this.props.link,
+        this.props.title,
+        this.props.desc,
+        this.props.time,
+        this.props.isSingle
+      );
     } else {
-      return this.renderCard(this.props.logo, this.props.link, this.props.title, this.props.desc, this.props.time, this.props.isSingle);
+      return this.renderCard(
+        this.props.logo,
+        this.props.link,
+        this.props.title,
+        this.props.desc,
+        this.props.time,
+        this.props.isSingle
+      );
     }
   }
 }

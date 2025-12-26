@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Alert, Button, QRCode} from "antd";
+import { Alert, Button, QRCode } from "antd";
 import copy from "copy-to-clipboard";
 import * as Setting from "../Setting";
 import i18next from "i18next";
@@ -24,7 +24,7 @@ export const generateCasdoorAppUrl = (accessToken, forQrCode = true) => {
 
   if (!accessToken) {
     error = i18next.t("general:Access token is empty");
-    return {qrUrl, error};
+    return { qrUrl, error };
   }
 
   qrUrl = `casdoor-authenticator://login?serverUrl=${window.location.origin}&accessToken=${accessToken}`;
@@ -34,11 +34,11 @@ export const generateCasdoorAppUrl = (accessToken, forQrCode = true) => {
     error = i18next.t("general:QR code is too large");
   }
 
-  return {qrUrl, error};
+  return { qrUrl, error };
 };
 
-export const CasdoorAppQrCode = ({accessToken, icon}) => {
-  const {qrUrl, error} = generateCasdoorAppUrl(accessToken, true);
+export const CasdoorAppQrCode = ({ accessToken, icon }) => {
+  const { qrUrl, error } = generateCasdoorAppUrl(accessToken, true);
 
   if (error) {
     return <Alert message={error} type="error" showIcon />;
@@ -55,16 +55,19 @@ export const CasdoorAppQrCode = ({accessToken, icon}) => {
   );
 };
 
-export const CasdoorAppUrl = ({accessToken}) => {
-  const {qrUrl, error} = generateCasdoorAppUrl(accessToken, false);
+export const CasdoorAppUrl = ({ accessToken }) => {
+  const { qrUrl, error } = generateCasdoorAppUrl(accessToken, false);
 
-  const handleCopyUrl = async() => {
+  const handleCopyUrl = async () => {
     if (!window.isSecureContext) {
       return;
     }
 
     copy(qrUrl);
-    Setting.showMessage("success", i18next.t("general:Copied to clipboard successfully"));
+    Setting.showMessage(
+      "success",
+      i18next.t("general:Copied to clipboard successfully")
+    );
   };
 
   if (error) {
@@ -73,14 +76,21 @@ export const CasdoorAppUrl = ({accessToken}) => {
 
   return (
     <div>
-      <div style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "10px",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
         {window.isSecureContext && (
-          <Button size="small" type="primary" onClick={handleCopyUrl} style={{marginLeft: "10px"}}>
+          <Button
+            size="small"
+            type="primary"
+            onClick={handleCopyUrl}
+            style={{ marginLeft: "10px" }}
+          >
             {i18next.t("resource:Copy Link")}
           </Button>
         )}

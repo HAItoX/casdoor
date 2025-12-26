@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Card, Col, Input, Row, Select, Switch} from "antd";
+import { Button, Card, Col, Input, Row, Select, Switch } from "antd";
 import * as OrganizationBackend from "./backend/OrganizationBackend";
 import * as UserBackend from "./backend/UserBackend";
 import * as GroupBackend from "./backend/GroupBackend";
@@ -26,7 +26,10 @@ class RoleEditPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
-      organizationName: props.organizationName !== undefined ? props.organizationName : props.match.params.organizationName,
+      organizationName:
+        props.organizationName !== undefined
+          ? props.organizationName
+          : props.match.params.organizationName,
       roleName: decodeURIComponent(props.match.params.roleName),
       role: null,
       organizations: [],
@@ -43,8 +46,8 @@ class RoleEditPage extends React.Component {
   }
 
   getRole() {
-    RoleBackend.getRole(this.state.organizationName, this.state.roleName)
-      .then((res) => {
+    RoleBackend.getRole(this.state.organizationName, this.state.roleName).then(
+      (res) => {
         if (res.data === null) {
           this.props.history.push("/404");
           return;
@@ -61,58 +64,55 @@ class RoleEditPage extends React.Component {
         this.getUsers(this.state.organizationName);
         this.getGroups(this.state.organizationName);
         this.getRoles(this.state.organizationName);
-      });
+      }
+    );
   }
 
   getOrganizations() {
-    OrganizationBackend.getOrganizations("admin")
-      .then((res) => {
-        this.setState({
-          organizations: res.data || [],
-        });
+    OrganizationBackend.getOrganizations("admin").then((res) => {
+      this.setState({
+        organizations: res.data || [],
       });
+    });
   }
 
   getUsers(organizationName) {
-    UserBackend.getUsers(organizationName)
-      .then((res) => {
-        if (res.status === "error") {
-          Setting.showMessage("error", res.msg);
-          return;
-        }
+    UserBackend.getUsers(organizationName).then((res) => {
+      if (res.status === "error") {
+        Setting.showMessage("error", res.msg);
+        return;
+      }
 
-        this.setState({
-          users: res.data,
-        });
+      this.setState({
+        users: res.data,
       });
+    });
   }
 
   getGroups(organizationName) {
-    GroupBackend.getGroups(organizationName)
-      .then((res) => {
-        if (res.status === "error") {
-          Setting.showMessage("error", res.msg);
-          return;
-        }
+    GroupBackend.getGroups(organizationName).then((res) => {
+      if (res.status === "error") {
+        Setting.showMessage("error", res.msg);
+        return;
+      }
 
-        this.setState({
-          groups: res.data,
-        });
+      this.setState({
+        groups: res.data,
       });
+    });
   }
 
   getRoles(organizationName) {
-    RoleBackend.getRoles(organizationName)
-      .then((res) => {
-        if (res.status === "error") {
-          Setting.showMessage("error", res.msg);
-          return;
-        }
+    RoleBackend.getRoles(organizationName).then((res) => {
+      if (res.status === "error") {
+        Setting.showMessage("error", res.msg);
+        return;
+      }
 
-        this.setState({
-          roles: res.data,
-        });
+      this.setState({
+        roles: res.data,
       });
+    });
   }
 
   parseRoleField(key, value) {
@@ -134,106 +134,233 @@ class RoleEditPage extends React.Component {
 
   renderRole() {
     return (
-      <Card size="small" title={
-        <div>
-          {this.state.mode === "add" ? i18next.t("role:New Role") : i18next.t("role:Edit Role")}&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button onClick={() => this.submitRoleEdit(false)}>{i18next.t("general:Save")}</Button>
-          <Button style={{marginLeft: "20px"}} type="primary" onClick={() => this.submitRoleEdit(true)}>{i18next.t("general:Save & Exit")}</Button>
-          {this.state.mode === "add" ? <Button style={{marginLeft: "20px"}} onClick={() => this.deleteRole()}>{i18next.t("general:Cancel")}</Button> : null}
-        </div>
-      } style={(Setting.isMobile()) ? {margin: "5px"} : {}} type="inner">
-        <Row style={{marginTop: "10px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("general:Organization"), i18next.t("general:Organization - Tooltip"))} :
+      <Card
+        size="small"
+        title={
+          <div>
+            {this.state.mode === "add"
+              ? i18next.t("role:New Role")
+              : i18next.t("role:Edit Role")}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <Button onClick={() => this.submitRoleEdit(false)}>
+              {i18next.t("general:Save")}
+            </Button>
+            <Button
+              style={{ marginLeft: "20px" }}
+              type="primary"
+              onClick={() => this.submitRoleEdit(true)}
+            >
+              {i18next.t("general:Save & Exit")}
+            </Button>
+            {this.state.mode === "add" ? (
+              <Button
+                style={{ marginLeft: "20px" }}
+                onClick={() => this.deleteRole()}
+              >
+                {i18next.t("general:Cancel")}
+              </Button>
+            ) : null}
+          </div>
+        }
+        style={Setting.isMobile() ? { margin: "5px" } : {}}
+        type="inner"
+      >
+        <Row style={{ marginTop: "10px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("general:Organization"),
+              i18next.t("general:Organization - Tooltip")
+            )}{" "}
+            :
           </Col>
-          <Col span={22} >
-            <Select virtual={false} style={{width: "100%"}} disabled={!Setting.isAdminUser(this.props.account)} value={this.state.role.owner} onChange={(value => {this.updateRoleField("owner", value);})}
-              options={this.state.organizations.map((organization) => Setting.getOption(organization.name, organization.name))
-              } />
-          </Col>
-        </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("general:Name"), i18next.t("general:Name - Tooltip"))} :
-          </Col>
-          <Col span={22} >
-            <Input value={this.state.role.name} onChange={e => {
-              this.updateRoleField("name", e.target.value);
-            }} />
-          </Col>
-        </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("general:Display name"), i18next.t("general:Display name - Tooltip"))} :
-          </Col>
-          <Col span={22} >
-            <Input value={this.state.role.displayName} onChange={e => {
-              this.updateRoleField("displayName", e.target.value);
-            }} />
-          </Col>
-        </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("general:Description"), i18next.t("general:Description - Tooltip"))} :
-          </Col>
-          <Col span={22} >
-            <Input value={this.state.role.description} onChange={e => {
-              this.updateRoleField("description", e.target.value);
-            }} />
-          </Col>
-        </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("role:Sub users"), i18next.t("role:Sub users - Tooltip"))} :
-          </Col>
-          <Col span={22} >
-            <Select virtual={true} mode="multiple" style={{width: "100%"}} value={this.state.role.users}
-              onChange={(value => {this.updateRoleField("users", value);})}
-              options={this.state.users.map((user) => Setting.getOption(`${user.owner}/${user.name}`, `${user.owner}/${user.name}`))}
+          <Col span={22}>
+            <Select
+              virtual={false}
+              style={{ width: "100%" }}
+              disabled={!Setting.isAdminUser(this.props.account)}
+              value={this.state.role.owner}
+              onChange={(value) => {
+                this.updateRoleField("owner", value);
+              }}
+              options={this.state.organizations.map((organization) =>
+                Setting.getOption(organization.name, organization.name)
+              )}
             />
           </Col>
         </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("role:Sub groups"), i18next.t("role:Sub groups - Tooltip"))} :
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("general:Name"),
+              i18next.t("general:Name - Tooltip")
+            )}{" "}
+            :
           </Col>
-          <Col span={22} >
-            <Select virtual={false} mode="multiple" style={{width: "100%"}} value={this.state.role.groups}
-              onChange={(value => {this.updateRoleField("groups", value);})}
-              options={this.state.groups.map((group) => Setting.getOption(`${group.owner}/${group.name}`, `${group.owner}/${group.name}`))}
+          <Col span={22}>
+            <Input
+              value={this.state.role.name}
+              onChange={(e) => {
+                this.updateRoleField("name", e.target.value);
+              }}
             />
           </Col>
         </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("role:Sub roles"), i18next.t("role:Sub roles - Tooltip"))} :
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("general:Display name"),
+              i18next.t("general:Display name - Tooltip")
+            )}{" "}
+            :
           </Col>
-          <Col span={22} >
-            <Select virtual={false} mode="multiple" style={{width: "100%"}} value={this.state.role.roles} onChange={(value => {this.updateRoleField("roles", value);})}
-              options={this.state.roles.filter(role => (role.owner !== this.state.role.owner || role.name !== this.state.role.name)).map((role) => Setting.getOption(`${role.owner}/${role.name}`, `${role.owner}/${role.name}`))
-              } />
-          </Col>
-        </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 22 : 2}>
-            {Setting.getLabel(i18next.t("role:Sub domains"), i18next.t("role:Sub domains - Tooltip"))} :
-          </Col>
-          <Col span={22} >
-            <Select virtual={false} mode="tags" style={{width: "100%"}} value={this.state.role.domains} onChange={(value => {
-              this.updateRoleField("domains", value);
-            })}
-            options={this.state.role.domains?.map((domain) => Setting.getOption(domain, domain))
-            } />
+          <Col span={22}>
+            <Input
+              value={this.state.role.displayName}
+              onChange={(e) => {
+                this.updateRoleField("displayName", e.target.value);
+              }}
+            />
           </Col>
         </Row>
-        <Row style={{marginTop: "20px"}} >
-          <Col style={{marginTop: "5px"}} span={(Setting.isMobile()) ? 19 : 2}>
-            {Setting.getLabel(i18next.t("general:Is enabled"), i18next.t("general:Is enabled - Tooltip"))} :
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("general:Description"),
+              i18next.t("general:Description - Tooltip")
+            )}{" "}
+            :
           </Col>
-          <Col span={1} >
-            <Switch checked={this.state.role.isEnabled} onChange={checked => {
-              this.updateRoleField("isEnabled", checked);
-            }} />
+          <Col span={22}>
+            <Input
+              value={this.state.role.description}
+              onChange={(e) => {
+                this.updateRoleField("description", e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("role:Sub users"),
+              i18next.t("role:Sub users - Tooltip")
+            )}{" "}
+            :
+          </Col>
+          <Col span={22}>
+            <Select
+              virtual={true}
+              mode="multiple"
+              style={{ width: "100%" }}
+              value={this.state.role.users}
+              onChange={(value) => {
+                this.updateRoleField("users", value);
+              }}
+              options={this.state.users.map((user) =>
+                Setting.getOption(
+                  `${user.owner}/${user.name}`,
+                  `${user.owner}/${user.name}`
+                )
+              )}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("role:Sub groups"),
+              i18next.t("role:Sub groups - Tooltip")
+            )}{" "}
+            :
+          </Col>
+          <Col span={22}>
+            <Select
+              virtual={false}
+              mode="multiple"
+              style={{ width: "100%" }}
+              value={this.state.role.groups}
+              onChange={(value) => {
+                this.updateRoleField("groups", value);
+              }}
+              options={this.state.groups.map((group) =>
+                Setting.getOption(
+                  `${group.owner}/${group.name}`,
+                  `${group.owner}/${group.name}`
+                )
+              )}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("role:Sub roles"),
+              i18next.t("role:Sub roles - Tooltip")
+            )}{" "}
+            :
+          </Col>
+          <Col span={22}>
+            <Select
+              virtual={false}
+              mode="multiple"
+              style={{ width: "100%" }}
+              value={this.state.role.roles}
+              onChange={(value) => {
+                this.updateRoleField("roles", value);
+              }}
+              options={this.state.roles
+                .filter(
+                  (role) =>
+                    role.owner !== this.state.role.owner ||
+                    role.name !== this.state.role.name
+                )
+                .map((role) =>
+                  Setting.getOption(
+                    `${role.owner}/${role.name}`,
+                    `${role.owner}/${role.name}`
+                  )
+                )}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 22 : 2}>
+            {Setting.getLabel(
+              i18next.t("role:Sub domains"),
+              i18next.t("role:Sub domains - Tooltip")
+            )}{" "}
+            :
+          </Col>
+          <Col span={22}>
+            <Select
+              virtual={false}
+              mode="tags"
+              style={{ width: "100%" }}
+              value={this.state.role.domains}
+              onChange={(value) => {
+                this.updateRoleField("domains", value);
+              }}
+              options={this.state.role.domains?.map((domain) =>
+                Setting.getOption(domain, domain)
+              )}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col style={{ marginTop: "5px" }} span={Setting.isMobile() ? 19 : 2}>
+            {Setting.getLabel(
+              i18next.t("general:Is enabled"),
+              i18next.t("general:Is enabled - Tooltip")
+            )}{" "}
+            :
+          </Col>
+          <Col span={1}>
+            <Switch
+              checked={this.state.role.isEnabled}
+              onChange={(checked) => {
+                this.updateRoleField("isEnabled", checked);
+              }}
+            />
           </Col>
         </Row>
       </Card>
@@ -242,10 +369,17 @@ class RoleEditPage extends React.Component {
 
   submitRoleEdit(exitAfterSave) {
     const role = Setting.deepCopy(this.state.role);
-    RoleBackend.updateRole(this.state.organizationName, this.state.roleName, role)
+    RoleBackend.updateRole(
+      this.state.organizationName,
+      this.state.roleName,
+      role
+    )
       .then((res) => {
         if (res.status === "ok") {
-          Setting.showMessage("success", i18next.t("general:Successfully saved"));
+          Setting.showMessage(
+            "success",
+            i18next.t("general:Successfully saved")
+          );
           this.setState({
             roleName: this.state.role.name,
           });
@@ -253,15 +387,25 @@ class RoleEditPage extends React.Component {
           if (exitAfterSave) {
             this.props.history.push("/roles");
           } else {
-            this.props.history.push(`/roles/${this.state.role.owner}/${encodeURIComponent(this.state.role.name)}`);
+            this.props.history.push(
+              `/roles/${this.state.role.owner}/${encodeURIComponent(
+                this.state.role.name
+              )}`
+            );
           }
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to save")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to save")}: ${res.msg}`
+          );
           this.updateRoleField("name", this.state.roleName);
         }
       })
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
@@ -271,24 +415,45 @@ class RoleEditPage extends React.Component {
         if (res.status === "ok") {
           this.props.history.push("/roles");
         } else {
-          Setting.showMessage("error", `${i18next.t("general:Failed to delete")}: ${res.msg}`);
+          Setting.showMessage(
+            "error",
+            `${i18next.t("general:Failed to delete")}: ${res.msg}`
+          );
         }
       })
-      .catch(error => {
-        Setting.showMessage("error", `${i18next.t("general:Failed to connect to server")}: ${error}`);
+      .catch((error) => {
+        Setting.showMessage(
+          "error",
+          `${i18next.t("general:Failed to connect to server")}: ${error}`
+        );
       });
   }
 
   render() {
     return (
       <div>
-        {
-          this.state.role !== null ? this.renderRole() : null
-        }
-        <div style={{marginTop: "20px", marginLeft: "40px"}}>
-          <Button size="large" onClick={() => this.submitRoleEdit(false)}>{i18next.t("general:Save")}</Button>
-          <Button style={{marginLeft: "20px"}} type="primary" size="large" onClick={() => this.submitRoleEdit(true)}>{i18next.t("general:Save & Exit")}</Button>
-          {this.state.mode === "add" ? <Button style={{marginLeft: "20px"}} size="large" onClick={() => this.deleteRole()}>{i18next.t("general:Cancel")}</Button> : null}
+        {this.state.role !== null ? this.renderRole() : null}
+        <div style={{ marginTop: "20px", marginLeft: "40px" }}>
+          <Button size="large" onClick={() => this.submitRoleEdit(false)}>
+            {i18next.t("general:Save")}
+          </Button>
+          <Button
+            style={{ marginLeft: "20px" }}
+            type="primary"
+            size="large"
+            onClick={() => this.submitRoleEdit(true)}
+          >
+            {i18next.t("general:Save & Exit")}
+          </Button>
+          {this.state.mode === "add" ? (
+            <Button
+              style={{ marginLeft: "20px" }}
+              size="large"
+              onClick={() => this.deleteRole()}
+            >
+              {i18next.t("general:Cancel")}
+            </Button>
+          ) : null}
         </div>
       </div>
     );

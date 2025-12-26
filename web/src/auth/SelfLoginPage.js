@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 import React from "react";
 import LoginPage from "./LoginPage";
-import {authConfig} from "./Auth";
+import { authConfig } from "./Auth";
 
 class SelfLoginPage extends React.Component {
   constructor(props) {
@@ -23,7 +23,12 @@ class SelfLoginPage extends React.Component {
   }
   render() {
     return (
-      <LoginPage type={"login"} mode={"signin"} applicationName={authConfig.appName} {...this.props} />
+      <LoginPage
+        type={"login"}
+        mode={"signin"}
+        applicationName={authConfig.appName}
+        {...this.props}
+      />
     );
   }
 }

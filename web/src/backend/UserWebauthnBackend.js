@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,13 +22,24 @@ export function registerWebauthnCredential() {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
   })
-    .then(res => res.json())
+    .then((res) => res.json())
     .then((credentialCreationOptions) => {
-      credentialCreationOptions.publicKey.challenge = webAuthnBufferDecode(credentialCreationOptions.publicKey.challenge);
-      credentialCreationOptions.publicKey.user.id = webAuthnBufferDecode(credentialCreationOptions.publicKey.user.id);
+      credentialCreationOptions.publicKey.challenge = webAuthnBufferDecode(
+        credentialCreationOptions.publicKey.challenge
+      );
+      credentialCreationOptions.publicKey.user.id = webAuthnBufferDecode(
+        credentialCreationOptions.publicKey.user.id
+      );
       if (credentialCreationOptions.publicKey.excludeCredentials) {
-        for (let i = 0; i < credentialCreationOptions.publicKey.excludeCredentials.length; i++) {
-          credentialCreationOptions.publicKey.excludeCredentials[i].id = webAuthnBufferDecode(credentialCreationOptions.publicKey.excludeCredentials[i].id);
+        for (
+          let i = 0;
+          i < credentialCreationOptions.publicKey.excludeCredentials.length;
+          i++
+        ) {
+          credentialCreationOptions.publicKey.excludeCredentials[i].id =
+            webAuthnBufferDecode(
+              credentialCreationOptions.publicKey.excludeCredentials[i].id
+            );
         }
       }
 
@@ -52,8 +63,7 @@ export function registerWebauthnCredential() {
             clientDataJSON: webAuthnBufferEncode(clientDataJSON),
           },
         }),
-      })
-        .then(res => res.json());
+      }).then((res) => res.json());
     });
 }
 
@@ -69,7 +79,7 @@ export function deleteUserWebAuthnCredential(credentialID) {
     headers: {
       "Accept-Language": Setting.getAcceptLanguage(),
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 }
 
 // Base64URL to ArrayBuffer
@@ -78,7 +88,7 @@ export function webAuthnBufferDecode(value) {
   while (value.length % 4) {
     value += "=";
   }
-  return Uint8Array.from(atob(value), c => c.charCodeAt(0));
+  return Uint8Array.from(atob(value), (c) => c.charCodeAt(0));
 }
 
 // ArrayBuffer to URLBase64

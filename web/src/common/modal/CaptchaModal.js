@@ -1,4 +1,4 @@
-// Copyright 2022 The Casdoor Authors. All Rights Reserved.
+// Copyright 2022 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Button, Col, Input, Modal, Row} from "antd";
+import { Button, Col, Input, Modal, Row } from "antd";
 import i18next from "i18next";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import * as UserBackend from "../../backend/UserBackend";
-import {CaptchaWidget} from "../CaptchaWidget";
-import {SafetyOutlined} from "@ant-design/icons";
+import { CaptchaWidget } from "../CaptchaWidget";
+import { SafetyOutlined } from "@ant-design/icons";
 
 export const CaptchaModal = (props) => {
-  const {owner, name, visible, onOk, onUpdateToken, onCancel, isCurrentProvider, noModal} = props;
+  const {
+    owner,
+    name,
+    visible,
+    onOk,
+    onUpdateToken,
+    onCancel,
+    isCurrentProvider,
+    noModal,
+  } = props;
 
   const [captchaType, setCaptchaType] = React.useState("none");
   const [clientId, setClientId] = React.useState("");
@@ -83,9 +92,8 @@ export const CaptchaModal = (props) => {
   const renderDefaultCaptcha = () => {
     if (noModal) {
       return (
-        <Row style={{textAlign: "center"}}>
-          <Col
-            style={{flex: noModal ? "70%" : "100%"}}>
+        <Row style={{ textAlign: "center" }}>
+          <Col style={{ flex: noModal ? "70%" : "100%" }}>
             <Input
               ref={defaultInputRef}
               value={captchaToken}
@@ -99,21 +107,24 @@ export const CaptchaModal = (props) => {
               flex: noModal ? "30%" : "100%",
             }}
           >
-            <img src={`data:image/png;base64,${captchaImg}`}
+            <img
+              src={`data:image/png;base64,${captchaImg}`}
               onClick={loadCaptcha}
               style={{
                 borderRadius: "5px",
                 border: "1px solid #ccc",
                 marginBottom: "20px",
                 width: "100%",
-              }} alt="captcha" />
+              }}
+              alt="captcha"
+            />
           </Col>
         </Row>
       );
     }
     return (
-      <Col style={{textAlign: "center"}}>
-        <div style={{display: "inline-block"}}>
+      <Col style={{ textAlign: "center" }}>
+        <div style={{ display: "inline-block" }}>
           <Row
             style={{
               backgroundImage: `url('data:image/png;base64,${captchaImg}')`,
@@ -128,7 +139,7 @@ export const CaptchaModal = (props) => {
           <Row>
             <Input
               ref={defaultInputRef}
-              style={{width: "200px"}}
+              style={{ width: "200px" }}
               value={captchaToken}
               prefix={<SafetyOutlined />}
               placeholder={i18next.t("general:Captcha")}
@@ -179,7 +190,14 @@ export const CaptchaModal = (props) => {
       }
       return [
         null,
-        <Button key="ok" disabled={isOkDisabled} type="primary" onClick={handleOk}>{i18next.t("general:OK")}</Button>,
+        <Button
+          key="ok"
+          disabled={isOkDisabled}
+          type="primary"
+          onClick={handleOk}
+        >
+          {i18next.t("general:OK")}
+        </Button>,
       ];
     }
 
@@ -188,7 +206,6 @@ export const CaptchaModal = (props) => {
 
   if (noModal) {
     return renderCaptcha();
-
   } else {
     return (
       <Modal
@@ -205,10 +222,8 @@ export const CaptchaModal = (props) => {
         afterClose={handleCancel}
         onOk={handleOk}
       >
-        <div style={{marginTop: "20px", marginBottom: "50px"}}>
-          {
-            renderCaptcha()
-          }
+        <div style={{ marginTop: "20px", marginBottom: "50px" }}>
+          {renderCaptcha()}
         </div>
       </Modal>
     );

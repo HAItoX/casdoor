@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 
 import i18next from "i18next";
 import React from "react";
-import {Button, Card, Col, Row} from "antd";
+import { Button, Card, Col, Row } from "antd";
 import * as Setting from "../Setting";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
-const {Meta} = Card;
+const { Meta } = Card;
 
 class SingleCard extends React.Component {
   constructor(props) {
@@ -30,23 +30,48 @@ class SingleCard extends React.Component {
 
   renderCard(plan, isSingle, link) {
     return (
-      <Col style={{minWidth: "320px", paddingLeft: "20px", paddingRight: "20px", paddingBottom: "20px", marginBottom: "20px", paddingTop: "0px"}} span={6}>
+      <Col
+        style={{
+          minWidth: "320px",
+          paddingLeft: "20px",
+          paddingRight: "20px",
+          paddingBottom: "20px",
+          marginBottom: "20px",
+          paddingTop: "0px",
+        }}
+        span={6}
+      >
         <Card
           hoverable
-          onClick={() => Setting.isMobile() ? window.location.href = link : null}
-          style={isSingle ? {width: "320px", height: "100%"} : {width: "100%", height: "100%", paddingTop: "0px"}}
+          onClick={() =>
+            Setting.isMobile() ? (window.location.href = link) : null
+          }
+          style={
+            isSingle
+              ? { width: "320px", height: "100%" }
+              : { width: "100%", height: "100%", paddingTop: "0px" }
+          }
           title={<h2>{plan.displayName}</h2>}
         >
           <Col>
             <Row>
-              <div style={{textAlign: "left"}} className="px-10 mt-5">
-                <span style={{fontSize: "40px", fontWeight: 700}}>{Setting.getCurrencySymbol(plan.currency)} {plan.price}</span>
-                <span style={{fontSize: "18px", fontWeight: 600, color: "gray"}}> {plan.period === "Yearly" ? i18next.t("plan:per year") : i18next.t("plan:per month")}</span>
+              <div style={{ textAlign: "left" }} className="px-10 mt-5">
+                <span style={{ fontSize: "40px", fontWeight: 700 }}>
+                  {Setting.getCurrencySymbol(plan.currency)} {plan.price}
+                </span>
+                <span
+                  style={{ fontSize: "18px", fontWeight: 600, color: "gray" }}
+                >
+                  {" "}
+                  {plan.period === "Yearly"
+                    ? i18next.t("plan:per year")
+                    : i18next.t("plan:per month")}
+                </span>
               </div>
             </Row>
 
-            <Row style={{height: "90px", paddingTop: "15px"}}>
-              <div style={{textAlign: "left", fontSize: "18px"}}>
+            <Row style={{ height: "90px", paddingTop: "15px" }}>
+              <div style={{ textAlign: "left", fontSize: "18px" }}>
                 <Meta description={plan.description} />
               </div>
             </Row>
@@ -64,11 +89,20 @@ class SingleCard extends React.Component {
               })}
             </ul> */}
 
-            <Row style={{paddingTop: "15px"}}>
-              <Button style={{width: "100%", height: "50px", borderRadius: "0px", bottom: "0", left: "0"}} type="primary" key="subscribe" onClick={() => window.location.href = link}>
-                {
-                  i18next.t("pricing:Getting started")
-                }
+            <Row style={{ paddingTop: "15px" }}>
+              <Button
+                style={{
+                  width: "100%",
+                  height: "50px",
+                  borderRadius: "0px",
+                  bottom: "0",
+                  left: "0",
+                }}
+                type="primary"
+                key="subscribe"
+                onClick={() => (window.location.href = link)}
+              >
+                {i18next.t("pricing:Getting started")}
               </Button>
             </Row>
           </Col>
@@ -78,7 +112,11 @@ class SingleCard extends React.Component {
   }
 
   render() {
-    return this.renderCard(this.props.plan, this.props.isSingle, this.props.link);
+    return this.renderCard(
+      this.props.plan,
+      this.props.isSingle,
+      this.props.link
+    );
   }
 }
 

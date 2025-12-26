@@ -1,4 +1,4 @@
-// Copyright 2024 The Casdoor Authors. All Rights Reserved.
+// Copyright 2024 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import CryptoJS from "crypto-js";
-import {Buffer} from "buffer";
+import { Buffer } from "buffer";
 
 export function getRandomKeyForObfuscator(obfuscatorType) {
   if (obfuscatorType === "DES") {
@@ -26,8 +26,8 @@ export function getRandomKeyForObfuscator(obfuscatorType) {
 }
 
 export const passwordObfuscatorKeyRegexes = {
-  "DES": /^[1-9a-f]{16}$/,
-  "AES": /^[1-9a-f]{32}$/,
+  DES: /^[1-9a-f]{16}$/,
+  AES: /^[1-9a-f]{32}$/,
 };
 
 function encrypt(cipher, key, iv, password) {
@@ -43,13 +43,26 @@ function encrypt(cipher, key, iv, password) {
   return iv.concat(encrypted.ciphertext).toString(CryptoJS.enc.Hex);
 }
 
-export function checkPasswordObfuscator(passwordObfuscatorType, passwordObfuscatorKey) {
+export function checkPasswordObfuscator(
+  passwordObfuscatorType,
+  passwordObfuscatorKey
+) {
   if (passwordObfuscatorType === undefined) {
     return "passwordObfuscatorType should not be undefined";
-  } else if (passwordObfuscatorType === "Plain" || passwordObfuscatorType === "") {
+  } else if (
+    passwordObfuscatorType === "Plain" ||
+    passwordObfuscatorType === ""
+  ) {
     return "";
-  } else if (passwordObfuscatorType === "AES" || passwordObfuscatorType === "DES") {
-    if (passwordObfuscatorKeyRegexes[passwordObfuscatorType].test(passwordObfuscatorKey)) {
+  } else if (
+    passwordObfuscatorType === "AES" ||
+    passwordObfuscatorType === "DES"
+  ) {
+    if (
+      passwordObfuscatorKeyRegexes[passwordObfuscatorType].test(
+        passwordObfuscatorKey
+      )
+    ) {
       return "";
     } else {
       return `The password obfuscator key doesn't match the regex: ${passwordObfuscatorKeyRegexes[passwordObfuscatorType].source}`;
@@ -59,8 +72,15 @@ export function checkPasswordObfuscator(passwordObfuscatorType, passwordObfuscat
   }
 }
 
-export function encryptByPasswordObfuscator(passwordObfuscatorType, passwordObfuscatorKey, password) {
-  const passwordObfuscatorErrorMessage = checkPasswordObfuscator(passwordObfuscatorType, passwordObfuscatorKey);
+export function encryptByPasswordObfuscator(
+  passwordObfuscatorType,
+  passwordObfuscatorKey,
+  password
+) {
+  const passwordObfuscatorErrorMessage = checkPasswordObfuscator(
+    passwordObfuscatorType,
+    passwordObfuscatorKey
+  );
   if (passwordObfuscatorErrorMessage.length > 0) {
     return ["", passwordObfuscatorErrorMessage];
   } else {

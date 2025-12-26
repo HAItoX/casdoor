@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -171,7 +171,7 @@ export const OtherProviderInfo = {
     },
     "Custom HTTP SMS": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://casdoor.org/docs/provider/sms/overview",
+      url: "https://snbb.hitox.top/docs/provider/sms/overview",
     },
     "Mock SMS": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
@@ -201,7 +201,7 @@ export const OtherProviderInfo = {
     },
     "Custom HTTP Email": {
       logo: `${StaticBaseUrl}/img/social_default.png`,
-      url: "https://casdoor.org/docs/provider/email/overview",
+      url: "https://snbb.hitox.top/docs/provider/email/overview",
     },
   },
   Storage: {
@@ -243,7 +243,7 @@ export const OtherProviderInfo = {
     },
     Casdoor: {
       logo: `${StaticBaseUrl}/img/casdoor.png`,
-      url: "https://casdoor.org/docs/provider/storage/overview",
+      url: "https://snbb.hitox.top/docs/provider/storage/overview",
     },
     "CUCloud OSS": {
       logo: `${StaticBaseUrl}/img/social_cucloud.png`,
@@ -355,7 +355,7 @@ export const OtherProviderInfo = {
     },
     "Custom HTTP": {
       logo: `${StaticBaseUrl}/img/email_default.png`,
-      url: "https://casdoor.org/docs/provider/notification/overview",
+      url: "https://snbb.hitox.top/docs/provider/notification/overview",
     },
     DingTalk: {
       logo: `${StaticBaseUrl}/img/social_dingtalk.png`,
@@ -1773,7 +1773,7 @@ export function getDefaultHtmlEmailContent() {
 <div class="email-container">
   <div class="header">
         <h3>Casbin Organization</h3>
-        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="Casdoor Logo" width="300">
+        <img src="${StaticBaseUrl}/img/casdoor-logo_1185x256.png" alt="HitoFlowLogo" width="300">
     </div>
     <p><strong>%{user.friendlyName}</strong>, here is your verification code</p>
     <p>Use this code for your transaction. It's valid for 5 minutes</p>
@@ -1789,7 +1789,7 @@ export function getDefaultHtmlEmailContent() {
     <p>Casbin Team</p>
     <hr>
     <div class="footer">
-        <p>Casdoor is a brand operated by Casbin organization. For more info please refer to <a href="https://casdoor.org">https://casdoor.org</a></p>
+        <p>HitoFlowis a brand operated by Casbin organization. For more info please refer to <a href="https://snbb.hitox.top">https://snbb.hitox.top</a></p>
     </div>
 </div>
 </body>

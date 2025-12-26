@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import React from "react";
-import {Alert, Button, Modal, QRCode, Result} from "antd";
+import { Alert, Button, Modal, QRCode, Result } from "antd";
 import i18next from "i18next";
-import {getWechatMessageEvent} from "./AuthBackend";
+import { getWechatMessageEvent } from "./AuthBackend";
 import * as Setting from "../Setting";
 import * as Provider from "./Provider";
 import * as AuthBackend from "./AuthBackend";
@@ -23,7 +23,7 @@ import * as AuthBackend from "./AuthBackend";
 export function renderMessage(msg) {
   if (msg !== null) {
     return (
-      <div style={{display: "inline"}}>
+      <div style={{ display: "inline" }}>
         <Alert
           message={i18next.t("application:Failed to sign in")}
           showIcon
@@ -46,19 +46,22 @@ export function renderMessageLarge(ths, msg) {
   if (msg !== null) {
     return (
       <Result
-        style={{margin: "0px auto"}}
+        style={{ margin: "0px auto" }}
         status="error"
         title={i18next.t("general:There was a problem signing you in..")}
         subTitle={msg}
         extra={[
-          <Button type="primary" key="back" onClick={() => {
-            window.history.go(-2);
-          }}>
+          <Button
+            type="primary"
+            key="back"
+            onClick={() => {
+              window.history.go(-2);
+            }}
+          >
             {i18next.t("general:Back")}
           </Button>,
         ]}
-      >
-      </Result>
+      ></Result>
     );
   } else {
     return null;
@@ -70,7 +73,8 @@ function getRefinedValue(value) {
 }
 
 export function getCasParameters(params) {
-  const queries = (params !== undefined) ? params : new URLSearchParams(window.location.search);
+  const queries =
+    params !== undefined ? params : new URLSearchParams(window.location.search);
   const service = getRefinedValue(queries.get("service"));
   const renew = getRefinedValue(queries.get("renew"));
   const gateway = getRefinedValue(queries.get("gateway"));
@@ -112,9 +116,12 @@ export function getCasLoginParameters(owner, name) {
 }
 
 export function getOAuthGetParameters(params) {
-  const queries = (params !== undefined) ? params : new URLSearchParams(window.location.search);
+  const queries =
+    params !== undefined ? params : new URLSearchParams(window.location.search);
   const lowercaseQueries = {};
-  queries.forEach((val, key) => {lowercaseQueries[key.toLowerCase()] = val;});
+  queries.forEach((val, key) => {
+    lowercaseQueries[key.toLowerCase()] = val;
+  });
 
   const clientId = getRefinedValue(queries.get("client_id"));
   const responseType = getRefinedValue(queries.get("response_type"));
@@ -142,9 +149,15 @@ export function getOAuthGetParameters(params) {
   const challengeMethod = getRefinedValue(queries.get("code_challenge_method"));
   const codeChallenge = getRefinedValue(queries.get("code_challenge"));
   const responseMode = getRefinedValue(queries.get("response_mode"));
-  const samlRequest = getRefinedValue(lowercaseQueries["samlRequest".toLowerCase()]);
-  const relayState = getRefinedValue(lowercaseQueries["RelayState".toLowerCase()]);
-  const noRedirect = getRefinedValue(lowercaseQueries["noRedirect".toLowerCase()]);
+  const samlRequest = getRefinedValue(
+    lowercaseQueries["samlRequest".toLowerCase()]
+  );
+  const relayState = getRefinedValue(
+    lowercaseQueries["RelayState".toLowerCase()]
+  );
+  const noRedirect = getRefinedValue(
+    lowercaseQueries["noRedirect".toLowerCase()]
+  );
 
   if (clientId === "" && samlRequest === "") {
     // login
@@ -169,9 +182,16 @@ export function getOAuthGetParameters(params) {
   }
 }
 
-export function getStateFromQueryParams(applicationName, providerName, method, isShortState) {
+export function getStateFromQueryParams(
+  applicationName,
+  providerName,
+  method,
+  isShortState
+) {
   let query = window.location.search;
-  query = `${query}&application=${encodeURIComponent(applicationName)}&provider=${encodeURIComponent(providerName)}&method=${method}`;
+  query = `${query}&application=${encodeURIComponent(
+    applicationName
+  )}&provider=${encodeURIComponent(providerName)}&method=${method}`;
   if (method === "link") {
     query = `${query}&from=${window.location.pathname}`;
   }
@@ -195,35 +215,56 @@ export function getQueryParamsFromState(state) {
 }
 
 export function getEvent(application, provider, ticket, method) {
-  getWechatMessageEvent(ticket)
-    .then(res => {
-      if (res.data === "SCAN" || res.data === "subscribe") {
-        const code = res?.data2;
-        Setting.goToLink(Provider.getAuthUrl(application, provider, method ?? "signup", code));
-      }
-    });
+  getWechatMessageEvent(ticket).then((res) => {
+    if (res.data === "SCAN" || res.data === "subscribe") {
+      const code = res?.data2;
+      Setting.goToLink(
+        Provider.getAuthUrl(application, provider, method ?? "signup", code)
+      );
+    }
+  });
 }
 
-export async function WechatOfficialAccountModal(application, provider, method) {
+export async function WechatOfficialAccountModal(
+  application,
+  provider,
+  method
+) {
   AuthBackend.getWechatQRCode(`${provider.owner}/${provider.name}`).then(
-    async res => {
+    async (res) => {
       if (res.status !== "ok") {
         Setting.showMessage("error", res?.msg);
         return;
       }
 
-      const t1 = setInterval(await getEvent, 1000, application, provider, res.data2, method);
-      {Modal.info({
-        title: i18next.t("provider:Please use WeChat to scan the QR code and follow the official account for sign in"),
-        content: (
-          <div style={{marginRight: "34px"}}>
-            <QRCode style={{padding: "20px", margin: "auto"}} bordered={false} value={res.data} size={230} />
-          </div>
-        ),
-        onOk() {
-          window.clearInterval(t1);
-        },
-      });}
+      const t1 = setInterval(
+        await getEvent,
+        1000,
+        application,
+        provider,
+        res.data2,
+        method
+      );
+      {
+        Modal.info({
+          title: i18next.t(
+            "provider:Please use WeChat to scan the QR code and follow the official account for sign in"
+          ),
+          content: (
+            <div style={{ marginRight: "34px" }}>
+              <QRCode
+                style={{ padding: "20px", margin: "auto" }}
+                bordered={false}
+                value={res.data}
+                size={230}
+              />
+            </div>
+          ),
+          onOk() {
+            window.clearInterval(t1);
+          },
+        });
+      }
     }
   );
 }

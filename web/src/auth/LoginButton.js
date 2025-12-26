@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +13,23 @@
 // limitations under the License.
 
 import i18next from "i18next";
-import {createButton} from "react-social-login-buttons";
+import { createButton } from "react-social-login-buttons";
 
-function LoginButton({type, logoUrl, align = "center", style = {background: "#ffffff", color: "#000000"}, activeStyle = {background: "#ededee"}}) {
-  function Icon({width = 24, height = 24, color}) {
-    return <img src={logoUrl} alt={`Sign in with ${type}`} style={{width: width, height: height}} />;
+function LoginButton({
+  type,
+  logoUrl,
+  align = "center",
+  style = { background: "#ffffff", color: "#000000" },
+  activeStyle = { background: "#ededee" },
+}) {
+  function Icon({ width = 24, height = 24, color }) {
+    return (
+      <img
+        src={logoUrl}
+        alt={`Sign in with ${type}`}
+        style={{ width: width, height: height }}
+      />
+    );
   }
   const config = {
     text: `Sign in with ${type}`,

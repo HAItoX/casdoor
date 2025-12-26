@@ -1,4 +1,4 @@
-// Copyright 2025 The Casdoor Authors. All Rights Reserved.
+// Copyright 2025 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ import React from "react";
 import * as AuthBackend from "./AuthBackend";
 import i18next from "i18next";
 import * as Util from "./Util";
-import {QRCode} from "antd";
+import { QRCode } from "antd";
 
 class WeChatLoginPanel extends React.Component {
   constructor(props) {
@@ -34,11 +34,17 @@ class WeChatLoginPanel extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.loginMethod === "wechat" && prevProps.loginMethod !== "wechat") {
+    if (
+      this.props.loginMethod === "wechat" &&
+      prevProps.loginMethod !== "wechat"
+    ) {
       this.fetchQrCode();
     }
-    if (prevProps.loginMethod === "wechat" && this.props.loginMethod !== "wechat") {
-      this.setState({qrCode: null, loading: false, ticket: null});
+    if (
+      prevProps.loginMethod === "wechat" &&
+      this.props.loginMethod !== "wechat"
+    ) {
+      this.setState({ qrCode: null, loading: false, ticket: null });
       this.clearPolling();
     }
   }
@@ -55,37 +61,70 @@ class WeChatLoginPanel extends React.Component {
   }
 
   fetchQrCode() {
-    const {application} = this.props;
-    const wechatProviderItem = application?.providers?.find(p => p.provider?.type === "WeChat");
+    const { application } = this.props;
+    const wechatProviderItem = application?.providers?.find(
+      (p) => p.provider?.type === "WeChat"
+    );
     if (wechatProviderItem) {
-      this.setState({status: "loading", qrCode: null, ticket: null});
-      AuthBackend.getWechatQRCode(`${wechatProviderItem.provider.owner}/${wechatProviderItem.provider.name}`).then(res => {
-        if (res.status === "ok" && res.data) {
-          this.setState({qrCode: res.data, status: "active", ticket: res.data2});
+      this.setState({ status: "loading", qrCode: null, ticket: null });
+      AuthBackend.getWechatQRCode(
+        `${wechatProviderItem.provider.owner}/${wechatProviderItem.provider.name}`
+      )
+        .then((res) => {
+          if (res.status === "ok" && res.data) {
+            this.setState({
+              qrCode: res.data,
+              status: "active",
+              ticket: res.data2,
+            });
+            this.clearPolling();
+            this.pollingTimer = setInterval(() => {
+              Util.getEvent(
+                application,
+                wechatProviderItem.provider,
+                res.data2,
+                "signup"
+              );
+            }, 1000);
+          } else {
+            this.setState({ qrCode: null, status: "expired", ticket: null });
+            this.clearPolling();
+          }
+        })
+        .catch(() => {
+          this.setState({ qrCode: null, status: "expired", ticket: null });
           this.clearPolling();
-          this.pollingTimer = setInterval(() => {
-            Util.getEvent(application, wechatProviderItem.provider, res.data2, "signup");
-          }, 1000);
-        } else {
-          this.setState({qrCode: null, status: "expired", ticket: null});
-          this.clearPolling();
-        }
-      }).catch(() => {
-        this.setState({qrCode: null, status: "expired", ticket: null});
-        this.clearPolling();
-      });
+        });
     }
   }
 
   render() {
-    const {loginWidth = 320} = this.props;
-    const {status, qrCode} = this.state;
+    const { loginWidth = 320 } = this.props;
+    const { status, qrCode } = this.state;
     return (
-      <div style={{width: loginWidth, margin: "0 auto", textAlign: "center", marginTop: 16}}>
-        <div style={{marginTop: 2}}>
-          <QRCode style={{margin: "auto", marginTop: "20px", marginBottom: "20px"}} bordered={false} status={status} value={qrCode ?? " "} size={230} />
-          <div style={{marginTop: 8}}>
-            <a onClick={e => {e.preventDefault(); this.fetchQrCode();}}>
+      <div
+        style={{
+          width: loginWidth,
+          margin: "0 auto",
+          textAlign: "center",
+          marginTop: 16,
+        }}
+      >
+        <div style={{ marginTop: 2 }}>
+          <QRCode
+            style={{ margin: "auto", marginTop: "20px", marginBottom: "20px" }}
+            bordered={false}
+            status={status}
+            value={qrCode ?? " "}
+            size={230}
+          />
+          <div style={{ marginTop: 8 }}>
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                this.fetchQrCode();
+              }}
+            >
               {i18next.t("login:Refresh")}
             </a>
           </div>

@@ -1,4 +1,4 @@
-// Copyright 2021 The Casdoor Authors. All Rights Reserved.
+// Copyright 2021 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import React from "react";
-import {Button, Popconfirm, Table} from "antd";
+import { Button, Popconfirm, Table } from "antd";
 import * as Setting from "./Setting";
 import * as LdapBackend from "./backend/LdapBackend";
 import i18next from "i18next";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class LdapSyncPage extends React.Component {
   constructor(props) {
@@ -43,40 +43,49 @@ class LdapSyncPage extends React.Component {
       return;
     }
 
-    LdapBackend.syncUsers(this.state.ldap.owner, this.state.ldap.id, selectedUsers)
-      .then((res => {
-        if (res.status === "ok") {
-          const exist = res.data.exist;
-          const failed = res.data.failed;
-          const existUser = [];
-          const failedUser = [];
+    LdapBackend.syncUsers(
+      this.state.ldap.owner,
+      this.state.ldap.id,
+      selectedUsers
+    ).then((res) => {
+      if (res.status === "ok") {
+        const exist = res.data.exist;
+        const failed = res.data.failed;
+        const existUser = [];
+        const failedUser = [];
 
-          if ((!exist || exist.length === 0) && (!failed || failed.length === 0)) {
-            Setting.goToLink(`/organizations/${this.state.ldap.owner}/users`);
-          } else {
-            if (exist && exist.length > 0) {
-              exist.forEach(elem => {
-                existUser.push(elem.cn);
-              });
-              Setting.showMessage("error", `User [${existUser}] is already exist`);
-            }
-
-            if (failed && failed.length > 0) {
-              failed.forEach(elem => {
-                failedUser.push(elem.cn);
-              });
-              Setting.showMessage("error", `Sync [${failedUser}] failed`);
-            }
-          }
+        if (
+          (!exist || exist.length === 0) &&
+          (!failed || failed.length === 0)
+        ) {
+          Setting.goToLink(`/organizations/${this.state.ldap.owner}/users`);
         } else {
-          Setting.showMessage("error", res.msg);
+          if (exist && exist.length > 0) {
+            exist.forEach((elem) => {
+              existUser.push(elem.cn);
+            });
+            Setting.showMessage(
+              "error",
+              `User [${existUser}] is already exist`
+            );
+          }
+
+          if (failed && failed.length > 0) {
+            failed.forEach((elem) => {
+              failedUser.push(elem.cn);
+            });
+            Setting.showMessage("error", `Sync [${failedUser}] failed`);
+          }
         }
-      }));
+      } else {
+        Setting.showMessage("error", res.msg);
+      }
+    });
   }
 
   getLdap() {
-    LdapBackend.getLdap(this.state.organizationName, this.state.ldapId)
-      .then((res) => {
+    LdapBackend.getLdap(this.state.organizationName, this.state.ldapId).then(
+      (res) => {
         if (res.status === "ok") {
           this.setState({
             ldap: res.data,
@@ -85,29 +94,35 @@ class LdapSyncPage extends React.Component {
         } else {
           Setting.showMessage("error", res.msg);
         }
-      });
+      }
+    );
   }
 
   getLdapUser() {
-    LdapBackend.getLdapUser(this.state.organizationName, this.state.ldapId)
-      .then((res) => {
-        if (res.status === "ok") {
-          this.setState((prevState) => {
-            prevState.users = res.data.users;
-            prevState.existUuids = res.data.existUuids?.length > 0 ? res.data.existUuids.filter(uuid => uuid !== "") : [];
-            return prevState;
-          });
-        } else {
-          Setting.showMessage("error", res.msg);
-        }
-      });
+    LdapBackend.getLdapUser(
+      this.state.organizationName,
+      this.state.ldapId
+    ).then((res) => {
+      if (res.status === "ok") {
+        this.setState((prevState) => {
+          prevState.users = res.data.users;
+          prevState.existUuids =
+            res.data.existUuids?.length > 0
+              ? res.data.existUuids.filter((uuid) => uuid !== "")
+              : [];
+          return prevState;
+        });
+      } else {
+        Setting.showMessage("error", res.msg);
+      }
+    });
   }
 
   buildValArray(data, key) {
     const valTypesArray = [];
 
     if (data !== null && data.length > 0) {
-      data.forEach(elem => {
+      data.forEach((elem) => {
         const val = elem[key];
         if (!valTypesArray.includes(val)) {
           valTypesArray.push(val);
@@ -122,7 +137,7 @@ class LdapSyncPage extends React.Component {
 
     if (data !== null && data.length > 0) {
       const valArray = this.buildValArray(data, key);
-      valArray.forEach(elem => {
+      valArray.forEach((elem) => {
         filterArray.push({
           text: elem,
           value: elem,
@@ -140,15 +155,14 @@ class LdapSyncPage extends React.Component {
         key: "cn",
         sorter: (a, b) => a.cn.localeCompare(b.cn),
         render: (text, record, index) => {
-          return (<div style={{display: "flex", justifyContent: "space-between"}}>
-            <div>
-              {text}
+          return (
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>{text}</div>
+              {this.state.existUuids.includes(record.uuid)
+                ? Setting.getTag("green", i18next.t("ldap:synced"))
+                : Setting.getTag("red", i18next.t("ldap:unsynced"))}
             </div>
-            {this.state.existUuids.includes(record.uuid) ?
-              Setting.getTag("green", i18next.t("ldap:synced")) :
-              Setting.getTag("red", i18next.t("ldap:unsynced"))
-            }
-          </div>);
+          );
         },
       },
       {
@@ -157,12 +171,12 @@ class LdapSyncPage extends React.Component {
         key: "uid",
         sorter: (a, b) => a.uid.localeCompare(b.uid),
         render: (text, record, index) => {
-          return (
-            this.state.existUuids.includes(record.uuid) ?
-              <Link to={`/users/${this.state.organizationName}/${text}`}>
-                {text}
-              </Link> :
-              text
+          return this.state.existUuids.includes(record.uuid) ? (
+            <Link to={`/users/${this.state.organizationName}/${text}`}>
+              {text}
+            </Link>
+          ) : (
+            text
           );
         },
       },
@@ -209,27 +223,49 @@ class LdapSyncPage extends React.Component {
           selectedUsers: selectedRows,
         });
       },
-      getCheckboxProps: record => ({
+      getCheckboxProps: (record) => ({
         disabled: this.state.existUuids.indexOf(record.uuid) !== -1,
       }),
     };
 
     return (
-      <Table rowSelection={rowSelection} columns={columns} dataSource={users} rowKey="uuid" bordered size="small"
-        pagination={{defaultPageSize: 10, showQuickJumper: true, showSizeChanger: true}}
+      <Table
+        rowSelection={rowSelection}
+        columns={columns}
+        dataSource={users}
+        rowKey="uuid"
+        bordered
+        size="small"
+        pagination={{
+          defaultPageSize: 10,
+          showQuickJumper: true,
+          showSizeChanger: true,
+        }}
         title={() => (
           <div>
             {this.state.ldap?.serverName}
-            <Popconfirm placement={"right"} disabled={this.state.selectedUsers.length === 0}
+            <Popconfirm
+              placement={"right"}
+              disabled={this.state.selectedUsers.length === 0}
               title={"Please confirm to sync selected users"}
               onConfirm={() => this.syncUsers()}
             >
-              <Button type="primary" style={{marginLeft: "10px"}} disabled={this.state.selectedUsers.length === 0}>
+              <Button
+                type="primary"
+                style={{ marginLeft: "10px" }}
+                disabled={this.state.selectedUsers.length === 0}
+              >
                 {i18next.t("general:Sync")}
               </Button>
             </Popconfirm>
-            <Button style={{marginLeft: "20px"}}
-              onClick={() => Setting.goToLink(`/ldap/${this.state.organizationName}/${this.state.ldapId}`)}>
+            <Button
+              style={{ marginLeft: "20px" }}
+              onClick={() =>
+                Setting.goToLink(
+                  `/ldap/${this.state.organizationName}/${this.state.ldapId}`
+                )
+              }
+            >
               {i18next.t("general:Edit")} LDAP
             </Button>
           </div>
@@ -242,13 +278,18 @@ class LdapSyncPage extends React.Component {
   render() {
     return (
       <div>
-        {
-          this.renderTable(this.state.users)
-        }
-        <div style={{marginTop: "20px", marginLeft: "40px"}}>
-          <Button style={{marginLeft: "20px"}} type="primary" size="large" onClick={() => {
-            this.props.history.push(`/organizations/${this.state.organizationName}`);
-          }}>
+        {this.renderTable(this.state.users)}
+        <div style={{ marginTop: "20px", marginLeft: "40px" }}>
+          <Button
+            style={{ marginLeft: "20px" }}
+            type="primary"
+            size="large"
+            onClick={() => {
+              this.props.history.push(
+                `/organizations/${this.state.organizationName}`
+              );
+            }}
+          >
             {i18next.t("general:Save & Exit")}
           </Button>
         </div>

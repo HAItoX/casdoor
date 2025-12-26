@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import {Table} from "antd";
+import { Table } from "antd";
 import i18next from "i18next";
 
 class PrometheusInfoTable extends React.Component {
@@ -65,15 +65,24 @@ class PrometheusInfoTable extends React.Component {
     ];
     if (this.state.table === "latency") {
       return (
-        <div style={{height: "300px", overflow: "auto"}}>
-          <Table columns={latencyColumns} dataSource={this.props.prometheusInfo?.apiLatency} pagination={false} />
+        <div style={{ height: "300px", overflow: "auto" }}>
+          <Table
+            columns={latencyColumns}
+            dataSource={this.props.prometheusInfo?.apiLatency}
+            pagination={false}
+          />
         </div>
       );
     } else if (this.state.table === "throughput") {
       return (
-        <div style={{height: "300px", overflow: "auto"}}>
-          {i18next.t("system:Total Throughput")}: {this.props.prometheusInfo?.totalThroughput}
-          <Table columns={throughputColumns} dataSource={this.props.prometheusInfo?.apiThroughput} pagination={false} />
+        <div style={{ height: "300px", overflow: "auto" }}>
+          {i18next.t("system:Total Throughput")}:{" "}
+          {this.props.prometheusInfo?.totalThroughput}
+          <Table
+            columns={throughputColumns}
+            dataSource={this.props.prometheusInfo?.apiThroughput}
+            pagination={false}
+          />
         </div>
       );
     }

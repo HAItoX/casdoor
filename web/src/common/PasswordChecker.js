@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 import i18next from "i18next";
 import React from "react";
-import {CheckCircleTwoTone, CloseCircleTwoTone} from "@ant-design/icons";
+import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 
 function isValidOption_AtLeast6(password) {
   if (password.length < 6) {
@@ -33,7 +33,9 @@ function isValidOption_AtLeast8(password) {
 function isValidOption_Aa123(password) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/;
   if (!regex.test(password)) {
-    return i18next.t("user:The password must contain at least one uppercase letter, one lowercase letter and one digit");
+    return i18next.t(
+      "user:The password must contain at least one uppercase letter, one lowercase letter and one digit"
+    );
   }
   return "";
 }
@@ -41,7 +43,9 @@ function isValidOption_Aa123(password) {
 function isValidOption_SpecialChar(password) {
   const regex = /^(?=.*[!-/:-@[-`{-~]).+$/;
   if (!regex.test(password)) {
-    return i18next.t("user:The password must contain at least one special character");
+    return i18next.t(
+      "user:The password must contain at least one special character"
+    );
   }
   return "";
 }
@@ -49,7 +53,9 @@ function isValidOption_SpecialChar(password) {
 function isValidOption_NoRepeat(password) {
   const regex = /(.)\1+/;
   if (regex.test(password)) {
-    return i18next.t("user:The password must not contain any repeated characters");
+    return i18next.t(
+      "user:The password must not contain any repeated characters"
+    );
   }
   return "";
 }
@@ -64,21 +70,42 @@ const checkers = {
 
 function getOptionDescription(option, password) {
   switch (option) {
-  case "AtLeast6": return i18next.t("user:The password must have at least 6 characters");
-  case "AtLeast8": return i18next.t("user:The password must have at least 8 characters");
-  case "Aa123": return i18next.t("user:The password must contain at least one uppercase letter, one lowercase letter and one digit");
-  case "SpecialChar": return i18next.t("user:The password must contain at least one special character");
-  case "NoRepeat": return i18next.t("user:The password must not contain any repeated characters");
+    case "AtLeast6":
+      return i18next.t("user:The password must have at least 6 characters");
+    case "AtLeast8":
+      return i18next.t("user:The password must have at least 8 characters");
+    case "Aa123":
+      return i18next.t(
+        "user:The password must contain at least one uppercase letter, one lowercase letter and one digit"
+      );
+    case "SpecialChar":
+      return i18next.t(
+        "user:The password must contain at least one special character"
+      );
+    case "NoRepeat":
+      return i18next.t(
+        "user:The password must not contain any repeated characters"
+      );
   }
 }
 
 export function renderPasswordPopover(options, password) {
-  return <div style={{width: 240}} >
-    {options.map((option, idx) => {
-      return <div key={idx}>{checkers[option](password) === "" ? <CheckCircleTwoTone twoToneColor={"#52c41a"} /> :
-        <CloseCircleTwoTone twoToneColor={"#ff4d4f"} />} {getOptionDescription(option, password)}</div>;
-    })}
-  </div>;
+  return (
+    <div style={{ width: 240 }}>
+      {options.map((option, idx) => {
+        return (
+          <div key={idx}>
+            {checkers[option](password) === "" ? (
+              <CheckCircleTwoTone twoToneColor={"#52c41a"} />
+            ) : (
+              <CloseCircleTwoTone twoToneColor={"#ff4d4f"} />
+            )}{" "}
+            {getOptionDescription(option, password)}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export function checkPasswordComplexity(password, options) {

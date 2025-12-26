@@ -1,4 +1,4 @@
-// Copyright 2023 The Casdoor Authors. All Rights Reserved.
+// Copyright 2023 The HitoFlowAuthors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Modal} from "antd";
-import {ExclamationCircleFilled} from "@ant-design/icons";
+import { Modal } from "antd";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import i18next from "i18next";
 import * as Conf from "../Conf";
 import * as Setting from "../Setting";
 
-const {confirm} = Modal;
-const {fetch: originalFetch} = window;
+const { confirm } = Modal;
+const { fetch: originalFetch } = window;
 
 const demoModeCallback = (res) => {
-  res.json().then(data => {
+  res.json().then((data) => {
     if (Setting.isResponseDenied(data)) {
       confirm({
         title: i18next.t("general:This is a read-only demo site!"),
@@ -31,7 +31,9 @@ const demoModeCallback = (res) => {
         okText: i18next.t("general:OK"),
         cancelText: i18next.t("general:Cancel"),
         onOk() {
-          Setting.openLink(`https://demo.casdoor.com${location.pathname}${location.search}?username=built-in/admin&password=123`);
+          Setting.openLink(
+            `https://demo.casdoor.com${location.pathname}${location.search}?username=built-in/admin&password=123`
+          );
         },
         onCancel() {},
       });
@@ -46,18 +48,18 @@ if (Conf.IsDemoMode) {
   responseFilters.push(demoModeCallback);
 }
 
-window.fetch = async(url, option = {}) => {
-  requestFilters.forEach(filter => filter(url, option));
+window.fetch = async (url, option = {}) => {
+  requestFilters.forEach((filter) => filter(url, option));
 
   return new Promise((resolve, reject) => {
     originalFetch(url, option)
-      .then(res => {
+      .then((res) => {
         if (!url.startsWith("/api/get-organizations")) {
-          responseFilters.forEach(filter => filter(res.clone()));
+          responseFilters.forEach((filter) => filter(res.clone()));
         }
         resolve(res);
       })
-      .catch(error => {
+      .catch((error) => {
         reject(error);
       });
   });
