@@ -1,5 +1,5 @@
 // 子应用容器组件
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
 import { getGlobalProps } from "./config";
 import { getLocalSubApps } from "./utils";
 import { loadMicroApp } from "qiankun";
@@ -19,6 +19,7 @@ const SubAppContainer = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const microAppRef = useRef(null);
+  const containerRef = useRef(null);
 
   // 获取当前子应用的配置信息（在渲染阶段获取，确保立即生效）
   const localApps = getLocalSubApps();
@@ -32,8 +33,8 @@ const SubAppContainer = ({ match }) => {
   const containerId = currentApp?.container || "#subapp-container";
   const containerElementId = containerId.replace("#", "");
 
-  useEffect(() => {
-    const logPrefix = getLogPrefix("SubAppContainer.useEffect");
+  useLayoutEffect(() => {
+    const logPrefix = getLogPrefix("SubAppContainer.useLayoutEffect");
     // 重置状态
     setLoading(true);
     setError(null);
@@ -52,11 +53,35 @@ const SubAppContainer = ({ match }) => {
     // 手动加载子应用的函数
     const loadApp = async () => {
       try {
-        // 确保DOM已经渲染完成
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        // 等待容器元素真正存在（使用轮询机制）
+        let containerElement = containerRef.current;
+        let retryCount = 0;
+        const maxRetries = 20; // 最多重试20次
+        const retryInterval = 50; // 每次间隔50ms
 
-        // 再次检查容器元素是否存在
-        const containerElement = document.getElementById(containerElementId);
+        while (!containerElement && retryCount < maxRetries) {
+          console.debug(`${logPrefix} 等待容器元素...`, {
+            retryCount,
+            maxRetries,
+            containerRefCurrent: containerRef.current,
+          });
+          await new Promise((resolve) => setTimeout(resolve, retryInterval));
+          containerElement = containerRef.current;
+          retryCount++;
+        }
+
+        if (!containerElement) {
+          console.error(`${logPrefix} 容器元素不存在!`, {
+            containerId,
+            containerElementId,
+            retryCount,
+            maxRetries,
+            containerRefCurrent: containerRef.current,
+          });
+          throw new Error(
+            `容器元素 ${containerId} 不存在，重试${maxRetries}次后仍然未找到`
+          );
+        }
         console.debug(`${logPrefix} 容器元素检查:`, {
           containerId,
           containerElementId,
@@ -69,28 +94,8 @@ const SubAppContainer = ({ match }) => {
                 hasChildNodes: containerElement.hasChildNodes(),
               }
             : null,
+          refCurrent: containerRef.current,
         });
-
-        // 额外检查：使用querySelector查找容器
-        const containerElementByQuery = document.querySelector(containerId);
-        console.debug(`${logPrefix} 容器元素 querySelector 检查:`, {
-          selector: containerId,
-          elementExists: !!containerElementByQuery,
-        });
-
-        if (!containerElement) {
-          console.error(
-            `${logPrefix} 容器元素不存在! 页面中存在的所有容器元素:`
-          );
-          document.querySelectorAll('[id$="-container"]').forEach((el) => {
-            console.error(`${logPrefix} 容器元素:`, {
-              id: el.id,
-              className: el.className,
-              tagName: el.tagName,
-            });
-          });
-          throw new Error(`容器元素 ${containerId} 不存在`);
-        }
 
         if (!currentApp) {
           console.error(`${logPrefix} 未找到子应用配置! 所有本地应用:`, {
@@ -116,6 +121,7 @@ const SubAppContainer = ({ match }) => {
           appName: currentApp.name,
           entry: currentApp.entry,
           container: containerId,
+          containerElement: containerElement,
           hasProps: Object.keys(currentApp.props || {}).length > 0,
           hasGlobalProps: Object.keys(globalProps).length > 0,
         });
@@ -123,7 +129,7 @@ const SubAppContainer = ({ match }) => {
         const microApp = loadMicroApp({
           name: currentApp.name,
           entry: currentApp.entry,
-          container: containerElement,
+          container: containerId,
           props: {
             ...currentApp.props,
             ...globalProps,
@@ -214,7 +220,7 @@ const SubAppContainer = ({ match }) => {
         });
 
         // 检查容器状态
-        const containerElement = document.getElementById(containerElementId);
+        const containerElement = containerRef.current;
         console.debug(`${logPrefix} 卸载前容器状态:`, {
           containerExists: !!containerElement,
           hasChildNodes: containerElement
@@ -268,19 +274,9 @@ const SubAppContainer = ({ match }) => {
     activeRule,
   });
 
-  // 在渲染阶段检查容器是否已经存在（用于调试）
-  useEffect(() => {
-    const checkLogPrefix = getLogPrefix("SubAppContainer.renderCheck");
-    // 这个useEffect会在DOM渲染完成后执行，用于验证容器是否正确渲染
-    const containerElement = document.getElementById(containerElementId);
-    console.debug(`${checkLogPrefix} 容器渲染完成检查:`, {
-      containerElementId,
-      elementExists: !!containerElement,
-    });
-  }, [containerElementId]);
-
   return (
     <div
+      ref={containerRef}
       id={containerElementId}
       style={{
         width: "100%",

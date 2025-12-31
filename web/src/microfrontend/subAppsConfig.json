@@ -1,12 +1,12 @@
 [
   {
   "name": "hitoColib",
-  "entry": "//localhost:5173/fe-sg/qiankun.html", 
+  "entry": "//localhost:5173/fe-sg/qiankun-entry.html", 
   "container": "#hitocolib-container",
   "activeRule": "/subapp/hitoColib",
   "props": {
-    "authState": {},
-    "masterActions": {}
+    "routerBase": "/subapp/hitoColib",
+    "authToken": "your-auth-token"
   }
   },
   {
