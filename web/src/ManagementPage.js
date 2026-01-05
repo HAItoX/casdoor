@@ -28,6 +28,7 @@ import { Link, Redirect, Route, Switch, withRouter } from "react-router-dom";
 import React, { useState } from "react";
 import i18next from "i18next";
 import {
+  AppstoreOutlined,
   AppstoreTwoTone,
   BarsOutlined,
   DeploymentUnitOutlined,
@@ -108,6 +109,7 @@ import { clearWeb3AuthToken } from "./auth/Web3Auth";
 import TransactionListPage from "./TransactionListPage";
 import TransactionEditPage from "./TransactionEditPage";
 import VerificationListPage from "./VerificationListPage";
+import { getLocalSubApps } from "./microfrontend/utils";
 // 导入微前端子应用容器组件
 import SubAppContainer from "./microfrontend/SubAppContainer";
 
@@ -363,6 +365,25 @@ function ManagementPage(props) {
         })
       )
     );
+
+    const subApps = getLocalSubApps();
+    if (subApps && subApps.length > 0) {
+      res.push(
+        Setting.getItem(
+          <Link style={{ color: textColor }} to="/subapps">
+            {i18next.t("general:Sub Apps")}
+          </Link>,
+          "/subapps",
+          <AppstoreTwoTone twoToneColor={twoToneColor} />,
+          subApps.map((app) =>
+            Setting.getItem(
+              <Link to={app.activeRule}>{app.displayName || app.name}</Link>,
+              app.activeRule
+            )
+          )
+        )
+      );
+    }
 
     if (Setting.isLocalAdminUser(props.account)) {
       if (Conf.ShowGithubCorner) {

@@ -48,8 +48,8 @@ import SamlCallback from "./auth/SamlCallback";
 import i18next from "i18next";
 import { withTranslation } from "react-i18next";
 const ManagementPage = lazy(() => import("./ManagementPage"));
-// 导入微前端子应用容器组件
 import SubAppContainer from "./microfrontend/SubAppContainer";
+import { setOAuthClientInfo } from "./microfrontend/auth";
 const { Footer, Content } = Layout;
 
 import { setTwoToneColor } from "@ant-design/icons";
@@ -323,6 +323,20 @@ class App extends Component {
         );
         setTourLogo(account.organization.logo);
         setOrgIsTourVisible(account.organization.enableTour);
+
+        if (account.signupApplication) {
+          ApplicationBackend.getApplication(
+            "admin",
+            account.signupApplication
+          ).then((appRes) => {
+            if (appRes.status === "ok" && appRes.data) {
+              setOAuthClientInfo(
+                appRes.data.clientId,
+                appRes.data.clientSecret
+              );
+            }
+          });
+        }
       } else {
         if (res.data !== "Please login first") {
           Setting.showMessage(

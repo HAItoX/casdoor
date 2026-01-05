@@ -242,6 +242,7 @@
     "Applications": "Applications",
     "Applications that require authentication": "Applications that require authentication",
     "Apps": "Apps",
+    "Sub Apps": "Sub Apps",
     "Authorization": "Authorization",
     "Avatar": "Avatar",
     "Avatar - Tooltip": "Public avatar image for the user",

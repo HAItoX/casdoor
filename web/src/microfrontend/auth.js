@@ -5,37 +5,78 @@ import * as AuthBackend from "../auth/AuthBackend";
 import * as ApplicationBackend from "../backend/ApplicationBackend";
 import eventBus from "./eventBus";
 
-// 获取当前用户信息
-export const getAccountInfo = () => {
-  // 从全局状态或localStorage获取当前用户信息
-  // 注意：这里需要根据主应用的实际实现进行调整
-  const account = localStorage.getItem("casdoor_account")
-    ? JSON.parse(localStorage.getItem("casdoor_account"))
-    : null;
-  const accessToken = localStorage.getItem("casdoor_access_token") || null;
-  const themeData = localStorage.getItem("casdoor_theme_data")
-    ? JSON.parse(localStorage.getItem("casdoor_theme_data"))
-    : null;
-  const serverUrl = Setting.ServerUrl;
+// 生成带时间戳的日志前缀
+const getLogPrefix = (module) => {
+  const timestamp = new Date().toISOString();
+  return `[${timestamp}] [MicroFrontend] [${module}]`;
+};
 
-  return {
-    account,
-    accessToken,
-    themeData,
-    serverUrl,
-    // 提供给子应用的方法
-    onLoginSuccess: (newAccount, newAccessToken, redirectUrl) => {
-      handleLoginSuccess(newAccount, newAccessToken, redirectUrl);
-    },
-    onUpdateAccount: (newAccount, newAccessToken) => {
-      setAccountInfo(newAccount, newAccessToken, themeData);
-      // 通知所有子应用账户信息已更新
-      notifySubApps("accountUpdated", {
-        account: newAccount,
-        accessToken: newAccessToken,
+// 获取当前用户信息
+export const getAccountInfo = async () => {
+  const logPrefix = getLogPrefix("auth.getAccountInfo");
+  console.debug(`${logPrefix} 开始获取账户信息...`);
+
+  try {
+    const res = await AuthBackend.getAccount();
+
+    let account = null;
+    let accessToken = null;
+    let themeData = null;
+
+    if (res.status === "ok") {
+      account = res.data;
+      account.organization = res.data2;
+      accessToken = res.data.accessToken;
+
+      themeData = Setting.getThemeData(account.organization);
+
+      console.debug(`${logPrefix} 成功获取账户信息:`, {
+        username: account.name,
+        hasAccessToken: !!accessToken,
+        organization: account.organization?.name,
       });
-    },
-  };
+    } else {
+      console.warn(`${logPrefix} 获取账户信息失败:`, res.msg);
+    }
+
+    const serverUrl = Setting.ServerUrl;
+
+    return {
+      account,
+      accessToken,
+      themeData,
+      serverUrl,
+      onLoginSuccess: (newAccount, newAccessToken, redirectUrl) => {
+        handleLoginSuccess(newAccount, newAccessToken, redirectUrl);
+      },
+      onUpdateAccount: (newAccount, newAccessToken) => {
+        setAccountInfo(newAccount, newAccessToken, themeData);
+        notifySubApps("accountUpdated", {
+          account: newAccount,
+          accessToken: newAccessToken,
+        });
+      },
+    };
+  } catch (error) {
+    console.error(`${logPrefix} 获取账户信息时发生错误:`, error);
+
+    return {
+      account: null,
+      accessToken: null,
+      themeData: null,
+      serverUrl: Setting.ServerUrl,
+      onLoginSuccess: (newAccount, newAccessToken, redirectUrl) => {
+        handleLoginSuccess(newAccount, newAccessToken, redirectUrl);
+      },
+      onUpdateAccount: (newAccount, newAccessToken) => {
+        setAccountInfo(newAccount, newAccessToken, null);
+        notifySubApps("accountUpdated", {
+          account: newAccount,
+          accessToken: newAccessToken,
+        });
+      },
+    };
+  }
 };
 
 // 设置用户信息
@@ -57,6 +98,29 @@ export const setAccountInfo = (account, accessToken, themeData) => {
   } else {
     localStorage.removeItem("casdoor_theme_data");
   }
+};
+
+// 设置OAuth客户端信息
+export const setOAuthClientInfo = (clientId, clientSecret) => {
+  if (clientId) {
+    localStorage.setItem("casdoor_client_id", clientId);
+  } else {
+    localStorage.removeItem("casdoor_client_id");
+  }
+
+  if (clientSecret) {
+    localStorage.setItem("casdoor_client_secret", clientSecret);
+  } else {
+    localStorage.removeItem("casdoor_client_secret");
+  }
+};
+
+// 获取OAuth客户端信息
+export const getOAuthClientInfo = () => {
+  return {
+    clientId: localStorage.getItem("casdoor_client_id"),
+    clientSecret: localStorage.getItem("casdoor_client_secret"),
+  };
 };
 
 // 登录成功处理

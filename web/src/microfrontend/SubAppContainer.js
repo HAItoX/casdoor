@@ -114,7 +114,7 @@ const SubAppContainer = ({ match }) => {
         }
 
         // 获取全局属性
-        const globalProps = getGlobalProps();
+        const globalProps = await getGlobalProps();
 
         // 手动加载子应用
         console.debug(`${logPrefix} 开始手动加载子应用:`, {

@@ -1,16 +1,17 @@
 [
   {
   "name": "hitoColib",
+  "displayName": "知识库",
   "entry": "//localhost:5173/fe-sg/qiankun-entry.html", 
   "container": "#hitocolib-container",
   "activeRule": "/subapp/hitoColib",
   "props": {
-    "routerBase": "/subapp/hitoColib",
-    "authToken": "your-auth-token"
+    "routerBase": "/subapp/hitoColib"
   }
   },
   {
     "name": "sub-app-react",
+    "displayName": "React 子应用",
     "entry": "//localhost:3001",
     "container": "#subapp-container",
     "activeRule": "/subapp/react",
@@ -18,6 +19,7 @@
   },
   {
     "name": "sub-app-vue",
+    "displayName": "Vue 子应用",
     "entry": "//localhost:3002",
     "container": "#subapp-container",
     "activeRule": "/subapp/vue",
@@ -25,6 +27,7 @@
   },
   {
     "name": "sub-app-js",
+    "displayName": "JavaScript 子应用",
     "entry": "//localhost:3004",
     "container": "#subapp-container",
     "activeRule": "/subapp/js",
